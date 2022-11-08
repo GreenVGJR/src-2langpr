@@ -1,0 +1,6 @@
+/*
+just google if you dont know what means this
+*/
+
+$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$message;%C;$cropText[$year;2]];%y;$filterMessage[$year;20]];%Y;$year];%b;$cropText[$month;3]];%B;$month];%m;$formatDate[$dateStamp;MM]];%W;$filterMessage[$formatDate[$dateStamp;w];$year,]];%U;$filterMessage[$formatDate[$sub[$dateStamp;86400000];w];$year,]];%a;$formatDate[$dateStamp;ddd]];%A;$formatDate[$dateStamp;dddd]];%d;$day];%w;$formatDate[$dateStamp;E]];%j;$formatDate[$dateStamp;DDDD]];%D;$filterMessage[$formatDate[$dateStamp;L]/$filterMessage[$year;20];2021/]];%v;$day-$cropText[$month;3]-$year];%F;$year-$formatDate[$dateStamp;MM]-$day];%H;$hour];%I;$formatDate[$dateStamp;h]];%k;$hour];%l;$formatDate[$dateStamp;h]];%M;$minute];%s;$cropText[$dateStamp;10]];%L;$splitText[11]$splitText[12]$splitText[13]];%p;$formatDate[$dateStamp;a]];%P;$toLowercase[$formatDate[$dateStamp;a]]];%S;$second]
+$textSplit[$dateStamp;]
