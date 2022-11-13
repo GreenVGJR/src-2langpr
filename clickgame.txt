@@ -1,0 +1,140 @@
+Variable Need:
+
+• usergame
+= 0
+
+• pointsuser
+= 0
+
+• position
+= 0
+
+
+(All command must set on BDScript Unstable)
+First Command
+
+$nomention
+$author[Points: $getUserVar[pointsuser]]
+$title[`$replaceText[$replaceText[$replaceText[$replaceText[$random[1;4];1;| 🟠  |      |      |      ;1];2;|     |  🟠  |      |      ;1];3;|     |      |  🟠  |      ;1];4;|     |      |      |  🟠  ;1]`]
+$color[a09fff]
+$addTimestamp
+$onlyIf[$getUserVar[usergame]!=$authorID;]
+$setUserVar[position;$random[1;4]]
+$setUserVar[usergame;$authorID]
+$addButton[no;click4;↑;$randomText[primary;success;danger];no;]
+$addButton[no;click3;↑;$randomText[primary;danger;success];no;]
+$addButton[no;click2;↑;$randomText[primary;success;danger];no;]
+$addButton[no;click1;↑;$randomText[primary;danger;success];no;]
+
+
+Second Command
+Trigger: $onInteraction[click1]
+
+$nomention
+$if[$getUserVar[position]==1]
+$author[Points: $sum[$getUserVar[pointsuser];1]]
+$title[`$replaceText[$replaceText[$replaceText[$replaceText[$random[1;4];1;| 🟠  |      |      |      ;1];2;|     |  🟠  |      |      ;1];3;|     |      |  🟠  |      ;1];4;|     |      |      |  🟠  ;1]`]
+$color[a09fff]
+$addTimestamp
+$setUserVar[position;$random[1;4]]
+$setUserVar[pointsuser;$sum[$getUserVar[pointsuser];1]]
+$editButton[click4;↑;$randomText[primary;success;danger];no;]
+$editButton[click3;↑;$randomText[primary;danger;success];no;]
+$editButton[click2;↑;$randomText[primary;success;danger];no;]
+$editButton[click1;↑;$randomText[primary;danger;success];no;]
+$else
+$description[Game Ended.]
+$footer[Last Points: $getUserVar[pointsuser]]
+$color[a09fff]
+$addTimestamp
+$removeButtons
+$setUserVar[pointsuser;0]
+$setUserVar[usergame;0]
+$setUserVar[position;0]
+$endif
+$onlyIf[$getUserVar[usergame]==$authorID;]
+
+
+Third Command
+Trigger: $onInteraction[click2]
+
+$nomention
+$if[$getUserVar[position]==2]
+$author[Points: $sum[$getUserVar[pointsuser];1]]
+$title[`$replaceText[$replaceText[$replaceText[$replaceText[$random[1;4];1;| 🟠  |      |      |      ;1];2;|     |  🟠  |      |      ;1];3;|     |      |  🟠  |      ;1];4;|     |      |      |  🟠  ;1]`]
+$color[a09fff]
+$addTimestamp
+$setUserVar[position;$random[1;4]]
+$setUserVar[pointsuser;$sum[$getUserVar[pointsuser];1]]
+$editButton[click4;↑;$randomText[primary;success;danger];no;]
+$editButton[click3;↑;$randomText[primary;danger;success];no;]
+$editButton[click2;↑;$randomText[primary;success;danger];no;]
+$editButton[click1;↑;$randomText[primary;danger;success];no;]
+$else
+$description[Game Ended.]
+$footer[Last Points: $getUserVar[pointsuser]]
+$color[a09fff]
+$addTimestamp
+$removeButtons
+$setUserVar[pointsuser;0]
+$setUserVar[usergame;0]
+$setUserVar[position;0]
+$endif
+$onlyIf[$getUserVar[usergame]==$authorID;]
+
+
+Fourth Command
+Trigger: $onInteraction[click3]
+
+$nomention
+$if[$getUserVar[position]==3]
+$author[Points: $sum[$getUserVar[pointsuser];1]]
+$title[`$replaceText[$replaceText[$replaceText[$replaceText[$random[1;4];1;| 🟠  |      |      |      ;1];2;|     |  🟠  |      |      ;1];3;|     |      |  🟠  |      ;1];4;|     |      |      |  🟠  ;1]`]
+$color[a09fff]
+$addTimestamp
+$setUserVar[position;$random[1;4]]
+$setUserVar[pointsuser;$sum[$getUserVar[pointsuser];1]]
+$editButton[click4;↑;$randomText[primary;success;danger];no;]
+$editButton[click3;↑;$randomText[primary;danger;success];no;]
+$editButton[click2;↑;$randomText[primary;success;danger];no;]
+$editButton[click1;↑;$randomText[primary;danger;success];no;]
+$else
+$description[Game Ended.]
+$footer[Last Points: $getUserVar[pointsuser]]
+$color[a09fff]
+$addTimestamp
+$removeButtons
+$setUserVar[pointsuser;0]
+$setUserVar[usergame;0]
+$setUserVar[position;0]
+$endif
+$onlyIf[$getUserVar[usergame]==$authorID;]
+
+
+Fifth Command
+Trigger: $onInteraction[click4]
+
+$nomention
+$botListHide
+$if[$getUserVar[position]==4]
+$author[Points: $sum[$getUserVar[pointsuser];1]]
+$title[`$replaceText[$replaceText[$replaceText[$replaceText[$random[1;4];1;| 🟠  |      |      |      ;1];2;|     |  🟠  |      |      ;1];3;|     |      |  🟠  |      ;1];4;|     |      |      |  🟠  ;1]`]
+$color[a09fff]
+$addTimestamp
+$setUserVar[position;$random[1;4]]
+$setUserVar[pointsuser;$sum[$getUserVar[pointsuser];1]]
+$editButton[click4;↑;$randomText[primary;success;danger];no;]
+$editButton[click3;↑;$randomText[primary;danger;success];no;]
+$editButton[click2;↑;$randomText[primary;success;danger];no;]
+$editButton[click1;↑;$randomText[primary;danger;success];no;]
+$else
+$description[Game Ended.]
+$footer[Last Points: $getUserVar[pointsuser]]
+$color[a09fff]
+$addTimestamp
+$removeButtons
+$setUserVar[pointsuser;0]
+$setUserVar[usergame;0]
+$setUserVar[position;0]
+$endif
+$onlyIf[$getUserVar[usergame]==$authorID;]
