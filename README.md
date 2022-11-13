@@ -15,8 +15,9 @@
 5. [Create-QRCode](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/create-qrcode.js)
 6. [STRF-Time](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/strftime.js)
 7. [TypeOf](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/typeof.js)
+8. [LogSpotify](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/logspotify.js)
+9. [SlowMode](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/slowmode.js)
+10. [Advanced-Music](https://github.com/GreenVGJR/amc-aoijs)
 
 ## **bdscript**
-1.
-2.
-3.
+1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt)
