@@ -18,6 +18,7 @@
 8. [LogSpotify](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/logspotify.js)
 9. [SlowMode](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/slowmode.js)
 10. [Advanced-Music](https://github.com/GreenVGJR/amc-aoijs)
+11. [ModMail](https://github.com/GreenVGJR/modmail-aoijs)
 
 ## **bdscript**
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt)
