@@ -6,7 +6,7 @@ replace by eval this:
 $setVar[sc-clientid;$botID;YOUR_CLIENTID_HERE]
 
 
-only worked on v1.3.0
+only worked on v1.3.0 and so on
 and its kinda buggy
 */ 
 
