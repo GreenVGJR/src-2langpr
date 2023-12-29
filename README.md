@@ -25,4 +25,4 @@
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt)
 
 ## **forgescript**
-1. [SoundCloud Finder]()
+1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js)
