@@ -1,3 +1,15 @@
+/*
+to use this code, you must have "clientid" to use it.
+about how to find then you can find on google.
+
+replace by eval this:
+$setVar[sc-clientid;$botID;YOUR_CLIENTID_HERE]
+
+
+only worked on v1.3.0
+and its kinda buggy
+*/ 
+
 module.exports = [{
    //Basic Command
    name: "sc-search",
