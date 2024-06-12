@@ -6,7 +6,7 @@ using frequently may causing tiktok temporary ban your ip.
 */
 
 module.exports = [{
-	  name: "tk-d",
+    name: "tk-d",
     type: "messageCreate",
     code: `$onlyIf[$message[0]!=;$reply Usage: \`tk-d <url>\`]
 $onlyIf[$checkContains[$message[0];vt.tiktok.com;vm.tiktok.com;www.tiktok.com;tiktok.com]!=false;$reply Invalid link.]
