@@ -27,3 +27,4 @@
 ## **forgescript**
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js)
 2. [TikTok Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/atd.js)
+3. [YouTube Get Download Link](https://github.com/GreenVGJR/src-2langpr/fsjs/ytdl-download_link.js)
