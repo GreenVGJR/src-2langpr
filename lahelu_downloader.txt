@@ -1,0 +1,11 @@
+$nomention
+$argsCheck[1;Usage: `lh-d <url>`]
+$onlyIf[$checkContains[$message[1];lahelu.com]==true;Usage: `lh-d <url>`]
+$textSplit[$message[1];lahelu.com/post/]
+$onlyIf[$splitText[2]!=;Usage: `lh-d <url>`]
+$httpGet[https://lahelu.com/api/post/get?postID=$splitText[2]]
+$onlyIf[$httpStatus==200;($httpStatus) Something just happened.]
+$onlyIf[$httpResult!={};No media we're found.]
+[$httpResult[postInfo;media].$if[$checkContains[$httpResult[postInfo;media];video]==true]mp4$elsepng$endif](https://cache.lahelu.com/$httpResult[postInfo;media])
+[`@$httpResult[postInfo;userUsername] - $httpResult[postInfo;title]`](<$message[1]>)
+`U: $httpResult[postInfo;totalUpvotes] | D: $httpResult[postInfo;totalDownvotes] | C: $httpResult[postInfo;totalComments]`
