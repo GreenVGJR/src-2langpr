@@ -23,8 +23,10 @@
 
 ## **bdscript**
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt)
+2. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/lahelu_downloader.txt)
 
 ## **forgescript**
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js)
 2. [TikTok Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/atd.js)
 3. [YouTube Get Download Link](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/ytdl-download_link.js)
+4. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/lahelu_downloader.js)
