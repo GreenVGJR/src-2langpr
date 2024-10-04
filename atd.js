@@ -26,8 +26,8 @@ $let[realurl;$replaceText[$get[fetchurl];/@/video/;/@$advancedTextSplit[$env[fet
 $let[ismobileurl;true]
 ]
 $if[$checkContains[$message;--wm];$let[typecontent;"downloadAddr":"];$let[typecontent;"playAddr":"]]
-$onlyIf[$checkContains[$message;--wm --lite;--lite --wm]!=true;$!editMessage[$channelID;$get[mid];(403) There's no watermark video for lite version.]]
-$onlyIf[$checkContains[$message;--wm --hd;--hd --wm]!=true;$!editMessage[$channelID;$get[mid];(403) There's no watermark video for HD version.]]
+$onlyIf[$checkContains[$message;--wm --lite;--lite --wm]!=true;$!editMessage[$channelID;$get[mid];(404) There's no watermark video for lite version.]]
+$onlyIf[$checkContains[$message;--wm --hd;--hd --wm]!=true;$!editMessage[$channelID;$get[mid];(404) There's no watermark video for HD version.]]
 $let[cookie;$djsEval[
 const axios = require('axios');
 const url = 'https://www.tiktok.com';
@@ -67,6 +67,9 @@ $if[$get[hls]==;$let[hls;$decodeURI[$replaceText[$replaceText[$advancedTextSplit
 $let[hls;$decodeURI[$replaceText[$replaceText[$advancedTextSplit[$env[test];$get[typecontent];1;";0];\\u002F;/];\\\\;]]]
 ]]
 $onlyIf[$get[hls]!=;$!editMessage[$channelID;$get[mid];(204) Video private / not available.] $stop]
+$if[$checkContains[$message;--wm];
+$onlyIf[$advancedTextSplit[$get[hls];v16-webapp-;1]!=;$!editMessage[$channelID;$get[mid];(403) Tiktok restrict this feature.] $stop]
+]
 $let[mhls;$decodeURI[$replaceText[$replaceText[$advancedTextSplit[$env[test];"music":;1;"playUrl":";1;";0];\\u002F;/];\\\\;]]]
 $let[videoid;$advancedTextSplit[$env[test];"webapp.video-detail":{"itemInfo":{"itemStruct":{"id":";1;";0]]
 $let[videoarst;$advancedTextSplit[$env[test];"uniqueId":";1;";0]]
