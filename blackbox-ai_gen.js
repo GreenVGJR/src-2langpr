@@ -7,7 +7,8 @@ $onlyIf[$message[0]!=;Usage: \`img-gen <prompt> --type=(number)\`\n\`\`\`--type=
 $onlyIf[$checkContains[$message[1];--type=]!=true;Parameter \`prompt\` should be at first position.]
 $onlyIf[$hasPerms[$guildID;$clientID;AttachFiles]!=false;Missing Permission, **Attach Files** - Bot]
 
-$let[content;$advancedTextSplit[$message;--type=;0]]
+$let[content;$replaceText[$advancedTextSplit[$message;--type=;0];
+;]]
 $let[c1;$advancedTextSplit[$message;--type=;1; ;0]]
 
 $let[model;blackboxai]
