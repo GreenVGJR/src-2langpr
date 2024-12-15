@@ -11,21 +11,6 @@ $let[content;$replaceText[$message;
 
 $let[mid;$sendMessage[$channelID;Generating.;true]]
 
-$c[-- Looking for ID --]
-$try[
-$let[chttp1;$httpRequest[https://www.blackbox.ai/agent/ImageGenerationLV45LJp;GET;te]]
-$onlyIf[$get[chttp1]==200;$!editMessage[$channelID;$get[mid];$nomention ($get[chttp1]) Script | Can't continue the process.]]
-$let[achievest;$advancedTextSplit[$httpGetHeader[Set-Cookie];\\\;;0]]
-$textSplit[$advancedTextSplit[$env[te];app/layout;0];"]
-$let[scripturl;https://www.blackbox.ai$advancedTextSplit[$env[te];app/layout;0;";$sub[$getTextSplitLength;1]]app/layout$advancedTextSplit[$env[te];app/layout;1;";0]]
-$let[chttp2;$httpRequest[$get[scripturl];GET;tr]]
-$onlyIf[$get[chttp2]==200;$!editMessage[$channelID;$get[mid];$nomention ($get[chttp2]) ValidateID | Can't continue the process.]]
-$let[finalid;$advancedTextSplit[$env[tr];},b=";1;";0]]
-;
-$!editMessage[$channelID;$get[mid];Can't continue the process.]
-$stop
-]
-
 $let[listbody;{
   "messages": \\[
     {
@@ -57,7 +42,7 @@ $let[listbody;{
   "visitFromDelta": false,
   "mobileClient": false,
   "userSelectedModel": null,
-  "validated": "$get[finalid]",
+  "validated": "00f37b34-a166-4efb-bce5-1312d87f2f94",
   "imageGenerationMode": false,
   "webSearchModePrompt": false
 }
@@ -69,7 +54,6 @@ $httpAddHeader[user-agent;Mozilla/5.0 (Macintosh; U; Intel Mac OS X 8_8_4; en-US
 $httpAddHeader[origin;https://www.blackbox.ai]
 $httpAddHeader[referer;https://www.blackbox.ai/agent/ImageGenerationLV45LJp]
 $httpAddHeader[content-type;application/json]
-$httpAddHeader[cookie;$get[achievest]]
 $httpSetBody[$get[listbody]]
 $let[http;$httpRequest[https://www.blackbox.ai/api/chat;POST;res]]
 $onlyIf[$get[http]==200;$!editMessage[$channelID;$get[mid];$nomention ($get[http]) Can't continue the process.]]
