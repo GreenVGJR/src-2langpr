@@ -24,6 +24,7 @@
 ## **bdscript**
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt)
 2. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/lahelu_downloader.txt)
+3. [Get TikTok Video](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/get-tiktok_video.txt)
 
 ## **forgescript**
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js)
