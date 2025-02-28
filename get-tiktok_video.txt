@@ -6,7 +6,7 @@ $nomention
 
 $c[-- Validation --]
 
-$argsCheck[>1;Usage: `tk-d <url>`]
+$argsCheck[>1;Usage: `$commandTrigger <url>`]
 $textSplit[$message[1];https://]
 $var[checkpr;$splitText[2]]
 $onlyIf[$charCount[$var[checkpr]]!=0;Invalid protocol. Use HTTPS.]
