@@ -8,15 +8,21 @@ $c[-- Validation --]
 
 $argsCheck[>1;Usage: `$commandTrigger <url>`]
 $textSplit[$message[1];https://]
-$var[checkpr;$splitText[2]]
+$textSplit[$splitText[2];?]
+$var[checkpr;$splitText[1]]
 $onlyIf[$charCount[$var[checkpr]]!=0;Invalid protocol. Use HTTPS.]
 $onlyIf[$checkContains[$var[checkpr];tiktok.com]==true;Invalid url. It should be a `tiktok.com/` or similar that.]
 $var[if_mobile;$checkContains[$var[checkpr];vt.tiktok.com;vm.tiktok.com]]
+
+$var[cachemessage;$sendMessage[Fetching...;true]]
 $if[$var[if_mobile]==true]
 $textSplit[$var[checkpr];/]
 $onlyIf[$charCount[$splitText[2]]!=0;Unknown video. (VideoID - Mobile)]
 $httpAddHeader[User-Agent;Mozilla/5.0 (Windows NT 10.0\; Win64\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36]
+$httpAddHeader[Range;bytes=0-0]
 $httpGet[https://$var[checkpr]]
+$onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP, Mobile)]
+
 $textSplit[$httpResult;"seo.abtest":{"canonical":"]
 $textSplit[$splitText[2];"]
 $textSplit[$replaceText[$splitText[1];\\u002F;/;-1];https://]
@@ -29,8 +35,8 @@ $endif
 
 $c[-- Second Validation --]
 
-$var[cachemessage;$sendMessage[Fetching...;true]]
 $httpAddHeader[User-Agent;Mozilla/5.0 (Windows NT 10.0\; Win64\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36]
+$httpAddHeader[Range;bytes=0-0]
 $httpGet[https://$var[checkpr]]
 $onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP)]
 
@@ -80,27 +86,48 @@ $textSplit[$splitText[2];"]
 $var[format_audio;$splitText[1]]
 
 $try
+
 $textSplit[$var[cacheresult];{"itemInfo":{"itemStruct":{"id":"]
 $textSplit[$splitText[2];"]
 $var[videoid;$splitText[1]]
 
 $if[$charCount[$var[format_sd]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_sd];\\u002F;/;-1])]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_sd];\\u002F;/;-1])]
 $elseif[$charCount[$var[format_hd]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_hd];\\u002F;/;-1])]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_hd];\\u002F;/;-1])]
 $elseif[$charCount[$var[format_ld]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_ld];\\u002F;/;-1])]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_ld];\\u002F;/;-1])]
 $else
-$editMessage[$channelID;$var[cachemessage];This video cannot be accessed as it should be.]
+$editMessage[$channelID;$var[cachemessage];No CDN was found. Re-fetching with player...]
+$httpGet[https://www.tiktok.com/player/api/v1/items?item_ids=$var[videoid]]
+
+$try
+$var[playerstatustik;$httpResult[status_code]]
+$if[$var[playerstatustik]!=0]
+$editMessage[$channelID;$var[cachemessage];Failed to get CDN.]
 $stop
+$else
+$var[format_sd;$httpResult[items;0;video_info;url_list;1]]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_sd];\\u002F;/;-1])]
 $endif
 $catch
-$sendMessage[Something just happened when trying to edit message.;false]
+$sendMessage[Rate-Limited. Try execute again or restart the bot for IP refresh. (HTTP - Tiktok)
+Error: $error[message];false]
 $stop
+$endtry
+
+$endif
+$catch
+$sendMessage[Something just happened when trying to edit message.
+Error: $error[message];false]
+$stop
+
 $endtry
 
 
 $c[-- Render --]
+
+$try
 
 $reply[$channelID;$var[cachemessage]]
 $author[Owner;1]
@@ -126,6 +153,7 @@ $addField[Video;$numberSeparator[$splitText[1];.];true;1]
 $textSplit[$var[cacheresult];"avatarLarger":"]
 $textSplit[$splitText[2];"]
 $thumbnail[$replaceText[$splitText[1];\\u002F;/;-1];1]
+$var[cover_author;$replaceText[$splitText[1];\\u002F;/;-1]]
 $color[#25F4EE;1]
 $author[Video;2]
 $addField[URL;[Video\](https://$var[checkpr]);true;2]
@@ -160,6 +188,7 @@ $addField[Favorite;$numberSeparator[$splitText[1];.];true;2]
 $textSplit[$var[cacheresult];"cover":"]
 $textSplit[$splitText[2];"]
 $thumbnail[$replaceText[$splitText[1];\\u002F;/;-1];2]
+$var[cover_video;$replaceText[$splitText[1];\\u002F;/;-1]]
 $color[#FE2C55;2]
 $author[Audio;3]
 $textSplit[$var[cacheresult];"music":{]
@@ -178,9 +207,15 @@ $textSplit[$var[cacheresult];"music":{]
 $textSplit[$splitText[2];"coverLarge":"]
 $textSplit[$splitText[2];"]
 $thumbnail[$replaceText[$splitText[1];\\u002F;/;-1];3]
+$var[cover_music;$replaceText[$splitText[1];\\u002F;/;-1]]
 $color[#B5A9FF;3]
 $author[Download;4]
+$description[Expire <t:$sum[$getTimestamp;86400]:R>;4]
 $addTimestamp[4]
+$addButton[true;cover;Cover;primary;true]
+$addButton[false;$var[cover_video];Video;link]
+$addButton[false;$var[cover_music];Music;link]
+$addButton[false;$var[cover_author];Owner;link]
 $addButton[true;video;Video;primary;true]
 $if[$charCount[$var[format_ld]]!=0]
 $addButton[false;$replaceText[$var[format_ld];\\u002F;/;-1];LD;link]
@@ -196,3 +231,8 @@ $if[$charCount[$var[format_audio]]!=0]
 $addButton[false;$replaceText[$var[format_audio];\\u002F;/;-1];SQ;link]
 $endif
 $color[#FFFFFF;4]
+
+$catch
+$sendMessage[Something just happened.
+Error: $error[message];false]
+$endtry
