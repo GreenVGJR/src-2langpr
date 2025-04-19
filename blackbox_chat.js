@@ -161,7 +161,7 @@ module.exports = [{
    type: "interactionCreate",
    code: `$onlyIf[$customID!=continuecovmodal;
 
-   $let[use_parameter;$checkContains[$sliceText[$input[usercontinuecov];0;1];--imagine;--think;--web;--deep;--memory]]
+   $let[use_parameter;$checkContains[$sliceText[$input[usercontinuecov];0;1];--imagine;--think;--web;--deep]]
    $let[except_image_parameter;$checkContains[$sliceText[$input[usercontinuecov];0;1];--think;--web;--deep]]
    $if[$get[use_parameter]==true;
    $onlyIf[$sliceText[$input[usercontinuecov];1]!=;$ephemeral $defer $interactionReply[Missing \`prompt\`.]]
