@@ -111,7 +111,7 @@ module.exports = [{
          "author": "$authorID",
          "channel": "$channelID",
          "message": "$messageID",
-         "unique": "$encodeURIComponent[$get[tempcookies]]"
+         "unique": $jsonLoad[escapecookie;$get[tempcookies]]$jsonStringify[escapecookie]
       }\\]
    }]
    $arrayPushJSON[savechat;{
@@ -137,7 +137,6 @@ module.exports = [{
    $if[$charCount[$get[finalresult]]>=4000;$attachment[$get[finalresult];response-$getTimestamp.txt;true];
    $author[Response | Done in $httpPingms]
    $if[$get[chat_image]==true;
-   $description[Expire <t:$sum[$cropText[$getTimestamp;0;10];31556926]:R>]
    $image[$advancedTextSplit[$get[finalresult];(;1;);0]]
    $addActionRow
    $addButton[$advancedTextSplit[$get[finalresult];(;1;);0];Download;Link]
@@ -159,7 +158,8 @@ module.exports = [{
 },
 {
    type: "interactionCreate",
-   code: `$onlyIf[$customID!=continuecovmodal;
+   code: `$onlyIf[$checkContains[$customID;continuecovmodal;endcov;contcov];]
+   $onlyIf[$customID!=continuecovmodal;
 
    $let[use_parameter;$checkContains[$sliceText[$input[usercontinuecov];0;1];--imagine;--think;--web;--deep]]
    $let[except_image_parameter;$checkContains[$sliceText[$input[usercontinuecov];0;1];--think;--web;--deep]]
