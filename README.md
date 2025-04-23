@@ -32,3 +32,4 @@
 4. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/lahelu_downloader.js)
 5. [Image Generation](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox-ai_gen.js)
 6. [Advanced Blackbox.AI Chat](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat.js)
+7. [Advanced Blackbox.AI Chat - Slash Version](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat_slash.js)
