@@ -24,7 +24,7 @@ module.exports = {
    $addField[_ _;-# *Rate limits may apply.\n-# **Experimental.;false]
    $addField[Example;$codeBlock[/chat prompt:hello\n/chat prompt:--imagine anime girl\n/chat prompt:--web,--think find me a cheap headset];false]
    $color[a09fff]]
-   $let[use_parameter;$checkContains[$sliceText[$option[prompt];0;1];--imagine;--think;--web;--deep;--memory]]
+   $let[use_parameter;$checkContains[$sliceText[$option[prompt];0;1];--imagine;--think;--web;--deep]]
    $let[except_image_parameter;$checkContains[$sliceText[$option[prompt];0;1];--think;--web;--deep]]
    $if[$get[use_parameter]==true;
    $onlyIf[$sliceText[$option[prompt];1]!=;Missing \`prompt\`.]
