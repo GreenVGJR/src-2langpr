@@ -21,7 +21,7 @@ module.exports = {
    $ephemeral $defer
    $addField[Usage;\`/chat prompt:(options?) <prompt>\`;false]
    $addField[Options;$codeBlock[--imagine  :: *Generate a image\n--think    :: Think before responding\n--web      :: Search the web\n--deep     :: *For complex tahat];false]
-   $addField[_ _;-# *Rate limits may apply.\n-# **Experimental.;false]
+   $addField[_ _;-# *Rate limits may apply.;false]
    $addField[Example;$codeBlock[/chat prompt:hello\n/chat prompt:--imagine anime girl\n/chat prompt:--web,--think find me a cheap headset];false]
    $color[a09fff]]
    $let[use_parameter;$checkContains[$sliceText[$option[prompt];0;1];--imagine;--think;--web;--deep]]
