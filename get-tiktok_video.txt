@@ -4,6 +4,8 @@ $c[--- UNLESS YOU KNOW WHAT YOU'RE DOING ---]
 
 $nomention
 
+$var[My_UserAgent;Mozilla/5.0 (Windows NT 10.0\; Win64\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36]
+
 $c[-- Validation --]
 
 $argsCheck[>1;Usage: `$commandTrigger <url>`]
@@ -14,11 +16,10 @@ $onlyIf[$charCount[$var[checkpr]]!=0;Invalid protocol. Use HTTPS.]
 $onlyIf[$checkContains[$var[checkpr];tiktok.com]==true;Invalid url. It should be a `tiktok.com/` or similar that.]
 $var[if_mobile;$checkContains[$var[checkpr];vt.tiktok.com;vm.tiktok.com]]
 
-$var[cachemessage;$sendMessage[Fetching...;true]]
 $if[$var[if_mobile]==true]
 $textSplit[$var[checkpr];/]
 $onlyIf[$charCount[$splitText[2]]!=0;Unknown video. (VideoID - Mobile)]
-$httpAddHeader[User-Agent;Mozilla/5.0 (Windows NT 10.0\; Win64\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36]
+$httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://$var[checkpr]]
 $onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP, Mobile)]
@@ -33,9 +34,11 @@ $textSplit[$var[checkpr];/]
 $onlyIf[$isNumber[$splitText[4]]==true;Unknown video. (VideoID - NaN for Web)]
 $endif
 
+$var[cachemessage;$sendMessage[Fetching...;true]]
+
 $c[-- Second Validation --]
 
-$httpAddHeader[User-Agent;Mozilla/5.0 (Windows NT 10.0\; Win64\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36]
+$httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://$var[checkpr]]
 $onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP)]
@@ -56,6 +59,7 @@ $var[cacheresult;$httpResult]
 
 
 $c[-- Get All Formats --]
+
 
 $textSplit[$var[cacheresult];"GearName":"adapt_540]
 $textSplit[$splitText[2];"UrlList":]
@@ -99,7 +103,10 @@ $elseif[$charCount[$var[format_ld]]!=0]
 $editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_ld];\\u002F;/;-1])]
 $else
 $editMessage[$channelID;$var[cachemessage];No CDN was found. Re-fetching with player...]
-$httpGet[https://www.tiktok.com/player/api/v1/items?item_ids=$var[videoid]]
+$httpAddHeader[User-Agent;$var[My_UserAgent]]
+$httpAddHeader[Cache-Control;max-age=0]
+$httpAddHeader[Referer;https://www.tiktok.com/player/v1/$var[videoid]]
+$httpGet[https://www.tiktok.com/player/api/v1/items?item_ids=$trimSpace[$var[videoid]]]
 
 $try
 $var[playerstatustik;$httpResult[status_code]]
@@ -111,8 +118,7 @@ $var[format_sd;$httpResult[items;0;video_info;url_list;1]]
 $editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_sd];\\u002F;/;-1])]
 $endif
 $catch
-$sendMessage[Rate-Limited. Try execute again or restart the bot for IP refresh. (HTTP - Tiktok)
-Error: $error[message];false]
+$sendMessage[Rate-Limited. Try execute again or restart the bot for IP refresh. (HTTP - Tiktok);false]
 $stop
 $endtry
 
