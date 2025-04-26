@@ -47,7 +47,7 @@ module.exports = {
    $let[chat_deep;false]
    ]
 
-   $let[user_message;$jsonLoad[escapechar;$if[$get[use_parameter];$sliceText[$option[prompt];0;1];$option[prompt]]]$jsonStringify[escapechar]]
+   $let[user_message;$jsonLoad[escapechar;$if[$get[use_parameter];$sliceText[$option[prompt];1];$option[prompt]]]$jsonStringify[escapechar]]
 
    $let[bodydata;{
    "messages": \\[
