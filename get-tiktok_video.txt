@@ -137,6 +137,8 @@ $elseif[$charCount[$var[format_hd]]!=0]
 $editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_hd];\\u002F;/;-1])]
 $elseif[$charCount[$var[format_ld]]!=0]
 $editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_ld];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_hd_alt]]!=0]
+$var[harderrorcdn;1]
 $else
 $editMessage[$channelID;$var[cachemessage];`(tiktok.com/player)` No CDN was found. Re-fetching with player...]
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
