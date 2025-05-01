@@ -16,11 +16,10 @@ $onlyIf[$charCount[$var[checkpr]]!=0;Invalid protocol. Use HTTPS.]
 $onlyIf[$checkContains[$var[checkpr];tiktok.com]==true;Invalid url. It should be a `tiktok.com/` or similar that.]
 $var[if_mobile;$checkContains[$var[checkpr];vt.tiktok.com;vm.tiktok.com]]
 
-$botTyping
-
 $if[$var[if_mobile]==true]
 $textSplit[$var[checkpr];/]
 $onlyIf[$charCount[$splitText[2]]!=0;Unknown video. (VideoID - Mobile)]
+$var[cachemessage;$sendMessage[`(tiktok.com)` Looking the VideoID.;true]]
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://$var[checkpr]]
@@ -34,10 +33,14 @@ $else
 $onlyIf[$checkContains[$var[checkpr];/video/]==true;Unknown video. (VideoID - Web)]
 $textSplit[$var[checkpr];/]
 $onlyIf[$isNumber[$splitText[4]]==true;Unknown video. (VideoID - NaN for Web)]
+$var[cachemessage;$sendMessage[`(tiktok.com)` Fetching.;true]]
 $endif
 
 $c[-- Second Validation --]
 
+$if[$var[if_mobile]==true]
+$editMessage[$channelID;$var[cachemessage];`(tiktok.com)` Fetching.]
+$endif
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://$var[checkpr]]
@@ -56,8 +59,6 @@ $textSplit[$splitText[2];,]
 $onlyIf[$splitText[1]==0;Captcha Triggered! Try execute again or restart the bot for IP refresh. (HTTP - Tiktok)
 Status Code: $splitText[1]]
 $var[cacheresult;$httpResult]
-
-$var[cachemessage;$sendMessage[`(tiktok.com)` Fetching...;true]]
 
 $c[-- Get All Formats --]
 
@@ -90,38 +91,6 @@ $textSplit[$splitText[2];"playUrl":"]
 $textSplit[$splitText[2];"]
 $var[format_audio;$splitText[1]]
 
-$editMessage[$channelID;$var[cachemessage];`(ssstik.io)` Fetching...]
-
-$c[-- Get HD Video --]
-
-$try
-
-$httpGet[https://ssstik.io/]
-$textSplit[$httpResult;s_tt = ']
-$textSplit[$splitText[2];']
-$var[authid;$splitText[1]]
-
-$var[secondbody;id=$var[checkpr]&locale=en&tt=$var[authid]]
-$httpAddHeader[Content-Type;application/x-www-form-urlencoded\; charset=UTF-8]
-$httpAddHeader[User-Agent;$var[My_UserAgent]]
-$httpPost[https://ssstik.io/abc?url=dl;$var[secondbody]]
-$var[cacheresult2;$httpResult]
-
-$textSplit[$var[cacheresult2];id="hd_download"]
-$textSplit[$splitText[2];downloadX(']
-$textSplit[$splitText[2];']
-$var[finalhd;$splitText[1]]
-
-$textSplit[$splitText[1];=]
-$var[authid_2;$splitText[2]]
-
-$httpPost[https://ssstik.io$var[finalhd];tt=$var[authid_2]]
-$httpAddHeader[User-Agent;$var[My_UserAgent]]
-$httpAddHeader[Content-Type;application/x-www-form-urlencoded\; charset=UTF-8]
-$var[format_hd_alt;$httpGetHeader[Hx-Redirect]]
-
-$catch
-$endtry
 
 $c[-- Preview Video --]
 
@@ -137,8 +106,6 @@ $elseif[$charCount[$var[format_hd]]!=0]
 $editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_hd];\\u002F;/;-1])]
 $elseif[$charCount[$var[format_ld]]!=0]
 $editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_ld];\\u002F;/;-1])]
-$elseif[$charCount[$var[format_hd_alt]]!=0]
-$var[harderrorcdn;1]
 $else
 $editMessage[$channelID;$var[cachemessage];`(tiktok.com/player)` No CDN was found. Re-fetching with player...]
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
@@ -150,6 +117,7 @@ $try
 $var[playerstatustik;$httpResult[status_code]]
 $if[$var[playerstatustik]!=0]
 $editMessage[$channelID;$var[cachemessage];`(tiktok.com/player)` Failed to get CDN. Continues without preview...]
+$var[harderrorcdn;1]
 $else
 $var[format_sd;$httpResult[items;0;video_info;url_list;1]]
 $editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_sd];\\u002F;/;-1])]
@@ -177,11 +145,21 @@ $reply[$channelID;$messageID]
 $else
 $reply[$channelID;$var[cachemessage]]
 $endif
+
+$textSplit[$var[cacheresult];"authorStats":]
+$textSplit[$splitText[2];"locationCreated":"]
+$textSplit[$splitText[2];"]
+$var[typeflag;$splitText[1]]
+
 $author[Owner;1]
 $textSplit[$var[cacheresult];"author":{]
 $textSplit[$splitText[2];"uniqueId":"]
 $textSplit[$splitText[2];"]
+$if[$var[typeflag]==FAKE-AD]
+$addField[Username;$splitText[1];true;1]
+$else
 $addField[Username;[@$splitText[1]\](https://www.tiktok.com/@$splitText[1]);true;1]
+$endif
 $textSplit[$var[cacheresult];"authorStats":{"followerCount":]
 $textSplit[$splitText[2];,]
 $addField[Followers;$numberSeparator[$splitText[1];.];true;1]
@@ -192,7 +170,11 @@ $addField[Like;$numberSeparator[$splitText[1];.];true;1]
 $textSplit[$var[cacheresult];"authorStats":]
 $textSplit[$splitText[2];"locationCreated":"]
 $textSplit[$splitText[2];"]
-$addField[Region;:flag_$toLowercase[$splitText[1]]: $splitText[1];true;1]
+$if[$var[typeflag]==FAKE-AD]
+$addField[Region;ADS;true;1]
+$else
+$addField[Region;:flag_$toLowercase[$var[typeflag]]: $var[typeflag];true;1]
+$endif
 $textSplit[$var[cacheresult];"authorStats":]
 $textSplit[$splitText[2];"videoCount":]
 $textSplit[$splitText[2];,]
@@ -276,12 +258,11 @@ $endif
 $if[$charCount[$var[format_hd]]!=0]
 $addButton[false;$replaceText[$var[format_hd];\\u002F;/;-1];HD;link]
 $endif
-$if[$charCount[$var[format_hd_alt]]!=0]
-$addButton[false;$replaceText[$var[format_hd_alt];\\u002F;/;-1];HD+;link]
-$endif
+$addButton[false;https://tikwm.com/video/media/hdplay/$var[videoid].mp4;HD+;link]
 $addButton[true;audio;Audio;primary;true]
 $if[$charCount[$var[format_audio]]!=0]
 $addButton[false;$replaceText[$var[format_audio];\\u002F;/;-1];SQ;link]
+$addButton[false;https://tikwm.com/video/music/$var[videoid].mp3;SQ (Video);link]
 $endif
 
 $color[#FFFFFF;4]
