@@ -71,8 +71,8 @@ $try
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://www.tikwm.com/api/?url=https://$var[checkpr]&hd=1]
-$onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP, Mobile)]
-$onlyIf[$httpResult[code]==0;Can't continue the process. (HTTP, Mobile)
+$onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP)]
+$onlyIf[$httpResult[code]==0;Can't continue the process. (HTTP)
 Status Code: $httpResult[code]]
 
 $var[format_sd_alt;$httpResult[data;play]]
