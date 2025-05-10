@@ -9,18 +9,24 @@ $var[My_UserAgent;Mozilla/5.0 (Windows NT 10.0\; Win64\; x64) AppleWebKit/537.36
 $c[-- Validation --]
 
 $argsCheck[>1;Usage: `$commandTrigger <url>`]
-$textSplit[$message[1];https://]
+$textSplit[$replaceText[$message[1];
+;];://]
+$onlyIf[$checkContains[$splitText[1];http;https]==true;Invalid protocol. Use HTTPS.]
 $textSplit[$splitText[2];?]
 $var[checkpr;$splitText[1]]
-$onlyIf[$charCount[$var[checkpr]]!=0;Invalid protocol. Use HTTPS.]
 $onlyIf[$checkContains[$var[checkpr];tiktok.com]==true;Invalid url. It should be a `tiktok.com/` or similar that.]
-$var[if_mobile;$checkContains[$var[checkpr];vt.tiktok.com;vm.tiktok.com]]
+$var[if_mobile;$checkContains[$var[checkpr];vt.tiktok.com;vm.tiktok.com;m.tiktok.com]]
 
 $cooldown[3s;Please wait after $getCooldown[normal]s.]
 
 $if[$var[if_mobile]==true]
 $textSplit[$var[checkpr];/]
+$if[$splitText[1]==m.tiktok.com]
+$onlyIf[$toLowercase[$splitText[2]]==v;Invalid parameter. (VideoID - Mobile)]
+$onlyIf[$charCount[$splitText[3]]!=0;Unknown video. (VideoID - Mobile)]
+$else
 $onlyIf[$charCount[$splitText[2]]!=0;Unknown video. (VideoID - Mobile)]
+$endif
 $var[checkpr_temp;$var[checkpr]]
 $var[cachemessage;$sendMessage[`(tikwm.com)` Fetching.;true]]
 $try
@@ -29,11 +35,18 @@ $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://www.tikwm.com/api/?url=https://$var[checkpr]&hd=1]
 
+$if[$httpResult[data;images]!=]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Video not available.]
+$stop
+$endif
+
 $var[checkpr;www.tiktok.com/@/video/$httpResult[data;id]]
 $var[format_sd_alt;$httpResult[data;play]]
 $var[format_sd_wm;$httpResult[data;wmplay]]
 $var[format_hd_alt;$httpResult[data;hdplay]]
 $var[format_audio_alt;$httpResult[data;music]]
+$var[cacheresult2;$httpResult]
+$var[videoid;$httpResult[data;id]]
 $var[isactiveapi;1]
 $catch
 $endtry
@@ -54,9 +67,18 @@ $var[checkpr;$splitText[2]]
 
 $endif
 $else
+$textSplit[$var[checkpr];/]
+$if[$splitText[1]==t.tiktok.com]
+$onlyIf[$toLowercase[$splitText[2]]==t;Invalid parameter. (VideoID - Web)]
+$onlyIf[$charCount[$splitText[3]]!=0;Unknown video. (VideoID - Web)]
+$if[$isNumber[$splitText[3]]==true]
+$var[checkpr;www.tiktok.com/@/video/$splitText[3]]
+$endif
+$else
 $onlyIf[$checkContains[$var[checkpr];/video/]==true;Unknown video. (VideoID - Web)]
 $textSplit[$var[checkpr];/]
 $onlyIf[$isNumber[$splitText[4]]==true;Unknown video. (VideoID - NaN for Web)]
+$endif
 $var[cachemessage;$sendMessage[`(tiktok.com)` Fetching.;true]]
 $endif
 
@@ -72,13 +94,23 @@ $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://www.tikwm.com/api/?url=https://$var[checkpr]&hd=1]
 $onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP)]
+$if[$httpResult[code]==-1]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` $httpResult[msg]]
+$stop
+$endif
 $onlyIf[$httpResult[code]==0;Can't continue the process. (HTTP)
 Status Code: $httpResult[code]]
+$if[$httpResult[data;images]!=]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Video not available.]
+$stop
+$endif
 
 $var[format_sd_alt;$httpResult[data;play]]
 $var[format_sd_wm;$httpResult[data;wmplay]]
 $var[format_hd_alt;$httpResult[data;hdplay]]
 $var[format_audio_alt;$httpResult[data;music]]
+$var[cacheresult2;$httpResult]
+$var[videoid;$httpResult[data;id]]
 $var[isactiveapi;1]
 
 $catch
@@ -96,47 +128,85 @@ $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://$var[checkpr]]
 $onlyIf[$httpStatus==200;`($httpStatus)` Something just happened. (HTTP)]
 
-$textSplit[$httpResult;"playAddr":"]
-$textSplit[$splitText[2];"]
-$onlyIf[$charCount[$splitText[1]]!=0;Video private / not available. (HTTP)]
-
-$c[Cloudflare Captcha (Rare case)]
-$onlyIf[$checkContains[$httpResult;<meta name="robots"]!=true;Captcha Triggered! Try execute again or restart the bot for IP refresh. (HTTP - Cloudflare)]
-
 $c[Tiktok Captcha (Common case)]
 $textSplit[$httpResult;"statusCode":]
 $textSplit[$splitText[2];,]
-$onlyIf[$splitText[1]==0;Captcha Triggered! Try execute again or restart the bot for IP refresh. (HTTP - Tiktok)
+$onlyIf[$and[$charCount[$splitText[1]]!=0;$splitText[1]!=0]==false;Captcha Triggered! Try execute again or restart the bot for IP refresh. (HTTP - Tiktok)
 Status Code: $splitText[1]]
+
+$textSplit[$httpResult;"playAddr":"]
+$textSplit[$splitText[2];"]
+$var[countPlayAddr;$charCount[$splitText[1]]]
+$if[$and[$var[countPlayAddr]==0;$charCount[$var[format_sd_alt]]==0]==true]
+$editMessage[$channelID;$var[cachemessage];`(tiktok.com)` Video private / not available.]
+$stop
+$elseif[$and[$var[countPlayAddr]==0;$var[isactiveapi]==1]==true]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` This video flagged Age restrict. Using API Version.]
+$var[isrestrict;1]
+$endif
+$textSplit[$httpResult;"downloadAddr":"]
+$textSplit[$splitText[2];"]
+$var[isdownload;$checkCondition[$charCount[$splitText[1]]!=0]]
+
+$botTyping
 $var[cacheresult;$httpResult]
 
 $var[statusapi;$and[$var[isactiveapi]==1;$charCount[$var[isactiveapi]]==1]]
 
 $c[-- Get All Formats --]
 
-
+$c[FAID = App ID (basically for specific app type)]
 $textSplit[$var[cacheresult];"GearName":"adapt_540]
 $textSplit[$splitText[2];"UrlList":]
 $textSplit[$splitText[2];","]
 $textSplit[$splitText[3];"]
-$var[format_ld;$splitText[1]]
+$if[$charCount[$splitText[1]]==0]
+$textSplit[$var[cacheresult];"GearName":"lowest_540]
+$textSplit[$splitText[2];"UrlList":]
+$textSplit[$splitText[2];","]
+$textSplit[$splitText[3];"]
+$var[format_ld;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
+$else
+$var[format_ld;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
+$endif
 $textSplit[$var[cacheresult];"GearName":"normal_]
 $textSplit[$splitText[2];"UrlList":]
 $textSplit[$splitText[2];","]
 $textSplit[$splitText[3];"]
-$var[format_sd;$splitText[1]]
+$if[$charCount[$splitText[1]]==0]
+$textSplit[$var[cacheresult];group_540p]
+$textSplit[$splitText[2];"UrlList":]
+$textSplit[$splitText[2];","]
+$textSplit[$splitText[3];"]
+$var[format_sd;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
+$else
+$var[format_sd;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
+$endif
 $textSplit[$var[cacheresult];"GearName":"adapt_lowest]
 $textSplit[$splitText[2];"UrlList":]
 $textSplit[$splitText[2];","]
 $textSplit[$splitText[3];"]
 $if[$charCount[$splitText[1]]==0]
+$textSplit[$var[cacheresult];group_1080p]
+$textSplit[$splitText[2];"UrlList":]
+$textSplit[$splitText[2];","]
+$textSplit[$splitText[3];"]
+$var[format_fhd;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
+$else
+$var[format_fhd;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
+$endif
 $textSplit[$var[cacheresult];"GearName":"adapt_lower_]
 $textSplit[$splitText[2];"UrlList":]
 $textSplit[$splitText[2];","]
 $textSplit[$splitText[3];"]
-$var[format_hd;$splitText[1]]
+$if[$charCount[$splitText[1]]==0]
+$textSplit[$var[cacheresult];group_720p]
+$textSplit[$splitText[2];"UrlList":]
+$textSplit[$splitText[2];","]
+$textSplit[$splitText[3];"]
+$var[format_hd;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
 $else
-$var[format_hd;$splitText[1]]
+$var[format_hd;$replaceText[$splitText[1];?faid=1988;?faid=1;1]]
 $endif
 $textSplit[$var[cacheresult];"music":{]
 $textSplit[$splitText[2];"playUrl":"]
@@ -159,8 +229,8 @@ $endif
 
 $endif
 
+$c[-- Render --]
 
-$c[-- Preview Video --]
 
 $try
 
@@ -168,56 +238,74 @@ $textSplit[$var[cacheresult];{"itemInfo":{"itemStruct":{"id":"]
 $textSplit[$splitText[2];"]
 $var[videoid;$splitText[1]]
 
-$if[$charCount[$var[format_sd]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_sd];\\u002F;/;-1])]
-$elseif[$charCount[$var[format_hd]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_hd];\\u002F;/;-1])]
-$elseif[$charCount[$var[format_ld]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_ld];\\u002F;/;-1])]
-$elseif[$charCount[$var[format_hd_alt]]!=0]
-$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` No CDN was found. Using API version.]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($var[format_hd_alt])]
-$else
-$editMessage[$channelID;$var[cachemessage];`(tiktok.com/player)` No CDN was found. Re-fetching with player...]
-$httpAddHeader[User-Agent;$var[My_UserAgent]]
-$httpAddHeader[Cache-Control;max-age=0]
-$httpAddHeader[Referer;https://www.tiktok.com/player/v1/$var[videoid]]
-$httpGet[https://www.tiktok.com/player/api/v1/items?item_ids=$var[videoid]]
-
-$try
-$var[playerstatustik;$httpResult[status_code]]
-$if[$var[playerstatustik]!=0]
-$editMessage[$channelID;$var[cachemessage];`(tiktok.com/player)` Failed to get CDN. Continues without preview...]
-$var[harderrorcdn;1]
-$else
-$var[format_sd;$httpResult[items;0;video_info;url_list;1]]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid].mp4\]($replaceText[$var[format_sd];\\u002F;/;-1])]
-$endif
-$catch
-$editMessage[$channelID;$var[cachemessage];`(tiktok.com/player)` Rate-limited. Failed to get CDN. Continues without preview...]
-$var[harderrorcdn;1]
-$endtry
-
-$endif
-$catch
-$sendMessage[Something just happened when trying to edit message.
-Error: $error[message];false]
-$stop
-
-$endtry
-
-
-$c[-- Render --]
-
-$try
-
-$botTyping
 $if[$var[harderrorcdn]==1]
 $reply[$channelID;$messageID]
 $else
 $reply[$channelID;$var[cachemessage]]
 $endif
 
+$if[$and[$var[isrestrict]==1;$charCount[$var[isrestrict]]!=0]==true]
+-# Some information are not available.
+$jsonParse[$var[cacheresult2]]
+$author[Owner;1]
+$addField[Username;[@$json[data;author;unique_id]\](https://www.tiktok.com/@$json[data;author;unique_id]);true;1]
+$addField[Region;:flag_$toLowercase[$json[data;region]]: $json[data;region];true;1]
+$thumbnail[$json[data;author;avatar];1]
+$var[cover_author;$json[data;author;avatar]]
+$color[#25F4EE;1]
+$author[Video;2]
+$addField[URL;[Video\](https://$var[checkpr]);true;2]
+$addField[Duration;$json[data;duration]s;true;2]
+$textSplit[$var[cacheresult2];"create_time":]
+$textSplit[$splitText[2];,]
+$addField[Uploaded At;<t:$splitText[1]:F>;false;2]
+$addField[Like;$numberSeparator[$json[data;digg_count];.];true;2]
+$addField[Comment;$numberSeparator[$json[data;comment_count];.];true;2]
+$addField[Share;$numberSeparator[$json[data;share_count];.];true;2]
+$addField[Play;$numberSeparator[$json[data;play_count];.];true;2]
+$addField[Favorite;$numberSeparator[$json[data;collect_count];.];true;2]
+$thumbnail[$json[data;origin_cover];2]
+$var[cover_video;$json[data;origin_cover]]
+$color[#FE2C55;2]
+$author[Audio;3]
+$addField[Title;`$json[data;music_info;title]`;false;3]
+$addField[URL;[Audio\](https://www.tiktok.com/music/-$json[data;music_info;id]);true;3]
+$addField[Author;$json[data;music_info;author];true;3]
+$addField[Duration;$json[data;music_info;duration]s;true;3]
+$thumbnail[$json[data;music_info;cover];3]
+$var[cover_music;$json[data;music_info;cover]]
+$color[#B5A9FF;3]
+$author[Download;4]
+$addField[`tikwm.com`;Expire <t:$sum[$getTimestamp;7200]:R>;true;4]
+$addTimestamp[4]
+$color[#FFFFFF;4]
+$addButton[true;cover;Cover;primary;true]
+$addButton[false;$json[data;ai_dynamic_cover];Dynamic Video;link]
+$addButton[false;$var[cover_video];Video;link]
+$addButton[false;$var[cover_music];Audio;link]
+$addButton[false;$var[cover_author];Owner;link]
+$addButton[true;video;Tiktok - Video;primary;true]
+$addButton[false;nonevideo;Not Available;secondary;true]
+$addButton[true;video_2;TikWM - Video;primary;true]
+$addButton[false;$var[format_sd_alt];SD;link]
+$textSplit[$var[cacheresult2];"wm_size":]
+$textSplit[$splitText[2];,]
+$var[cache2sdwm;$splitText[1]]
+$if[$var[cache2sdwm]!=0]
+$addButton[false;$var[format_sd_wm];SD - Watermark;link]
+$endif
+$textSplit[$var[cacheresult2];"size":]
+$textSplit[$splitText[2];,]
+$var[cache2sd;$splitText[1]]
+$textSplit[$var[cacheresult2];"hd_size":]
+$textSplit[$splitText[2];,]
+$var[cache2hd;$splitText[1]]
+$if[$var[cache2sd]!=$var[cache2hd]]
+$addButton[false;$var[format_hd_alt];Original;link]
+$endif
+$addButton[true;audio;Audio;primary;true]
+$addButton[false;$var[format_audio_alt];SQ (Video);link]
+$else
 $textSplit[$var[cacheresult];"authorStats":]
 $textSplit[$splitText[2];"locationCreated":"]
 $textSplit[$splitText[2];"]
@@ -232,6 +320,7 @@ $addField[Username;$splitText[1];true;1]
 $else
 $addField[Username;[@$splitText[1]\](https://www.tiktok.com/@$splitText[1]);true;1]
 $endif
+$var[format_asset_author;$splitText[1]]
 $textSplit[$var[cacheresult];"authorStats":{"followerCount":]
 $textSplit[$splitText[2];,]
 $addField[Followers;$numberSeparator[$splitText[1];.];true;1]
@@ -257,7 +346,7 @@ $thumbnail[$replaceText[$splitText[1];\\u002F;/;-1];1]
 $var[cover_author;$replaceText[$splitText[1];\\u002F;/;-1]]
 $color[#25F4EE;1]
 $author[Video;2]
-$addField[URL;[Video\](https://$var[checkpr]);true;2]
+$addField[URL;[Video\](https://tiktok.com/@$var[format_asset_author]/video/$var[videoid]);true;2]
 $textSplit[$var[cacheresult];"video":{]
 $textSplit[$splitText[2];"duration":]
 $textSplit[$splitText[2];,]
@@ -290,6 +379,10 @@ $textSplit[$var[cacheresult];"cover":"]
 $textSplit[$splitText[2];"]
 $thumbnail[$replaceText[$splitText[1];\\u002F;/;-1];2]
 $var[cover_video;$replaceText[$splitText[1];\\u002F;/;-1]]
+$textSplit[$var[cacheresult];"dynamicCover":"]
+$textSplit[$splitText[2];"]
+$thumbnail[$replaceText[$splitText[1];\\u002F;/;-1];2]
+$var[cover_dyvideo;$replaceText[$splitText[1];\\u002F;/;-1]]
 $color[#FE2C55;2]
 $author[Audio;3]
 $textSplit[$var[cacheresult];"music":{]
@@ -315,14 +408,17 @@ $thumbnail[$replaceText[$splitText[1];\\u002F;/;-1];3]
 $var[cover_music;$replaceText[$splitText[1];\\u002F;/;-1]]
 $color[#B5A9FF;3]
 $author[Download;4]
-$addField[`tiktok.com`;Expire <t:$sum[$getTimestamp;86400]:R>;true;4]
-$if[$charCount[$var[format_hd_alt]]!=0]
-$addField[`tikwm.com`;Expire <t:$sum[$getTimestamp;86400]:R>;true;4]
+$addField[`tiktok.com`;Expire <t:$sum[$getTimestamp;7200]:R>;true;4]
+$if[$charCount[$var[format_sd_alt]]!=0]
+$addField[`tikwm.com`;Expire <t:$sum[$getTimestamp;7200]:R>;true;4]
 $endif
 $addTimestamp[4]
 $addButton[true;cover;Cover;primary;true]
+$if[$charCount[$var[cover_dyvideo]]!=0]
+$addButton[false;$var[cover_dyvideo];Dynamic Video;link]
+$endif
 $addButton[false;$var[cover_video];Video;link]
-$addButton[false;$var[cover_music];Music;link]
+$addButton[false;$var[cover_music];Audio;link]
 $addButton[false;$var[cover_author];Owner;link]
 $addButton[true;video;Tiktok - Video;primary;true]
 $if[$charCount[$var[format_ld]]!=0]
@@ -334,11 +430,32 @@ $endif
 $if[$charCount[$var[format_hd]]!=0]
 $addButton[false;$replaceText[$var[format_hd];\\u002F;/;-1];HD;link]
 $endif
-$if[$var[statusapi]==true]
+$if[$charCount[$var[format_fhd]]!=0]
+$addButton[false;$replaceText[$var[format_fhd];\\u002F;/;-1];FHD;link]
+$endif
+$if[$and[$charCount[$var[format_ld]]==0;$charCount[$var[format_sd]]==0;$charCount[$var[format_hd]]==0;$charCount[$var[format_fhd]]==0]==true]
+$addButton[false;nonevideo;Not Available;secondary;true]
+$endif
 $addButton[true;video_2;TikWM - Video;primary;true]
+$if[$var[statusapi]==true]
 $addButton[false;$var[format_sd_alt];SD;link]
+$textSplit[$var[cacheresult2];"wm_size":]
+$textSplit[$splitText[2];,]
+$var[cache2sdwm;$splitText[1]]
+$if[$or[$var[cache2sdwm]!=0;$and[$var[isdownload]==true;$var[isactiveapi]==1]==true]]
 $addButton[false;$var[format_sd_wm];SD - Watermark;link]
+$endif
+$textSplit[$var[cacheresult2];"size":]
+$textSplit[$splitText[2];,]
+$var[cache2sd;$splitText[1]]
+$textSplit[$var[cacheresult2];"hd_size":]
+$textSplit[$splitText[2];,]
+$var[cache2hd;$splitText[1]]
+$if[$var[cache2sd]!=$var[cache2hd]]
 $addButton[false;$var[format_hd_alt];Original;link]
+$endif
+$else
+$addButton[false;nonevideo_2;Not Available;secondary;true]
 $endif
 $addButton[true;audio;Audio;primary;true]
 $if[$charCount[$var[format_audio]]!=0]
@@ -354,7 +471,32 @@ $if[$var[harderrorcdn]==1]
 $deleteMessage[$channelID;$var[cachemessage]]
 $endif
 
+$endif
 $catch
 $sendMessage[Something just happened.
 Error: $error[message];false]
+$endtry
+
+$c[-- Preview Video --]
+
+$try
+
+$if[$charCount[$var[format_fhd]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_fhd];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_sd]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_sd];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_hd]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_hd];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_ld]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_ld];\\u002F;/;-1])]
+$elseif[$and[$charCount[$var[format_sd_wm]]!=0;$var[isrestrict]==1]==true]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($var[format_sd_wm])]
+$elseif[$charCount[$var[format_sd_alt]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($var[format_sd_alt])]
+$endif
+$catch
+$sendMessage[Something just happened when trying to edit message.
+Error: $error[message];false]
+$stop
+
 $endtry
