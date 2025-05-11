@@ -4,9 +4,9 @@ module.exports = [{
    code: `$reply $nomention
    $onlyIf[$message[0]!=;
    $addField[Usage;\`b-chat (options?) <prompt>\`;false]
-   $addField[Options;$codeBlock[--imagine  :: *Generate a image\n--think    :: Think before responding\n--web      :: Search the web\n--deep     :: *For complex tasks\n--memory   :: **Memorize your chat];false]
+   $addField[Options;$codeBlock[--think    :: Think before responding\n--web      :: Search the web\n--deep     :: *For complex tasks\n--memory   :: **Memorize your chat];false]
    $addField[_ _;-# *Rate limits may apply.\n-# **Experimental.;false]
-   $addField[Example;$codeBlock[<prefix>b-chat hello\n<prefix>b-chat --imagine anime girl\n<prefix>b-chat --web,--think,--memory find me a cheap headset];false]
+   $addField[Example;$codeBlock[<prefix>b-chat hello\n<prefix>b-chat --web,--think,--memory find me a cheap headset];false]
    $color[a09fff]]
    $let[use_parameter;$checkContains[$message[0];--imagine;--think;--web;--deep;--memory]]
    $let[except_image_parameter;$checkContains[$message[0];--think;--web;--deep]]
@@ -136,13 +136,7 @@ module.exports = [{
    $if[$charCount[$get[check_quick]]!=0;$attachment[$if[$isJSON[$get[check_quick]];$jsonLoad[json_quick;$get[check_quick]]$env[json_quick];$get[check_quick]];web_search-$getTimestamp.json;true]]
    $if[$charCount[$get[finalresult]]>=4000;$attachment[$get[finalresult];response-$getTimestamp.txt;true];
    $author[Response | Done in $httpPingms]
-   $if[$get[chat_image]==true;
-   $image[$advancedTextSplit[$get[finalresult];(;1;);0]]
-   $addActionRow
-   $addButton[$advancedTextSplit[$get[finalresult];(;1;);0];Download;Link]
-   ;
    $description[$get[finalresult]]
-   ]
    $footer[$username[$authorID];$userAvatar[$authorID;256]]
    $color[#$randomBytes[3]]
    $timestamp
@@ -282,14 +276,7 @@ module.exports = [{
    $if[$charCount[$get[check_quick]]!=0;$attachment[$if[$isJSON[$get[check_quick]];$jsonLoad[json_quick;$get[check_quick]]$env[json_quick];$get[check_quick]];web_search-$getTimestamp.json;true]]
    $if[$charCount[$get[finalresult]]>=4000;$attachment[$get[finalresult];response-$getTimestamp.txt;true];
    $author[Response | Done in $httpPingms]
-   $if[$get[chat_image]==true;
-   $description[Expire <t:$sum[$cropText[$getTimestamp;0;10];31556926]:R>]
-   $image[$advancedTextSplit[$get[finalresult];(;1;);0]]
-   $addActionRow
-   $addButton[$advancedTextSplit[$get[finalresult];(;1;);0];Download;Link]
-   ;
    $description[$get[finalresult]]
-   ]
    $footer[$username[$authorID];$userAvatar[$authorID;256]]
    $color[#$randomBytes[3]]
    $timestamp
