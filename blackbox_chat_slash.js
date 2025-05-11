@@ -20,16 +20,17 @@ module.exports = {
    $onlyIf[$option[prompt]!=;
    $ephemeral $defer
    $addField[Usage;\`/chat prompt:(options?) <prompt>\`;false]
-   $addField[Options;$codeBlock[--imagine  :: *Generate a image\n--think    :: Think before responding\n--web      :: Search the web\n--deep     :: *For complex tahat];false]
-   $addField[_ _;-# *Rate limits may apply.;false]
+   $addField[Options;$codeBlock[--think    :: Think before responding\n--web      :: Search the web\n--deep     :: *For complex tahat];false]
+   $addField[_ _;-# *Rate limits may apply.\n-# **Experimental.;false]
    $addField[Example;$codeBlock[/chat prompt:hello\n/chat prompt:--imagine anime girl\n/chat prompt:--web,--think find me a cheap headset];false]
    $color[a09fff]]
-   $let[use_parameter;$checkContains[$sliceText[$option[prompt];0;1];--imagine;--think;--web;--deep]]
+   $let[use_parameter;$checkContains[$sliceText[$option[prompt];0;1];--imagine;--think;--web;--deep;--memory]]
    $let[except_image_parameter;$checkContains[$sliceText[$option[prompt];0;1];--think;--web;--deep]]
    $if[$get[use_parameter]==true;
    $onlyIf[$sliceText[$option[prompt];1]!=;Missing \`prompt\`.]
    ]
 
+   $if[$option[ephemeral];$ephemeral]
    $defer
    
    $let[user-agent;Mozilla/5.0 (Windows NT 10.0\\; Win64\\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36]
@@ -47,7 +48,7 @@ module.exports = {
    $let[chat_deep;false]
    ]
 
-   $let[user_message;$jsonLoad[escapechar;$if[$get[use_parameter];$sliceText[$option[prompt];1];$option[prompt]]]$jsonStringify[escapechar]]
+   $let[user_message;$jsonLoad[escapechar;$if[$get[use_parameter];$sliceText[$option[prompt];0;1];$option[prompt]]]$jsonStringify[escapechar]]
 
    $let[bodydata;{
    "messages": \\[
@@ -153,13 +154,7 @@ module.exports = {
    $if[$charCount[$get[check_quick]]!=0;$attachment[$if[$isJSON[$get[check_quick]];$jsonLoad[json_quick;$get[check_quick]]$env[json_quick];$get[check_quick]];web_search-$getTimestamp.json;true]]
    $if[$charCount[$get[finalresult]]>=4000;$attachment[$get[finalresult];response-$getTimestamp.txt;true];
    $author[Response | Done in $httpPingms]
-   $if[$get[chat_image]==true;
-   $image[$advancedTextSplit[$get[finalresult];(;1;);0]]
-   $addActionRow
-   $addButton[$advancedTextSplit[$get[finalresult];(;1;);0];Download;Link]
-   ;
    $description[$get[finalresult]]
-   ]
    $footer[$username[$authorID];$userAvatar[$authorID;256]]
    $color[#$randomBytes[3]]
    $timestamp
@@ -301,14 +296,7 @@ module.exports = {
    $if[$charCount[$get[check_quick]]!=0;$attachment[$if[$isJSON[$get[check_quick]];$jsonLoad[json_quick;$get[check_quick]]$env[json_quick];$get[check_quick]];web_search-$getTimestamp.json;true]]
    $if[$charCount[$get[finalresult]]>=4000;$attachment[$get[finalresult];response-$getTimestamp.txt;true];
    $author[Response | Done in $httpPingms]
-   $if[$get[chat_image]==true;
-   $description[Expire <t:$sum[$cropText[$getTimestamp;0;10];31556926]:R>]
-   $image[$advancedTextSplit[$get[finalresult];(;1;);0]]
-   $addActionRow
-   $addButton[$advancedTextSplit[$get[finalresult];(;1;);0];Download;Link]
-   ;
    $description[$get[finalresult]]
-   ]
    $footer[$username[$authorID];$userAvatar[$authorID;256]]
    $color[#$randomBytes[3]]
    $timestamp
