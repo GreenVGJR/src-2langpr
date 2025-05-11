@@ -130,10 +130,15 @@ $textSplit[$splitText[2];,]
 $onlyIf[$and[$charCount[$splitText[1]]!=0;$splitText[1]!=0]==false;Captcha Triggered! Try execute again or restart the bot for IP refresh. (HTTP - Tiktok)
 Status Code: $splitText[1]]
 
+$textSplit[$httpResult;"isECVideo":]
+$textSplit[$splitText[2];,]
+$var[isec_seller;$splitText[1]]
 $textSplit[$httpResult;"playAddr":"]
 $textSplit[$splitText[2];"]
 $var[countPlayAddr;$charCount[$splitText[1]]]
-$if[$and[$var[countPlayAddr]==0;$charCount[$var[format_sd_alt]]==0]==true]
+$if[$and[$var[isec_seller]==1;$var[isactiveapi]==1]==true]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` This video only for Tiktok Shop. Using API Version.]
+$elseif[$and[$var[countPlayAddr]==0;$charCount[$var[format_sd_alt]]==0]==true]
 $editMessage[$channelID;$var[cachemessage];`(tiktok.com)` Video private / not available.]
 $stop
 $elseif[$and[$var[countPlayAddr]==0;$var[isactiveapi]==1]==true]
