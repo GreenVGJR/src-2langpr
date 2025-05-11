@@ -216,15 +216,15 @@ $var[format_audio;$splitText[1]]
 $if[$var[statusapi]==true]
 
 $if[$checkContains[$var[format_sd_alt];tiktokv.com]==false]
-$textSplit[$var[format_sd_alt];?a=]
+$textSplit[$var[format_sd_alt];?]
 $var[format_sd_alt;$splitText[1]]
 $endif
 $if[$checkContains[$var[format_sd_wm];tiktokv.com]==false]
-$textSplit[$var[format_sd_wm];?a=]
+$textSplit[$var[format_sd_wm];?]
 $var[format_sd_wm;$splitText[1]]
 $endif
 $if[$checkContains[$var[format_hd_alt];tiktokv.com]==false]
-$textSplit[$var[format_hd_alt];?a=]
+$textSplit[$var[format_hd_alt];?]
 $var[format_hd_alt;$splitText[1]]
 $endif
 
