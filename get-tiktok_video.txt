@@ -302,7 +302,7 @@ $textSplit[$var[cacheresult2];"hd_size":]
 $textSplit[$splitText[2];,]
 $var[cache2hd;$splitText[1]]
 $if[$var[cache2sd]!=$var[cache2hd]]
-$addButton[false;$var[format_hd_alt];Original;link]
+$addButton[false;$var[format_hd_alt];HD;link]
 $endif
 $addButton[true;audio;Audio;primary;true]
 $addButton[false;$var[format_audio_alt];SQ (Video);link]
@@ -453,7 +453,7 @@ $textSplit[$var[cacheresult2];"hd_size":]
 $textSplit[$splitText[2];,]
 $var[cache2hd;$splitText[1]]
 $if[$var[cache2sd]!=$var[cache2hd]]
-$addButton[false;$var[format_hd_alt];Original;link]
+$addButton[false;$var[format_hd_alt];HD;link]
 $endif
 $else
 $addButton[false;nonevideo_2;Not Available;secondary;true]
