@@ -92,6 +92,7 @@ $endif
 
 $c[-- Second Validation --]
 
+$botTyping
 $if[$var[if_mobile]==true]
 $editMessage[$channelID;$var[cachemessage];`(tiktok.com)` Fetching.]
 $else
@@ -172,7 +173,6 @@ $textSplit[$httpResult;"downloadAddr":"]
 $textSplit[$splitText[2];"]
 $var[isdownload;$checkCondition[$charCount[$splitText[1]]!=0]]
 
-$botTyping
 $var[cacheresult;$httpResult]
 
 $var[statusapi;$and[$var[isactiveapi]==1;$charCount[$var[isactiveapi]]==1]]
@@ -326,6 +326,9 @@ $textSplit[$splitText[2];,]
 $var[cache2hd;$splitText[1]]
 $if[$var[cache2sd]!=$var[cache2hd]]
 $addButton[false;$var[format_hd_alt];HD;link]
+$endif
+$if[$var[format_original_alt]!=]
+$addButton[false;$var[format_original_alt];Original (Experimental);link]
 $endif
 $addButton[true;audio;Audio;primary;true]
 $addButton[false;$var[format_audio_alt];SQ (Video);link]
