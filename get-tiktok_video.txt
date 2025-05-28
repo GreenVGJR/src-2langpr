@@ -24,7 +24,7 @@ $else
 $onlyIf[$charCount[$splitText[2]]!=0;Unknown video. (VideoID - Mobile)]
 $endif
 $var[checkpr_temp;$var[checkpr]]
-$var[cachemessage;$sendMessage[`(tikwm.com)` Fetching.;true]]
+$var[cachemessage;$sendMessage[`(tikwm.com)` Fetching. (Normal);true]]
 $try
 
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
@@ -44,6 +44,18 @@ $var[format_audio_alt;$httpResult[data;music]]
 $var[cacheresult2;$httpResult]
 $var[videoid;$httpResult[data;id]]
 $var[isactiveapi;1]
+
+$if[$var[isactiveapi]==1]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Experimental)]
+$httpAddHeader[User-Agent;$var[My_UserAgent]]
+$httpAddHeader[Range;bytes=0-0]
+$httpGet[https://tikwm.com/api/video/task/submit?url=https://$var[checkpr]&web=1]
+$if[$httpResult[data;detail]==]
+$var[format_original_alt;https://tikwm.com/api/video/task/result?task_id=$httpResult[data;task_id]]
+$else
+$var[format_original_alt;$httpResult[data;detail;play_url]]
+$endif
+$endif
 $catch
 $endtry
 
@@ -83,7 +95,7 @@ $c[-- Second Validation --]
 $if[$var[if_mobile]==true]
 $editMessage[$channelID;$var[cachemessage];`(tiktok.com)` Fetching.]
 $else
-$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching.]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Normal)]
 $try
 
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
@@ -109,6 +121,17 @@ $var[cacheresult2;$httpResult]
 $var[videoid;$httpResult[data;id]]
 $var[isactiveapi;1]
 
+$if[$var[isactiveapi]==1]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Experimental)]
+$httpAddHeader[User-Agent;$var[My_UserAgent]]
+$httpAddHeader[Range;bytes=0-0]
+$httpGet[https://tikwm.com/api/video/task/submit?url=https://$var[checkpr]&web=1]
+$if[$httpResult[data;detail]==]
+$var[format_original_alt;https://tikwm.com/api/video/task/result?task_id=$httpResult[data;task_id]]
+$else
+$var[format_original_alt;$httpResult[data;detail;play_url]]
+$endif
+$endif
 $catch
 $if[$httpResult[code]!=0]
 $stop
@@ -454,6 +477,9 @@ $textSplit[$splitText[2];,]
 $var[cache2hd;$splitText[1]]
 $if[$var[cache2sd]!=$var[cache2hd]]
 $addButton[false;$var[format_hd_alt];HD;link]
+$endif
+$if[$var[format_original_alt]!=]
+$addButton[false;$var[format_original_alt];Original (Experimental);link]
 $endif
 $else
 $addButton[false;nonevideo_2;Not Available;secondary;true]
