@@ -50,7 +50,7 @@ $editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Experimental
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://tikwm.com/api/video/task/submit?url=https://$var[checkpr]&web=1]
-$if[$httpResult[data;detail]==]
+$if[$httpResult[data;detail;play_url]==]
 $var[format_original_alt;https://tikwm.com/api/video/task/result?task_id=$httpResult[data;task_id]]
 $else
 $var[format_original_alt;$httpResult[data;detail;play_url]]
@@ -127,7 +127,7 @@ $editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Experimental
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://tikwm.com/api/video/task/submit?url=https://$var[checkpr]&web=1]
-$if[$httpResult[data;detail]==]
+$if[$httpResult[data;detail;play_url]==]
 $var[format_original_alt;https://tikwm.com/api/video/task/result?task_id=$httpResult[data;task_id]]
 $else
 $var[format_original_alt;$httpResult[data;detail;play_url]]
