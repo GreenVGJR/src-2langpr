@@ -21,7 +21,7 @@ module.exports = {
 ];\\\\;];<br>;];<p>;1;</p>;0]]
     $if[$advancedTextSplit[$get[a2];<a href=";1]!=;
     $arrayLoad[a2_rest;<a href=";$get[a2]]
-    $let[r1;]
+    $let[r1;$advancedTextSplit[$get[a2];<a href=";0]]
     $arrayForEach[a2_rest;restore_a2;$let[r1;$get[r1]$advancedTextSplit[$env[restore_a2];https://;1;">;1]]]
     $let[a2;$get[r1]]
     ]
