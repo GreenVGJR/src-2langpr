@@ -6,14 +6,14 @@ $reply[$channelID;$messageID;true]
 $onlyIf[$message[0]!=;Usage: \`yt-d <youtube_url>\`]
 $onlyIf[$isValidLink[$message[0]];Invalid link.]
 $onlyIf[$checkContains[$message[0];youtube.com;youtu.be];Invalid link.]
-$let[videoid;$if[$advancedTextSplit[$message[0];watch;1;v=;1;&;0]!=;$advancedTextSplit[$message[0];watch;1;v=;1;&;0];$advancedTextSplit[$message[0];://;1;/;1;?;0]]]
+$let[videoid;$if[$advancedTextSplit[$message[0];watch;1;v=;1;&;0]!=;$advancedTextSplit[$message[0];watch;1;v=;1;&;0];$if[$advancedTextSplit[$message[0];://;1;shorts/;1;?;0]!=;$advancedTextSplit[$message[0];://;1;shorts/;1;?;0];$advancedTextSplit[$message[0];://;1;/;1;?;0]]]]
 $onlyIf[$get[videoid]!=;No VideoID.]
-$let[appversion;20.23.37]
+$let[appversion;20.24.33]
 
 $startTyping[$channelID]
 
 $try[
-$httpSetBody[{"videoId":"$get[videoid]","context":{"client":{"hl":"en-US","gl":"US","clientName":"ANDROID","clientVersion":"$get[appversion]","clientScreen":"WATCH","clientFormFactor":"UNKNOWN_FORM_FACTOR"},"request":{"useSsl":true,"internalExperimentFlags":\\[\\],"consistencyTokenJars":\\[\\]}},"playbackContext":{"contentPlaybackContext":{"vis":0,"splay":false,"html5Preference":"HTML5_PREF_WANTS","lactMilliseconds":"-1","signatureTimestamp":0}},"attestationRequest":{"omitBotguardData":true},"racyCheckOk":true,"contentCheckOk":true}]
+$httpSetBody[{"videoId":"$get[videoid]","context":{"client":{"hl":"en-US","gl":"US","clientName":"ANDROID","clientVersion":"$get[appversion]","androidSdkVersion":36,"clientScreen":"WATCH","clientFormFactor":"UNKNOWN_FORM_FACTOR"},"request":{"useSsl":true,"internalExperimentFlags":\\[\\],"consistencyTokenJars":\\[\\]}},"playbackContext":{"contentPlaybackContext":{"vis":0,"splay":false,"html5Preference":"HTML5_PREF_WANTS","lactMilliseconds":"-1","signatureTimestamp":0}},"attestationRequest":{"omitBotguardData":true},"racyCheckOk":true,"contentCheckOk":true}]
 $let[httpstatus;$httpRequest[https://www.youtube.com/youtubei/v1/player;POST;reshttp]]
 $onlyIf[$get[httpstatus]==200;Can't process this.\nError: $get[httpstatus]]
 $onlyIf[$env[reshttp;playabilityStatus;status]==OK;Can't process this.\nError: \`$env[reshttp;playabilityStatus;reason]\`]
@@ -25,7 +25,7 @@ $stop
 ;errorhttp]
 
 $jsonLoad[aa;$env[reshttp;streamingData;adaptiveFormats]]
-$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality]];$return[$if[$checkContains[$env[ab;url];&ratebypass];$env[ab];$replace[$env[ab];&requiressl=yes;&requiressl=yes&ratebypass=true&range=0-$env[ab;contentLength];1]]]]]]
+$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality];$or[$jsonHas[ab;audioTrack]==false;$checkContains[$env[ab;audioTrack;displayName];original]]];$return[$if[$checkContains[$env[ab;url];&ratebypass];$env[ab];$replace[$env[ab];&requiressl=yes;&requiressl=yes&ratebypass=true&range=0-$env[ab;contentLength];1]]]]]]
 $arrayReverse[filter_aa;filter_aa]
 
 $author[$env[reshttp;videoDetails;author]]
@@ -50,10 +50,10 @@ $onlyIf[$advancedTextSplit[$customID;_;1]==$authorID]
 $defer
 $let[itag;$advancedTextSplit[$selectMenuValues[0];_;0]]
 $let[videoid;$advancedTextSplit[$selectMenuValues[0];";1]]
-$let[appversion;20.23.37]
+$let[appversion;20.24.33]
 
 $try[
-$httpSetBody[{"videoId":"$get[videoid]","context":{"client":{"hl":"en-US","gl":"US","clientName":"ANDROID","clientVersion":"$get[appversion]","clientScreen":"WATCH","clientFormFactor":"UNKNOWN_FORM_FACTOR"},"request":{"useSsl":true,"internalExperimentFlags":\\[\\],"consistencyTokenJars":\\[\\]}},"playbackContext":{"contentPlaybackContext":{"vis":0,"splay":false,"html5Preference":"HTML5_PREF_WANTS","lactMilliseconds":"-1","signatureTimestamp":0}},"attestationRequest":{"omitBotguardData":true},"racyCheckOk":true,"contentCheckOk":true}]
+$httpSetBody[{"videoId":"$get[videoid]","context":{"client":{"hl":"en-US","gl":"US","clientName":"ANDROID","clientVersion":"$get[appversion]","androidSdkVersion":36,"clientScreen":"WATCH","clientFormFactor":"UNKNOWN_FORM_FACTOR"},"request":{"useSsl":true,"internalExperimentFlags":\\[\\],"consistencyTokenJars":\\[\\]}},"playbackContext":{"contentPlaybackContext":{"vis":0,"splay":false,"html5Preference":"HTML5_PREF_WANTS","lactMilliseconds":"-1","signatureTimestamp":0}},"attestationRequest":{"omitBotguardData":true},"racyCheckOk":true,"contentCheckOk":true}]
 $let[httpstatus;$httpRequest[https://www.youtube.com/youtubei/v1/player;POST;reshttp]]
 $onlyIf[$get[httpstatus]==200;Can't process this.\nError: $get[httpstatus]]
 $onlyIf[$env[reshttp;playabilityStatus;status]==OK;Can't process this.\nError: \`$env[reshttp;playabilityStatus;reason]\`]
@@ -65,7 +65,7 @@ $stop
 ;errorhttp]
 
 $jsonLoad[aa;$env[reshttp;streamingData;adaptiveFormats]]
-$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality]];$return[$if[$checkContains[$env[ab;url];&ratebypass];$env[ab];$replace[$env[ab];&requiressl=yes;&requiressl=yes&ratebypass=true&range=0-$if[$env[ab;contentLength]>=10000000;10000000;$env[ab;contentLength]];1]]]]]]
+$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality];$or[$jsonHas[ab;audioTrack]==false;$checkContains[$env[ab;audioTrack;displayName];original]]];$return[$if[$checkContains[$env[ab;url];&ratebypass];$env[ab];$replace[$env[ab];&requiressl=yes;&requiressl=yes&ratebypass=true&range=0-$if[$env[ab;contentLength]>=10000000;10000000;$env[ab;contentLength]];1]]]]]]
 $jsonLoad[specific_aa;$arrayMap[filter_aa;filter_ab;$if[$env[filter_ab;itag]==$get[itag];$return[$env[filter_ab]]]]]
 
 $let[mid;$interactionReply[Downloading. (This may taking while)$if[$env[specific_aa;0;contentLength]>=10000000;\n-# File Size will be limit to ~10MB if it's exceeded.];true]]
