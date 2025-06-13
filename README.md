@@ -34,4 +34,4 @@
 6. [Advanced Blackbox.AI Chat](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat.js) (Deprecated)
 7. [Advanced Blackbox.AI Chat - Slash Version](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat_slash.js) (Deprecated)
 8. [$getLyricsTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/getLyricsTrack_cf.js)
-9. [Youtube Music Downloader (Testing Only)](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/ytdl-downloader.js)
+9. [Youtube Music Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/ytdl-downloader.js)
