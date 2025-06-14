@@ -25,7 +25,7 @@ $stop
 ;errorhttp]
 
 $jsonLoad[aa;$env[reshttp;streamingData;adaptiveFormats]]
-$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality];$or[$jsonHas[ab;audioTrack]==false;$checkContains[$env[ab;audioTrack;displayName];original]]];$return[$if[$checkContains[$env[ab;url];&ratebypass];$env[ab];$replace[$env[ab];&requiressl=yes;&requiressl=yes&ratebypass=true&range=0-$env[ab;contentLength];1]]]]]]
+$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality];$jsonHas[ab;audioTrack]==false];$return[$env[ab]]]]]
 $arrayReverse[filter_aa;filter_aa]
 
 $author[$env[reshttp;videoDetails;author]]
@@ -66,7 +66,7 @@ $stop
 ;errorhttp]
 
 $jsonLoad[aa;$env[reshttp;streamingData;adaptiveFormats]]
-$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality];$or[$jsonHas[ab;audioTrack]==false;$checkContains[$env[ab;audioTrack;displayName];original]]];$return[$if[$checkContains[$env[ab;url];&ratebypass];$env[ab];$replace[$env[ab];&requiressl=yes;&requiressl=yes&ratebypass=true&range=0-$if[$env[ab;contentLength]>=10000000;10000000;$env[ab;contentLength]];1]]]]]]
+$jsonLoad[filter_aa;$arrayMap[aa;ab;$if[$and[$jsonHas[ab;isDrc]==false;$jsonHas[ab;audioQuality];$jsonHas[ab;audioTrack]==false];$return[$if[$checkContains[$env[ab;url];&ratebypass];$env[ab];$replace[$env[ab];&requiressl=yes;&requiressl=yes&ratebypass=true&range=0-$if[$env[ab;contentLength]>=10000000;10000000;$env[ab;contentLength]];1]]]]]]
 $jsonLoad[specific_aa;$arrayMap[filter_aa;filter_ab;$if[$env[filter_ab;itag]==$get[itag];$return[$env[filter_ab]]]]]
 
 $onlyIf[$env[specific_aa;0;url]!=;$interactionReply[Can't download this.]]
