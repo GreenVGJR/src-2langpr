@@ -24,7 +24,7 @@ $else
 $onlyIf[$charCount[$splitText[2]]!=0;Unknown video. (VideoID - Mobile)]
 $endif
 $var[checkpr_temp;$var[checkpr]]
-$var[cachemessage;$sendMessage[`(tikwm.com)` Fetching. (Normal);true]]
+$var[cachemessage;$sendMessage[`(tikwm.com)` Fetching.;true]]
 $try
 
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
@@ -46,14 +46,21 @@ $var[videoid;$httpResult[data;id]]
 $var[isactiveapi;1]
 
 $if[$var[isactiveapi]==1]
-$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Experimental)]
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://tikwm.com/api/video/task/submit?url=https://$var[checkpr]&web=1]
-$if[$httpResult[data;detail;play_url]==]
+$if[$httpResult[data;detail;download_url]==]
 $var[format_original_alt;https://tikwm.com/api/video/task/result?task_id=$httpResult[data;task_id]]
+$httpGet[$var[format_original_alt]]
+$httpAddHeader[User-Agent;$var[My_UserAgent]]
+$httpAddHeader[Range;bytes=0-0]
+$if[$httpResult[data;detail;download_url]!=]
+$var[format_original_alt;$httpResult[data;detail;download_url]]
+$var[isoriginalvideo;1]
+$endif
 $else
-$var[format_original_alt;$httpResult[data;detail;play_url]]
+$var[format_original_alt;$httpResult[data;detail;download_url]]
+$var[isoriginalvideo;1]
 $endif
 $endif
 $catch
@@ -96,7 +103,7 @@ $botTyping
 $if[$var[if_mobile]==true]
 $editMessage[$channelID;$var[cachemessage];`(tiktok.com)` Fetching.]
 $else
-$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Normal)]
+$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching.]
 $try
 
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
@@ -123,14 +130,21 @@ $var[videoid;$httpResult[data;id]]
 $var[isactiveapi;1]
 
 $if[$var[isactiveapi]==1]
-$editMessage[$channelID;$var[cachemessage];`(tikwm.com)` Fetching. (Experimental)]
 $httpAddHeader[User-Agent;$var[My_UserAgent]]
 $httpAddHeader[Range;bytes=0-0]
 $httpGet[https://tikwm.com/api/video/task/submit?url=https://$var[checkpr]&web=1]
-$if[$httpResult[data;detail;play_url]==]
+$if[$httpResult[data;detail;download_url]==]
 $var[format_original_alt;https://tikwm.com/api/video/task/result?task_id=$httpResult[data;task_id]]
+$httpGet[$var[format_original_alt]]
+$httpAddHeader[User-Agent;$var[My_UserAgent]]
+$httpAddHeader[Range;bytes=0-0]
+$if[$httpResult[data;detail;download_url]!=]
+$var[format_original_alt;$httpResult[data;detail;download_url]]
+$var[isoriginalvideo;1]
+$endif
 $else
-$var[format_original_alt;$httpResult[data;detail;play_url]]
+$var[format_original_alt;$httpResult[data;detail;download_url]]
+$var[isoriginalvideo;1]
 $endif
 $endif
 $catch
@@ -253,6 +267,33 @@ $endif
 
 $endif
 
+$c[-- Preview Video --]
+
+$try
+
+$if[$and[$charCount[$var[format_original_alt]]!=0;$var[isoriginalvideo]==1]==true]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_original_alt];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_fhd]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_fhd];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_sd]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_sd];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_hd]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_hd];\\u002F;/;-1])]
+$elseif[$charCount[$var[format_ld]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_ld];\\u002F;/;-1])]
+$elseif[$and[$charCount[$var[format_sd_wm]]!=0;$var[isrestrict]==1]==true]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($var[format_sd_wm])]
+$elseif[$charCount[$var[format_sd_alt]]!=0]
+$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($var[format_sd_alt])]
+$endif
+$catch
+$sendMessage[Something just happened when trying to edit message.
+Error: $error[message];false]
+$stop
+
+$endtry
+
+
 $c[-- Render --]
 
 
@@ -328,11 +369,14 @@ $if[$var[cache2sd]!=$var[cache2hd]]
 $addButton[false;$var[format_hd_alt];HD;link]
 $endif
 $if[$var[format_original_alt]!=]
-$addButton[false;$var[format_original_alt];Original (Experimental);link]
+$addButton[false;$var[format_original_alt];Original;link]
 $endif
 $addButton[true;audio;Audio;primary;true]
-$addButton[false;$var[format_audio_alt];SQ (Video);link]
+$textSplit[$var[format_audio_alt];?]
+$addButton[false;$replaceText[$splitText[1];\\u002F;/;-1];SQ - Video;link]
+
 $else
+
 $textSplit[$var[cacheresult];"authorStats":]
 $textSplit[$splitText[2];"locationCreated":"]
 $textSplit[$splitText[2];"]
@@ -482,16 +526,18 @@ $if[$var[cache2sd]!=$var[cache2hd]]
 $addButton[false;$var[format_hd_alt];HD;link]
 $endif
 $if[$var[format_original_alt]!=]
-$addButton[false;$var[format_original_alt];Original (Experimental);link]
+$addButton[false;$var[format_original_alt];Original;link]
 $endif
 $else
 $addButton[false;nonevideo_2;Not Available;secondary;true]
 $endif
 $addButton[true;audio;Audio;primary;true]
 $if[$charCount[$var[format_audio]]!=0]
-$addButton[false;$replaceText[$var[format_audio];\\u002F;/;-1];SQ;link]
+$textSplit[$var[format_audio];?]
+$addButton[false;$replaceText[$splitText[1];\\u002F;/;-1];SQ;link]
 $if[$var[statusapi]==true]
-$addButton[false;$var[format_audio_alt];SQ (Video);link]
+$textSplit[$var[format_audio_alt];?]
+$addButton[false;$replaceText[$splitText[1];\\u002F;/;-1];SQ - Video;link]
 $endif
 $endif
 
@@ -505,28 +551,4 @@ $endif
 $catch
 $sendMessage[Something just happened.
 Error: $error[message];false]
-$endtry
-
-$c[-- Preview Video --]
-
-$try
-
-$if[$charCount[$var[format_fhd]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_fhd];\\u002F;/;-1])]
-$elseif[$charCount[$var[format_sd]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_sd];\\u002F;/;-1])]
-$elseif[$charCount[$var[format_hd]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_hd];\\u002F;/;-1])]
-$elseif[$charCount[$var[format_ld]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($replaceText[$var[format_ld];\\u002F;/;-1])]
-$elseif[$and[$charCount[$var[format_sd_wm]]!=0;$var[isrestrict]==1]==true]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($var[format_sd_wm])]
-$elseif[$charCount[$var[format_sd_alt]]!=0]
-$editMessage[$channelID;$var[cachemessage];[tiktok-$var[videoid]\]($var[format_sd_alt])]
-$endif
-$catch
-$sendMessage[Something just happened when trying to edit message.
-Error: $error[message];false]
-$stop
-
 $endtry
