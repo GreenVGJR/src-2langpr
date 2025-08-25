@@ -24,6 +24,7 @@
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt) (Deprecated)
 2. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/lahelu_downloader.txt) (Deprecated)
 3. [Get TikTok Video](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/get-tiktok_video.txt)
+4. [Chat with Gemini AI (Testing)](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/chatgemini.txt)
 
 ## [**ForgeScript**](https://github.com/tryForge/ForgeScript)
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js) (Deprecated)
@@ -34,4 +35,8 @@
 6. [Advanced Blackbox.AI Chat](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat.js) (Deprecated)
 7. [Advanced Blackbox.AI Chat - Slash Version](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat_slash.js) (Deprecated)
 8. [$getLyricsTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/getLyricsTrack_cf.js)
-9. [Youtube Music Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/ytdl-downloader.js)
+9. [Youtube Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/yt-downloader.js)
+10. [Music Bot](https://github.com/GreenVGJR/amc-discord-bot/tree/fs-dev-local)
+11. [Steal Emoji / Sticker](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/stealemojiorsticker.js)
+12. [$fastSuggestTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/fastSuggestTrack_cf.js)
+13. [$chatGemini - Custom Function (Testing)](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatGemini_cf.js)
