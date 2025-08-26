@@ -4,8 +4,7 @@ module.exports = [{
    code: `$reply $nomention
    $onlyIf[$message[0]!=;
    $addField[Usage;\`b-chat (options?) <prompt>\`;false]
-   $addField[Options;$codeBlock[--think    :: Think before responding\n--web      :: Search the web\n--deep     :: *For complex tasks\n--memory   :: **Memorize your chat];false]
-   $addField[_ _;-# *Rate limits may apply.\n-# **Experimental.;false]
+   $addField[Options;$codeBlock[--think    :: Think before responding\n--web      :: Search the web\n--deep     :: For complex tasks\n--memory   :: Memorize your chat\n--imagine   ::   Generate image];false]
    $addField[Example;$codeBlock[<prefix>b-chat hello\n<prefix>b-chat --web,--think,--memory find me a cheap headset];false]
    $color[a09fff]]
    $let[use_parameter;$checkContains[$message[0];--imagine;--think;--web;--deep;--memory]]
@@ -31,65 +30,13 @@ module.exports = [{
 
    $let[user_message;$jsonLoad[escapechar;$if[$get[use_parameter];$messageSlice[1];$message]]$jsonStringify[escapechar]]
 
-   $let[bodydata;{
-   "messages": \\[
-      {
-         "id": null,
-         "content": $get[user_message],
-         "role": "user"
-      }
-   \\],
-   "agentMode": {},
-   "id": null,
-   "previewToken": null,
-   "userId": null,
-   "codeModelMode": true,
-   "trendingAgentMode": {},
-   "isMicMode": false,
-   "userSystemPrompt": null,
-   "maxTokens": 1024,
-   "playgroundTopP": null,
-   "playgroundTemperature": null,
-   "isChromeExt": false,
-   "githubToken": "",
-   "clickedAnswer2": false,
-   "clickedAnswer3": false,
-   "clickedForceWebSearch": false,
-   "visitFromDelta": false,
-   "isMemoryEnabled": false,
-   "mobileClient": false,
-   "userSelectedModel": null,
-   "validated": "00f37b34-a166-4efb-bce5-1312d87f2f94",
-   "imageGenerationMode": $get[chat_image],
-   "webSearchModePrompt": $get[chat_web],
-   "deepSearchMode": $get[chat_deep],
-   "domains": null,
-   "vscodeClient": false,
-   "codeInterpreterMode": false,
-   "customProfile": "",
-   "session": {
-      "user": {
-         "name": "",
-         "email": "",
-         "image": "",
-         "id": ""
-      },
-      "expires": ""
-   },
-   "isPremium": false,
-   "subscriptionCache": null,
-   "beastMode": false,
-   "reasoningMode": $get[chat_think]
-   }
-   ]
+   $let[getaccess;$round[$divide[$sub[$getTimestamp;$uptime];1000]]@gmail.com]
+   $let[bodydata;{"messages": \\[ { "id": null, "content": $get[user_message], "role": "user" } \\], "codeModelMode": true, "trendingAgentMode": {}, "maxTokens": 1024, "isMemoryEnabled": false, "mobileClient": false, "userSelectedModel": null, "validated": "a38f5889-8fef-46d4-8ede-bf4668b6a9bb", "imageGenerationMode": $get[chat_image], "deepSearchMode": $get[chat_deep], "customProfile": {}, "webSearchModeOption": { "autoMode": $get[chat_web], "webMode": $get[chat_web], "offlineMode": false }, "session": { "user": { "email": "$get[getaccess]" } }, "isPremium": false, "subscriptionCache": {}, "beastMode": false, "reasoningMode": $get[chat_think], "designerMode": false }]
 
-   $async[
+   $let[idmessage;$sendMessage[$channelID;-# Generating... $if[$checkContains[true;$get[chat_think];$get[chat_deep]];This may take a while.;$if[true-true==$get[except_image_parameter]-$get[chat_image];Option but 'imagine' will be ignore.]];true]]
+   
    $try[
-   $let[tempcookies;$!httpRequest[https://www.blackbox.ai/;HEAD;nonecookie]$httpGetHeader[Set-Cookie]]
-   $onlyIf[$get[tempcookies]!=;$!editMessage[$channelID;$get[idmessage];$nomention Something just happened.\nError: Failed to authorize.]]
-
    $httpSetBody[$get[bodydata]]
-   $httpAddHeader[Cookie;$get[tempcookies]]
    $httpAddHeader[Origin;https://www.blackbox.ai]
    $httpAddHeader[Referer;https://www.blackbox.ai]
    $httpAddHeader[User-Agent;$get[user-agent]]
@@ -105,13 +52,13 @@ module.exports = [{
    $nomention
    $if[$get[chat_memory]==true;
    $addActionRow
-   $arrayLoad[savechat;]
+   $arrayLoad[savechat]
    $arrayPushJSON[savechat;{
       "client": \\[{
          "author": "$authorID",
          "channel": "$channelID",
          "message": "$messageID",
-         "unique": $jsonLoad[escapecookie;$get[tempcookies]]$jsonStringify[escapecookie]
+         "unique": "$get[getaccess]"
       }\\]
    }]
    $arrayPushJSON[savechat;{
@@ -135,19 +82,13 @@ module.exports = [{
    $if[$charCount[$get[check_think]]!=0;$attachment[$get[check_think];think-$getTimestamp.txt;true]]
    $if[$charCount[$get[check_quick]]!=0;$attachment[$if[$isJSON[$get[check_quick]];$jsonLoad[json_quick;$get[check_quick]]$env[json_quick];$get[check_quick]];web_search-$getTimestamp.json;true]]
    $if[$charCount[$get[finalresult]]>=4000;$attachment[$get[finalresult];response-$getTimestamp.txt;true];
-   $author[Response | Done in $httpPingms]
+   $author[Response | $httpPingms]
    $description[$get[finalresult]]
-   $footer[$username[$authorID];$userAvatar[$authorID;256]]
-   $color[#$randomBytes[3]]
+   $footer[$username[$authorID];$userAvatar[$authorID;1024]]
+   $color[aa$randomBytes[2]]
    $timestamp
-   ]
-   ]
-   ;
-   $!editMessage[$channelID;$get[idmessage];$nomention Something just happened.\nStatus Code: (ERROR)\nPlease check the console log for the error details.]
-   $log[$env[harderror]];harderror]
-   ]
-   
-   $let[idmessage;$sendMessage[$channelID;-# Generating... $if[$checkContains[true;$get[chat_think];$get[chat_deep]];This may take a while.;$if[true-true==$get[except_image_parameter]-$get[chat_image];Option but 'imagine' will be ignore.]];true]]
+   ]]
+   ;$log[$env[harderror]];harderror]
    `
 },
 {
@@ -165,9 +106,9 @@ module.exports = [{
    $let[cachelink;$messageAttachment[$channelID;$messageID;0]]
    $let[status;$httpRequest[$get[cachelink];GET;cacheconversation]]
    $onlyIf[$get[status]==200;Something just happened.\nStatus Code: $get[status]]
-   $interactionUpdate[-# Extracting data...]
+   $interactionReply[-# Extracting data...]
    $jsonLoad[jsoncachecov;$env[cacheconversation]]
-   $let[cookies;$env[jsoncachecov;0;client;0;unique]]
+   $let[email;$env[jsoncachecov;0;client;0;unique]]
    $let[decodecookies;$decodeURIComponent[$get[cookies]]]
    
    $let[user-agent;Mozilla/5.0 (Windows NT 10.0\\; Win64\\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36]
@@ -196,57 +137,12 @@ module.exports = [{
    }]
 
    $!jsonSet[jsoncachecov;1;chat;$env[savechat]]
-   $let[bodydata;{
-   "messages": $env[jsoncachecov;1;chat],
-   "agentMode": {},
-   "id": null,
-   "previewToken": null,
-   "userId": null,
-   "codeModelMode": true,
-   "trendingAgentMode": {},
-   "isMicMode": false,
-   "userSystemPrompt": null,
-   "maxTokens": 1024,
-   "playgroundTopP": null,
-   "playgroundTemperature": null,
-   "isChromeExt": false,
-   "githubToken": "",
-   "clickedAnswer2": false,
-   "clickedAnswer3": false,
-   "clickedForceWebSearch": false,
-   "visitFromDelta": false,
-   "isMemoryEnabled": false,
-   "mobileClient": false,
-   "userSelectedModel": null,
-   "validated": "00f37b34-a166-4efb-bce5-1312d87f2f94",
-   "imageGenerationMode": $get[chat_image],
-   "webSearchModePrompt": $get[chat_web],
-   "deepSearchMode": $get[chat_deep],
-   "domains": null,
-   "vscodeClient": false,
-   "codeInterpreterMode": false,
-   "customProfile": "",
-   "session": {
-      "user": {
-         "name": "",
-         "email": "",
-         "image": "",
-         "id": ""
-      },
-      "expires": ""
-   },
-   "isPremium": false,
-   "subscriptionCache": null,
-   "beastMode": false,
-   "reasoningMode": $get[chat_think]
-   }
-   ]
+   $let[bodydata;{"messages": $env[jsoncachecov;1;chat], "codeModelMode": true, "trendingAgentMode": {}, "maxTokens": 1024, "isMemoryEnabled": false, "mobileClient": false, "userSelectedModel": null, "validated": "a38f5889-8fef-46d4-8ede-bf4668b6a9bb", "imageGenerationMode": $get[chat_image], "deepSearchMode": $get[chat_deep], "customProfile": {}, "webSearchModeOption": { "autoMode": $get[chat_web], "webMode": $get[chat_web], "offlineMode": false }, "session": { "user": { "email": "$get[email]" } }, "isPremium": false, "subscriptionCache": {}, "beastMode": false, "reasoningMode": $get[chat_think], "designerMode": false }]
 
-   $interactionUpdate[-# Generating... $if[$checkContains[true;$get[chat_think];$get[chat_deep]];This may take a while.;$if[true-true==$get[except_image_parameter]-$get[chat_image];Option but 'imagine' will be ignore.]]]
+   $interactionReply[-# Generating... $if[$checkContains[true;$get[chat_think];$get[chat_deep]];This may take a while.;$if[true-true==$get[except_image_parameter]-$get[chat_image];Option but 'imagine' will be ignore.]]]
 
    $try[
    $httpSetBody[$get[bodydata]]
-   $httpAddHeader[Cookie;$get[decodecookies]]
    $httpAddHeader[Origin;https://www.blackbox.ai]
    $httpAddHeader[Referer;https://www.blackbox.ai]
    $httpAddHeader[User-Agent;$get[user-agent]]
@@ -275,10 +171,10 @@ module.exports = [{
    $if[$charCount[$get[check_think]]!=0;$attachment[$get[check_think];think-$getTimestamp.txt;true]]
    $if[$charCount[$get[check_quick]]!=0;$attachment[$if[$isJSON[$get[check_quick]];$jsonLoad[json_quick;$get[check_quick]]$env[json_quick];$get[check_quick]];web_search-$getTimestamp.json;true]]
    $if[$charCount[$get[finalresult]]>=4000;$attachment[$get[finalresult];response-$getTimestamp.txt;true];
-   $author[Response | Done in $httpPingms]
+   $author[Response | $httpPingms]
    $description[$get[finalresult]]
-   $footer[$username[$authorID];$userAvatar[$authorID;256]]
-   $color[#$randomBytes[3]]
+   $footer[$username[$authorID];$userAvatar[$authorID;1024]]
+   $color[aa$randomBytes[2]]
    $timestamp
    ]
    ;
