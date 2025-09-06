@@ -1,19 +1,19 @@
 $nomention
 $onlyIf[$noMentionMessage[1]!=;Usage: `$commandTrigger <prompt>`]
-$optOff[
 $var[msg;$url[Encode;$replaceText[$replaceText[$noMentionMessage;";\\\\\";-1];
 ;\\\\n;-1]]]
-$botTyping
-$reply[$channelID;$messageID]
+$var[mid;$sendMessage[-# Generating.;true]]
 $try
 $httpAddHeader[Content-Type;application/x-www-form-urlencoded]
+$httpAddHeader[Accept-Language;en-US]
 $httpAddHeader[Origin;https://gemini.google.com/]
-$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate;f.req=%5Bnull%2C%22%5B%5B%5C%22$var[msg]%5C%22%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en-US%5C%22%5D%2C%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D%2Cnull%2Cnull%2Cnull%2C%5B1%5D%2C1%2Cnull%2Cnull%2C0%2C0%2C0%5D%22%5D]
+$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US;f.req=%5Bnull%2C%22%5B%5B%5C%22$var[msg]%5C%22%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en-US%5C%22%5D%2C%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D%2Cnull%2Cnull%2Cnull%2C%5B1%5D%2C1%2Cnull%2Cnull%2C0%2C0%2C0%5D%22%5D]
 $catch
 Can't generate this content.
 Error: `$error[message]`
 $stop
 $endtry
+$try
 $var[httpres;$httpResult]
 $textSplit[$var[httpres];"wrb.fr"]
 $textSplit[$splitText[$sub[$getTextSplitLength;1]];null,null]
@@ -24,7 +24,7 @@ $textSplit[$splitText[2];",[\"]
 $textSplit[$splitText[2];\"\],[\],]
 $textSplit[$splitText[1];\"\],]
 $if[$splitText[1]!=]
-$var[result;$replaceText[$replaceText[$splitText[1];\n;
+$var[result;$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$splitText[1];\\u0022;";-1];\\u0024;$;-1];\\u0026;&;-1];\\u002F;/;-1];\\u005C;\\;-1];\\u0027;';-1];\\u003C;<;-1];\\u003E;>;-1];\n;
 ;-1];\\;;-1]]
 $else
 $textSplit[$var[httpres];"wrb.fr"]
@@ -35,15 +35,16 @@ $textSplit[$splitText[1];,[[]
 $textSplit[$splitText[2];",[\"]
 $textSplit[$splitText[2];\"\],[\],]
 $textSplit[$splitText[1];\"\],]
-$var[result;$replaceText[$replaceText[$splitText[1];\n;
+$var[result;$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$splitText[1];\\u0022;";-1];\\u0024;$;-1];\\u0026;&;-1];\\u002F;/;-1];\\u005C;\\;-1];\\u0027;';-1];\\u003C;<;-1];\\u003E;>;-1];\n;
 ;-1];\\;;-1]]
 $endif
-$if[$charCount[$var[result]]>=2000]
-$color[A09FFF]
-$thumbnail[$userAvatar[$botID]]
-$addTimestamp
-$description[$cropText[$var[result];4000;]]
-$else
-$cropText[$var[result];2000;]
+$catch
+$endtry
+$if[$charCount[$var[result]]==0]
+$var[result;null]
 $endif
-]
+$if[$charCount[$var[result]]>=2000]
+$editMessage[$channelID;$var[mid];_ _;;$cropText[$var[result];4000;];A09FFF;]
+$else
+$editMessage[$channelID;$var[mid];$cropText[$var[result];2000;]]
+$endif
