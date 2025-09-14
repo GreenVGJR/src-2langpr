@@ -42,6 +42,6 @@ $!jsonSet[anjson;status;$default[$get[httpstatus];null]]
 $!jsonSet[anjson;results;$default[$trim[$get[results]];null]]
 $!jsonSet[anjson;detectedLang;$default[$advancedTextSplit[$httpResult;"wrb.fr";1;null,null,null,\\[;3;,1,;1;\\\\";1];$default[$advancedTextSplit[$httpResult;"wrb.fr";1;null,null,null,\\[;2;,1,;1;\\\\";1];null]]]
 $!jsonSet[anjson;translateLang;$default[$advancedTextSplit[$httpResult;"wrb.fr";1;null,null,null,\\[;3;,1,;0;\\\\";1];$default[$advancedTextSplit[$httpResult;"wrb.fr";1;null,null,null,\\[;2;,1,;0;\\\\";1];null]]]
-$if[$or[$env[info]==null;$env[info]==;$env[info]==false];$env[anjson;results];$env[anjson]]
+$return[$if[$or[$env[info]==null;$env[info]==;$env[info]==false];$env[anjson;results];$env[anjson]]]
 `
 }
