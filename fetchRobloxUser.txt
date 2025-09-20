@@ -1,0 +1,85 @@
+$nomention
+$reply[$channelID;$messageID]
+$if[$message[1]==]
+Usage:
+```js
+$commandTrigger 140258990
+$commandTrigger kreekcraft
+```
+$stop
+$endif
+$var[generateuuid;$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]-$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]-$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]-$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]-$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]$optOff[$randomText[a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;0;1;2;3;4;5;6;7;8;9]]]
+$var[useragent;Mozilla/5.0 (Linux\; Android 10\; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.7339.124 Mobile Safari/537.36 EdgA/139.0.3405.125]
+$botTyping
+$if[$isNumber[$message[1]]]
+$var[uid;$message[1]]
+$else
+$c[-- Fetch ProfileID --]
+$try
+$var[encm;$url[Encode;$message]]
+$httpAddHeader[User-Agent;$var[useragent]]
+$httpAddHeader[Accept;application/json]
+$httpAddHeader[Origin;https://www.roblox.com]
+$httpGet[https://apis.roblox.com/search-api/omni-search?searchQuery=$var[encm]&verticalType=user&pageToken=&globalSessionId=$var[generateuuid]&sessionId=$var[generateuuid]]
+$catch
+$endtry
+$if[$httpResult[searchResults;0]==]
+Can't find the user.
+$stop
+$endif
+$var[uid;$httpResult[searchResults;0;contents;0;contentId]]
+$endif
+
+$c[-- Fetch Avatar Assets --]
+$try
+$httpAddHeader[User-Agent;$var[useragent]]
+$httpAddHeader[Accept;application/json]
+$httpAddHeader[Content-Type;application/json]
+$httpAddHeader[Origin;https://www.roblox.com]
+$httpPost[https://thumbnails.roblox.com/v1/batch;[{"requestId":null,"type":"AvatarHeadShot","targetId":$var[uid],"format":"png","size":"150x150"},{"requestId":null,"type":"Avatar","targetId":$var[uid],"format":"png","size":"352x352"}\]]
+$catch
+$endtry
+$if[$and[$httpResult!=;$httpResult[data;0;errorCode]!=0]]
+Can't find the user.
+$stop
+$endif
+$var[av1;$httpResult[data;0;imageUrl]]
+$var[av2;$httpResult[data;1;imageUrl]]
+
+$c[-- Fetch Profile --]
+$try
+$httpAddHeader[User-Agent;$var[useragent]]
+$httpAddHeader[Accept;application/json]
+$httpAddHeader[Content-Type;application/json]
+$httpAddHeader[Origin;https://www.roblox.com]
+$httpPost[https://apis.roblox.com/profile-platform-api/v1/profiles/get;{"profileId":"$var[uid]","profileType":"User","components":[{"component":"UserProfileHeader"},{"component":"About"},{"component":"CurrentlyWearing"},{"component":"Statistics"},{"component":"Clothing"}\],"includeComponentOrdering":false}]
+$catch
+$endtry
+$var[clrembed;a09fff]
+
+$author[$httpResult[components;UserProfileHeader;names;username];1]
+$authorIcon[$var[av1];1]
+$title[$httpResult[components;UserProfileHeader;names;primaryName];1]
+$embeddedURL[https://www.roblox.com/users/$httpResult[components;UserProfileHeader;userId]/profile;1]
+$description[$httpResult[components;About;description];1]
+$color[$var[clrembed];1]
+$footer[$httpResult[components;About;joinDateTime];1]
+$footerIcon[https://images.rbxcdn.com/7c5fe83dffa97250aaddd54178900ea7.png;1]
+$thumbnail[$var[av2];1]
+$addField[Friends;$numberSeparator[$httpResult[components;UserProfileHeader;counts;friendsCount]] / $numberSeparator[$httpResult[components;UserProfileHeader;counts;mutualFriendsCount]];true;1]
+$addField[Followers;$numberSeparator[$httpResult[components;UserProfileHeader;counts;followersCount]];true;1]
+$addField[Following;$numberSeparator[$httpResult[components;UserProfileHeader;counts;followingsCount]];true;1]
+$jsonParse[$httpResult[components;About]]
+$addField[Previous Names;$if[$jsonArrayCount[nameHistory]==0] None $else $jsonJoinArray[nameHistory;, ] $endif;false;1]
+$jsonClear
+$jsonParse[{"rbxuser":[\]}]
+$if[$httpResult[components;UserProfileHeader;isPremium]] $jsonArrayAppend[rbxuser;Premium] $endif
+$if[$httpResult[components;UserProfileHeader;isVerified]] $jsonArrayAppend[rbxuser;Verified] $endif
+$if[$httpResult[components;UserProfileHeader;isRobloxAdmin]] $jsonArrayAppend[rbxuser;Admin] $endif
+$addField[Status;$if[$jsonArrayCount[rbxuser]==0] None $else $jsonJoinArray[rbxuser;, ] $endif;false;1]
+$textSplit[$httpResult[components;CurrentlyWearing;assets];{"assetId":]
+$textSplit[$joinSplitText[];,"itemType":"Asset"}]
+$textSplit[$joinSplitText[];[]
+$textSplit[$splitText[2];\]]
+$textSplit[$splitText[1];,]
+$addField[List Assets;$if[$getTextSplitLength==0] null $else $joinSplitText[, ] $endif;false;1]
