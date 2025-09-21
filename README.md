@@ -1,5 +1,18 @@
-> [!NOTE]  
-> Some of these Codes may be already unstable to use. Thank you
+<details close>
+
+<summary>
+
+### FAQ
+
+</summary>
+
+|"Everything but aoi.js"|Do i need to credits you?|
+|:-:|:-:|
+|I'm no longer using that|Optional|
+|**Why would you even do this for free?**|**Do you open commission?**|
+|Either i wanted it, or someone asked me to make it|No, at least not right now|
+
+</details>
 
 ### Shortcut
 
@@ -13,11 +26,11 @@
 3. [SoundCloud-Downloader](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/soundcloud-downloader.js) (Deprecated)
 4. [Data-Invite](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/datainvite.js) (Deprecated)
 5. [Create-QRCode](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/create-qrcode.js) (Deprecated)
-6. [STRF-Time](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/strftime.js)
-7. [TypeOf](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/typeof.js)
+6. [STRF-Time](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/strftime.js) (Deprecated)
+7. [TypeOf](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/typeof.js) (Deprecated)
 8. [LogSpotify](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/logspotify.js) (Deprecated)
 9. [SlowMode](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/slowmode.js) (Deprecated)
-10. [Advanced-Music](https://github.com/GreenVGJR/amc-aoijs) (Archived)
+10. [Advanced-Music](https://github.com/GreenVGJR/amc-aoijs) (Deprecated)
 11. [ModMail](https://github.com/GreenVGJR/modmail-aoijs) (Deprecated)
 
 ## [**BDScript**](https://www.google.com/search?q=%22Bot+Designer+For+Discord%22+site:play.google.com+OR+site:apps.apple.com&num=5&udm=14)
@@ -29,7 +42,7 @@
 
 ## [**ForgeScript**](https://github.com/tryForge/ForgeScript)
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js) (Deprecated)
-2. [TikTok Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/atd.js)
+2. [TikTok Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/atd.js) (Deprecated)
 3. [YouTube Get Download Link](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/ytdl-download_link.js) (Deprecated)
 4. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/lahelu_downloader.js) (Deprecated)
 5. [Image Generation](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox-ai_gen.js) (Deprecated)
