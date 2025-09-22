@@ -22,7 +22,7 @@ params: [{
 },
 {
     name: "onTTS", // bool
-    description: "Output the TTS Response",
+    description: "Output the TTS Response (Default: false)",
     required: false
 }],
 code: `
