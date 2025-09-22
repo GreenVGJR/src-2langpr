@@ -34,7 +34,7 @@ $let[checkinfo;$checkCondition[$env[info]==true]]
 $let[withtts;$if[$and[$env[onTTS]==true;$get[checkinfo]];$env[onTTS];false]]
 $jsonLoad[anjson;{}]
 $if[$get[withtts];
-$let[ttsquery;$if[$sub[$argCount[$cropText[$env[query];0;100;]];1]<1;1;$sliceText[$env[query];0;$sub[$argCount[$cropText[$env[query];0;100;]];1]]]]
+$let[ttsquery;$sliceText[$env[query];0;$sub[$argCount[$cropText[$env[query];0;100;]];$if[$checkCondition[$charCount[$env[query]]>100];1;0]]]]
 $let[tts_texts;$encodeURI[$advancedReplace[$get[ttsquery];";\\\\\\\\\\\\";
 ;\\\\\\\\n]]]
 $try[
@@ -61,7 +61,7 @@ $arrayLoad[as;1\\],;$arrayJoin[ah;]]
 $arrayMap[as;lk;$return[$advancedTextSplit[$env[lk];\\[\\\\\\";1;\\\\",;0]];ah]
 $let[results;$advancedReplace[$arrayJoin[ah; ];\\\\\\\\;\\\\;\\\\";";\\\\n;\\\n]]
 $if[$get[withtts];
-$let[ttsquery_res;$if[$sub[$argCount[$cropText[$get[results];0;100;]];1]<1;1;$sliceText[$get[results];0;$sub[$argCount[$cropText[$get[results];0;100;]];1]]]]
+$let[ttsquery_res;$sliceText[$get[results];0;$sub[$argCount[$cropText[$get[results];0;100;]];$if[$checkCondition[$charCount[$get[results]]>100];1;0]]]]
 $let[tts_texts_res;$encodeURI[$advancedReplace[$get[ttsquery_res];";\\\\\\\\\\\\";
 ;\\\\\\\\n]]]
 $try[
