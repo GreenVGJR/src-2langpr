@@ -69,8 +69,11 @@ $thumbnail[$var[av2];1]
 $addField[Friends;$numberSeparator[$httpResult[components;UserProfileHeader;counts;friendsCount]] / $numberSeparator[$httpResult[components;UserProfileHeader;counts;mutualFriendsCount]];true;1]
 $addField[Followers;$numberSeparator[$httpResult[components;UserProfileHeader;counts;followersCount]];true;1]
 $addField[Following;$numberSeparator[$httpResult[components;UserProfileHeader;counts;followingsCount]];true;1]
+$try
 $jsonParse[$httpResult[components;About]]
 $addField[Previous Names;$if[$jsonArrayCount[nameHistory]==0] None $else $jsonJoinArray[nameHistory;, ] $endif;false;1]
+$catch
+$endtry
 $jsonClear
 $jsonParse[{"rbxuser":[\]}]
 $if[$httpResult[components;UserProfileHeader;isPremium]] $jsonArrayAppend[rbxuser;Premium] $endif
