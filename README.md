@@ -6,11 +6,9 @@
 
 </summary>
 
-|"Everything but aoi.js"|Do i need to credits you?|
-|:-:|:-:|
-|I'm no longer using that|Optional|
-|**Why would you even do this for free?**|**Do you open commission?**|
-|Either i wanted it, or someone asked me to make it|No, at least not right now|
+|"Everything but aoi.js"|Do i need to credits you?|**Why would you even do this for free?**|
+|:-:|:-:|:-:|
+|I'm no longer using that|Optional|Either i wanted it, or someone asked me to make it|
 
 </details>
 
