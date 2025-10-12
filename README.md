@@ -44,7 +44,7 @@
 3. [YouTube Get Download Link](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/ytdl-download_link.js) (Deprecated)
 4. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/lahelu_downloader.js) (Deprecated)
 5. [Image Generation](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox-ai_gen.js) (Deprecated)
-6. [Advanced Blackbox.AI Chat](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat.js)
+6. [Advanced Blackbox.AI Chat](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat.js) (Deprecated)
 7. [Advanced Blackbox.AI Chat - Slash Version](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat_slash.js) (Deprecated)
 8. [$getLyricsTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/getLyricsTrack_cf.js)
 9. [Youtube Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/yt-downloader.js)
