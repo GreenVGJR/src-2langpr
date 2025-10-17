@@ -51,5 +51,5 @@
 10. [Music Bot](https://github.com/GreenVGJR/amc-discord-bot/tree/fs-dev-local)
 11. [Steal Emoji / Sticker](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/stealemojiorsticker.js)
 12. [$fastSuggestTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/fastSuggestTrack_cf.js)
-13. [$chatGemini - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatGemini_cf.js) (Unstable)
+13. [$chatGemini - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatGemini_cf.js)
 14. [$translateTextGoogle - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/translateTextGoogle_cf.js)
