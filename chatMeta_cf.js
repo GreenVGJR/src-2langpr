@@ -174,11 +174,11 @@ $callLocalFunction[meta_ai-rt_test]
 ]
 
 $localFunction[fetchmsg;
-$let[inputmsg;$encodeURI[$advancedReplace[$env[query];";\\\\\\\\\\\\";
-;\\\\\\\\n]]]
+$let[inputmsg;$advancedReplace[$env[query];";\\\\\\\\\\\\";
+;\\\\\\\\n]]
 $let[threadid;$djsEval[const generateOfflineThreadingId = () => (((BigInt(Date.now()) << 22n) | (BigInt('0x' + require('crypto').randomBytes(8).toString('hex')) & ((1n << 22n) - 1n))) & ((1n << 64n) - 1n)).toString()\\; generateOfflineThreadingId()]]
 $try[
-$httpSetBody[av=0&__user=0&__a=1&dpr=1&lsd=$env[tsr;lsd]&access_token=$env[tsr;access_token]&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=useKadabraSendMessageMutation&variables={"message":{"sensitive_string_value":"$get[inputmsg]"},"externalConversationId":"$randomUUID","offlineThreadingId":"$get[threadid]","suggestedPromptIndex":null,"flashVideoRecapInput":{"images":\\[\\]},"flashPreviewInput":null,"promptPrefix":null,"entrypoint":"ABRA__CHAT__TEXT","icebreaker_type":"TEXT","__relay_internal__pv__WebPixelRatiorelayprovider":1}&server_timestamps=true&doc_id=$env[tsr;docid;1]]
+$httpSetBody[av=0&__user=0&__a=1&dpr=1&lsd=$env[tsr;lsd]&access_token=$env[tsr;access_token]&fb_api_caller_class=RelayModern&fb_api_req_friendly_name=useKadabraSendMessageMutation&variables={"message":{"sensitive_string_value":"$encodeURI[$get[inputmsg]]"},"externalConversationId":"$randomUUID","offlineThreadingId":"$get[threadid]","suggestedPromptIndex":null,"flashVideoRecapInput":{"images":\\[\\]},"flashPreviewInput":null,"promptPrefix":null,"entrypoint":"ABRA__CHAT__TEXT","icebreaker_type":"TEXT","__relay_internal__pv__WebPixelRatiorelayprovider":1}&server_timestamps=true&doc_id=$env[tsr;docid;1]]
 $httpAddHeader[Accept-Encoding;gzip]
 $httpAddHeader[Content-Type;application/x-www-form-urlencoded]
 $httpAddHeader[Cookie;$env[tsr;cookies]]
