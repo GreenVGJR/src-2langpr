@@ -1,6 +1,6 @@
 $nomention
 $onlyIf[$noMentionMessage[1]!=;Usage: `$commandTrigger <prompt>`]
-$var[msg;$url[Encode;$noMentionMessage]]
+$var[msg;$noMentionMessage]
 $try
 $var[variables;$url[Encode;[null,"[[\\"$var[msg]\\",0,null,null,null,null,0\],[\\"en-US\\"\],[\\"\\",\\"\\",\\"\\",null,null,null,null,null,null,\\"\\"\],null,\\"\\",null,[1\],1,null,null,1,0,null,null,null,null,null,[[1\]\],0,null,null,null,null,null,null,null,null,1,null,null,[0\],null,null,null,null,null,null,null,null,null,null,[2\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[\]\]"\]]]
 $httpAddHeader[Content-Type;application/x-www-form-urlencoded]
