@@ -1,43 +1,32 @@
 $nomention
 $onlyIf[$noMentionMessage[1]!=;Usage: `$commandTrigger <prompt>`]
-$var[msg;$url[Encode;$replaceText[$replaceText[$noMentionMessage;";\\\\\";-1];
-;\\\\n;-1]]]
-$var[mid;$sendMessage[-# Generating.;true]]
+$var[msg;$url[Encode;$noMentionMessage]]
 $try
+$var[variables;$url[Encode;[null,"[[\\"$var[msg]\\",0,null,null,null,null,0\],[\\"en-US\\"\],[\\"\\",\\"\\",\\"\\",null,null,null,null,null,null,\\"\\"\],null,\\"\\",null,[1\],1,null,null,1,0,null,null,null,null,null,[[1\]\],0,null,null,null,null,null,null,null,null,1,null,null,[0\],null,null,null,null,null,null,null,null,null,null,[2\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[\]\]"\]]]
 $httpAddHeader[Content-Type;application/x-www-form-urlencoded]
+$httpAddHeader[Accept;*/*]
 $httpAddHeader[Accept-Language;en-US]
 $httpAddHeader[Origin;https://gemini.google.com/]
-$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US;f.req=%5Bnull%2C%22%5B%5B%5C%22$var[msg]%5C%22%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en-US%5C%22%5D%2C%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D%2Cnull%2Cnull%2Cnull%2C%5B1%5D%2C1%2Cnull%2Cnull%2C0%2C0%2C0%5D%22%5D]
+$httpAddHeader[Referer;https://gemini.google.com/]
+$httpAddHeader[X-Same-Domain;1]
+$httpAddHeader[Sec-Fetch-Dest;empty]
+$httpAddHeader[Sec-Fetch-Mode;cors]
+$httpAddHeader[Sec-Fetch-Site;same-origin]
+$httpAddHeader[User-Agent;Mozilla/5.0 (Linux\; Android 10\; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.135 Mobile Safari/537.36 EdgA/134.0.3124.68]
+$var[mid;$sendMessage[-# Generating.;true]]
+$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US&rt=c;f.req=$var[variables]]
 $catch
 Can't generate this content.
 Error: `$error[message]`
 $stop
 $endtry
 $try
-$var[httpres;$httpResult]
-$textSplit[$var[httpres];"wrb.fr"]
-$textSplit[$splitText[$sub[$getTextSplitLength;1]];null,null]
-$textSplit[$splitText[2];null,null]
-$textSplit[$splitText[1];null,null]
-$textSplit[$splitText[1];,[[]
-$textSplit[$splitText[2];",[\"]
-$textSplit[$splitText[2];\"\],[\],]
-$textSplit[$splitText[1];\"\],]
-$if[$splitText[1]!=]
-$var[result;$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$splitText[1];\\u0022;";-1];\\u0024;$;-1];\\u0026;&;-1];\\u002F;/;-1];\\u005C;\\;-1];\\u0027;';-1];\\u003C;<;-1];\\u003E;>;-1];\n;
-;-1];\\;;-1]]
-$else
-$textSplit[$var[httpres];"wrb.fr"]
-$textSplit[$splitText[$getTextSplitLength];null,null]
-$textSplit[$splitText[2];null,null]
-$textSplit[$splitText[1];null,null]
-$textSplit[$splitText[1];,[[]
-$textSplit[$splitText[2];",[\"]
-$textSplit[$splitText[2];\"\],[\],]
-$textSplit[$splitText[1];\"\],]
-$var[result;$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$splitText[1];\\u0022;";-1];\\u0024;$;-1];\\u0026;&;-1];\\u002F;/;-1];\\u005C;\\;-1];\\u0027;';-1];\\u003C;<;-1];\\u003E;>;-1];\n;
-;-1];\\;;-1]]
-$endif
+$textSplit[$httpResult;"wrb.fr"]
+$textSplit[$splitText[$getTextSplitLength];\]"\]\]]
+$var[pullres;$splitText[1]]
+$jsonParse[[["wrb.fr"$var[pullres]\]"\]\]]
+$jsonParse[$json[0;2]]
+$var[result;$json[4;0;1;0]]
 $catch
 $endtry
 $if[$charCount[$var[result]]==0]
