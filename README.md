@@ -35,7 +35,7 @@
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt) (Deprecated)
 2. [Lahelu Downloader](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/lahelu_downloader.txt) (Deprecated)
 3. [Get TikTok Video](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/get-tiktok_video.txt)
-4. [Chat with Gemini AI](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/chatgemini.txt) (Unstable)
+4. [Chat with Gemini AI](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/chatgemini.txt)
 5. [Fetch Roblox User](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchRobloxUser.txt)
 
 ## [**ForgeScript**](https://github.com/tryForge/ForgeScript)
