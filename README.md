@@ -53,4 +53,5 @@
 12. [$fastSuggestTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/fastSuggestTrack_cf.js)
 13. [$chatGemini - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatGemini_cf.js)
 14. [$translateTextGoogle - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/translateTextGoogle_cf.js)
-15. [$chatMeta - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta_cf.js)
+15. [$chatMeta (ForgeDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta_cf.js)
+16. [$chatMeta (QuorielDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta-quorielDb_cf.js)
