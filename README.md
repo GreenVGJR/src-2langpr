@@ -48,7 +48,7 @@
 7. [Advanced Blackbox.AI Chat - Slash Version](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat_slash.js) (Deprecated)
 8. [$getLyricsTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/getLyricsTrack_cf.js)
 9. [Youtube Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/yt-downloader.js)
-10. [Music Bot](https://github.com/GreenVGJR/amc-discord-bot/tree/fs-dev-local)
+10. [Music Bot](https://github.com/GreenVGJR/amc-discord-bot/)
 11. [Steal Emoji / Sticker](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/stealemojiorsticker.js)
 12. [$fastSuggestTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/fastSuggestTrack_cf.js)
 13. [$chatGemini - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatGemini_cf.js)
