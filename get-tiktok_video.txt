@@ -241,6 +241,7 @@ $endtry
 $endasync
 $c[-- Render --]
 $await[runs1]
+$botTyping
 $c[-- Get Original Video --]
 $try
 $if[$and[$var[isactiveapi]==1;$var[isrequser]==1]]
