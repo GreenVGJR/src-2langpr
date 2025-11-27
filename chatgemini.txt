@@ -1,8 +1,11 @@
 $nomention
-$onlyIf[$noMentionMessage[1]!=;Usage: `$commandTrigger <prompt>`]
-$var[msg;$noMentionMessage]
+$onlyIf[$message[1]!=;Usage: `$commandTrigger <prompt>`]
+$var[msg;$replaceText[$url[Encode;$replaceText[$message;";\\\\\\"]];%0A;\\\\n]]
+$var[mid;$sendMessage[-# Generating.;true]]
 $try
-$var[variables;$url[Encode;[null,"[[\\"$var[msg]\\",0,null,null,null,null,0\],[\\"en-US\\"\],[\\"\\",\\"\\",\\"\\",null,null,null,null,null,null,\\"\\"\],null,\\"\\",null,[1\],1,null,null,1,0,null,null,null,null,null,[[1\]\],0,null,null,null,null,null,null,null,null,1,null,null,[0\],null,null,null,null,null,null,null,null,null,null,[2\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[\]\]"\]]]
+$var[variables;[null,"[[\\"$var[msg]\\",0,null,null,null,null,0\],[\\"en-US\\"\],[\\"\\",\\"\\",\\"\\",null,null,null,null,null,null,\\"\\"\],null,\\"\\",null,[1\],1,null,null,1,0,null,null,null,null,null,[[1\]\],0,null,null,null,null,null,null,null,null,1,null,null,[0\],null,null,null,null,null,null,null,null,null,null,[2\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[\]\]"\]]
+$httpRemoveHeader[X-Amzn-Trace-Id]
+$httpRemoveHeader[Host]
 $httpAddHeader[Content-Type;application/x-www-form-urlencoded]
 $httpAddHeader[Accept;*/*]
 $httpAddHeader[Accept-Language;en-US]
@@ -13,7 +16,6 @@ $httpAddHeader[Sec-Fetch-Dest;empty]
 $httpAddHeader[Sec-Fetch-Mode;cors]
 $httpAddHeader[Sec-Fetch-Site;same-origin]
 $httpAddHeader[User-Agent;Mozilla/5.0 (Linux\; Android 10\; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.135 Mobile Safari/537.36 EdgA/134.0.3124.68]
-$var[mid;$sendMessage[-# Generating.;true]]
 $httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US&rt=c;f.req=$var[variables]]
 $catch
 Can't generate this content.
