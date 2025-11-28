@@ -49,40 +49,17 @@ $var[av2;$httpResult[data;1;imageUrl]]
 $c[-- Fetch Profile --]
 $try
 $httpAddHeader[User-Agent;$var[useragent]]
-$httpAddHeader[Accept;application/json]
-$httpAddHeader[Content-Type;application/json]
-$httpAddHeader[Origin;https://www.roblox.com]
-$httpPost[https://apis.roblox.com/profile-platform-api/v1/profiles/get;{"profileId":"$var[uid]","profileType":"User","components":[{"component":"UserProfileHeader"},{"component":"About"},{"component":"CurrentlyWearing"},{"component":"Statistics"},{"component":"Clothing"}\],"includeComponentOrdering":false}]
+$httpGet[https://users.roblox.com/v1/users/$var[uid]]
 $catch
 $endtry
 $var[clrembed;a09fff]
 
-$author[$httpResult[components;UserProfileHeader;names;username];1]
+$author[$httpResult[name];1]
 $authorIcon[$var[av1];1]
-$title[$httpResult[components;UserProfileHeader;names;primaryName];1]
-$embeddedURL[https://www.roblox.com/users/$httpResult[components;UserProfileHeader;userId]/profile;1]
-$description[$httpResult[components;About;description];1]
+$title[$httpResult[displayName];1]
+$embeddedURL[https://www.roblox.com/users/$var[uid]/profile;1]
+$description[$httpResult[description];1]
 $color[$var[clrembed];1]
-$footer[$httpResult[components;About;joinDateTime];1]
+$footer[$httpResult[created];1]
 $footerIcon[https://images.rbxcdn.com/7c5fe83dffa97250aaddd54178900ea7.png;1]
 $thumbnail[$var[av2];1]
-$addField[Friends;$numberSeparator[$httpResult[components;UserProfileHeader;counts;friendsCount]] / $numberSeparator[$httpResult[components;UserProfileHeader;counts;mutualFriendsCount]];true;1]
-$addField[Followers;$numberSeparator[$httpResult[components;UserProfileHeader;counts;followersCount]];true;1]
-$addField[Following;$numberSeparator[$httpResult[components;UserProfileHeader;counts;followingsCount]];true;1]
-$try
-$jsonParse[$httpResult[components;About]]
-$addField[Previous Names;$if[$jsonArrayCount[nameHistory]==0] None $else $jsonJoinArray[nameHistory;, ] $endif;false;1]
-$catch
-$endtry
-$jsonClear
-$jsonParse[{"rbxuser":[\]}]
-$if[$httpResult[components;UserProfileHeader;isPremium]] $jsonArrayAppend[rbxuser;Premium] $endif
-$if[$httpResult[components;UserProfileHeader;isVerified]] $jsonArrayAppend[rbxuser;Verified] $endif
-$if[$httpResult[components;UserProfileHeader;isRobloxAdmin]] $jsonArrayAppend[rbxuser;Admin] $endif
-$addField[Status;$if[$jsonArrayCount[rbxuser]==0] None $else $jsonJoinArray[rbxuser;, ] $endif;false;1]
-$textSplit[$httpResult[components;CurrentlyWearing;assets];{"assetId":]
-$textSplit[$joinSplitText[];,"itemType":"Asset"}]
-$textSplit[$joinSplitText[];[]
-$textSplit[$splitText[2];\]]
-$textSplit[$splitText[1];,]
-$addField[List Assets;$if[$getTextSplitLength==0] null $else $joinSplitText[, ] $endif;false;1]
