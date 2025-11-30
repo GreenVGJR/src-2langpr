@@ -55,11 +55,13 @@ $httpAddHeader[Origin;https://translate.google.com]
 $httpSetBody[f.req=%5B%5B%5B%22MkEWBc%22%2C%22%5B%5B%5C%22$get[texts]%5C%22%2C%5C%22$get[mode]%5C%22%2C%5C%22$get[to_mode]%5C%22%2C1%2Cnull%2C2%5D%2C%5B%5D%5D%22%2Cnull%2C%22generic%22%5D%5D%5D]
 $let[httpstatus;$httpRequest[https://translate.google.com/_/TranslateWebserverUi/data/batchexecute?hl=en-US;POST;res]]
 ]
-$arrayLoad[ah;null,null,null,null,null,;$env[res]]
-$!arrayShift[ah]
-$arrayLoad[as;1\\],;$arrayJoin[ah;]]
-$arrayMap[as;lk;$return[$advancedTextSplit[$env[lk];\\[\\\\\\";1;\\\\",;0]];ah]
-$let[results;$advancedReplace[$arrayJoin[ah; ];\\\\\\\\;\\\\;\\\\";";\\\\n;\\\n]]
+$jsonLoad[res;$advancedTextSplit[$env[res];}'
+
+;1]]
+$jsonLoad[res;$env[res;0;2]]
+$jsonLoad[rest;$env[res;1;0;0;5]]
+$arrayMap[rest;lk;$return[$env[lk;0]];rest]
+$let[results;$arrayJoin[rest; ]]
 $if[$get[withtts];
 $let[ttsquery_res;$sliceText[$get[results];0;$sub[$argCount[$cropText[$get[results];0;100;]];$if[$checkCondition[$charCount[$get[results]]>100];1;0]]]]
 $let[tts_texts_res;$encodeURI[$advancedReplace[$get[ttsquery_res];";\\\\\\\\\\\\";
@@ -76,13 +78,14 @@ $let[tkts64tts;$default[$advancedTextSplit[$httpResult;"wrb.fr";1;\\[\\\\";1;\\\
 ]
 $!jsonSet[anjson;status;$default[$get[httpstatus];null]]
 $!jsonSet[anjson;results;$default[$trim[$get[results]];null]]
-$!jsonSet[anjson;detectedLang;$default[$advancedTextSplit[$env[res];"wrb.fr";1;null,null,null,\\[;3;,1,;1;\\\\";1];$default[$advancedTextSplit[$env[res];"wrb.fr";1;null,null,null,\\[;2;,1,;1;\\\\";1];null]]]
-$!jsonSet[anjson;translateLang;$default[$advancedTextSplit[$env[res];"wrb.fr";1;null,null,null,\\[;3;,1,;0;\\\\";1];$default[$advancedTextSplit[$env[res];"wrb.fr";1;null,null,null,\\[;2;,1,;0;\\\\";1];null]]]
+$!jsonSet[anjson;detectedLang;$env[res;1;3]]
+$!jsonSet[anjson;translateLang;$env[res;1;1]]
 $!jsonSet[anjson;tts;{}]
 $!jsonSet[anjson;tts;status;$get[withtts]]
 $!jsonSet[anjson;tts;audio;{}]
 $!jsonSet[anjson;tts;audio;from;$default[$get[tkbs64tts];null]]
 $!jsonSet[anjson;tts;audio;to;$default[$get[tkts64tts];null]]
+$!jsonSet[anjson;tts;audio;format;$if[$or[$get[tkbs64tts]!=;$get[tkts64tts]!=];mp3;null]]
 $return[$if[$get[checkinfo]==false;$env[anjson;results];$env[anjson]]]
 `
 }
