@@ -238,19 +238,24 @@ $jsonLoad[tns;$advancedTextSplit[$httpResult;}'
 
 ;1]]
 $let[convoid;]
+$let[found1;false]
+$let[found2;false]
+$arrayReverse[tns;tns]
 $arrayForEach[tns;s;
-$if[$and[$env[s;0]==wrb.fr;$env[s;2]!=];
+$if[$and[$env[s;0]==wrb.fr;$env[s;2]!=;$get[found1]==false];
 $try[$jsonLoad[tr;$env[s;2]]]
 $if[$env[tr;25]!=null;
+$let[found1;true]
 $let[convoid;$env[tr;25]]
 ]]]
 $if[$get[convoid]==;
 $delete[convoid]
 ]
 $arrayForEach[tns;s;
-$if[$and[$env[s;0]==wrb.fr;$env[s;2]!=];
+$if[$and[$env[s;0]==wrb.fr;$env[s;2]!=;$get[found2]==false];
 $try[$jsonLoad[tr;$env[s;2]]]
-$if[$env[tr;23]==true;
+$if[$env[tr;4;0;8;0]==2;
+$let[found2;true]
 $if[$and[$env[tr;26;0;0;0;9;0;0;0;3;3]!=;$env[tr;26;0;0;0;9;0;0;0;3;3]!=null];
 $let[plc-gr-r_render-wm;$djsEval[require("undici").request("$env[tr;26;0;0;0;9;0;0;0;3;3]").then(lr => fetch(lr.headers?.location,{headers:{"Accept":"*/*","Cookie":ctx.getKeyword("grinitcookies_replacement")}}).then(a => a.url).catch()).catch()]]
 ]
