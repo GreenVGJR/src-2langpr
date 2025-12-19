@@ -1,0 +1,59 @@
+$nomention
+$if[$isSlash]
+$onlyIf[$or[$isNumber[$message[user]]==true;$message[user]==]!=true;Usage: `$commandTrigger <username>`]
+$var[qrs;$removeLinks[$message[user]]]
+$defer
+$else
+$onlyIf[$or[$isNumber[$message[1]]==true;$message[1]==]!=true;Usage: `$commandTrigger <username>`]
+$var[qrs;$removeLinks[$message]]
+$botTyping
+$reply[$channelID;$messageID]
+$endif
+$var[deviceid;$optOff[$random[5;7]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]$optOff[$random[3;9]]]
+$try
+$httpGet[https://api2.musical.ly/aweme/v1/discover/search/?keyword=$url[Encode;$var[qrs]]&cursor=0&count=6&hot_search=0&search_source=discover&aid=1180&app=trill&region=&referer=&device_id=$var[deviceid]&type=1]
+$var[result;$httpResult[user_list]]
+$catch
+Can't continue the process.
+Error: $error[message]
+$stop
+$endtry
+$if[$var[result]==]
+No results.
+$stop
+$endif
+$jsonParse[$var[result]]
+$if[$json[0;user_info]==]
+No results.
+$stop
+$endif
+$authorIcon[https://sf16-sg.tiktokcdn.com/obj/eden-sg/uvkuhyieh7lpqpbj/pwa/512x512.png]
+$author[$if[$or[$checkContains[$json[0;user_info;enterprise_verify_reason];verified]==true;$checkContains[$json[0;user_info;custom_verify];Verified]==true]] ✅ | $endif$json[0;user_info;unique_id]]
+$title[$json[0;user_info;nickname]]
+$if[$json[0;user_info;signature]!=]
+$description[```
+$json[0;user_info;signature]
+```]
+$endif
+$thumbnail[$json[0;user_info;avatar_larger;url_list;0]]
+$color[#FE2C55]
+$addField[Following;$json[0;user_info;following_count];true]
+$addField[Followers;$json[0;user_info;follower_count];true]
+$addField[Videos;$json[0;user_info;aweme_count];true]
+$addField[Region;:flag_$toLowercase[$json[0;user_info;region]]: $json[0;user_info;region];true]
+$addField[Language;$json[0;user_info;language];true]
+$addField[Verified;`$if[$or[$checkContains[$json[0;user_info;enterprise_verify_reason];verified]==true;$checkContains[$json[0;user_info;custom_verify];Verified]==true]]✅$else❌$endif`;true]
+$addField[Total Likes Video;$json[0;user_info;total_favorited];true]
+$addField[Total Likes Interaction;$json[0;user_info;favoriting_count];true]
+$if[$json[0;user_info;original_musician;music_count]!=0]
+$addField[Total Music;$json[0;user_info;original_musician;music_count];true]
+$endif
+$addField[Similar Accounts;$if[$json[1;user_info]!=]- [$json[1;user_info;nickname]\](https://www.tiktok.com/@$json[1;user_info;unique_id])$endif
+$if[$json[2;user_info]!=]- [$json[2;user_info;nickname]\](https://www.tiktok.com/@$json[2;user_info;unique_id])$endif
+$if[$json[3;user_info]!=]- [$json[3;user_info;nickname]\](https://www.tiktok.com/@$json[3;user_info;unique_id])$endif
+$if[$json[4;user_info]!=]- [$json[4;user_info;nickname]\](https://www.tiktok.com/@$json[4;user_info;unique_id])$endif
+$if[$json[5;user_info]!=]- [$json[5;user_info;nickname]\](https://www.tiktok.com/@$json[5;user_info;unique_id])$endif;true]
+$footer[UserID: $json[0;user_info;uid]]
+$footerIcon[$json[0;user_info;avatar_larger;url_list;0]]
+$addButton[true;https://www.tiktok.com/@$json[0;user_info;unique_id]?secUid=$json[0;user_info;sec_uid];Profile;Link]
+$addButton[false;$json[0;user_info;avatar_larger;url_list;0];Avatar URL;Link]
