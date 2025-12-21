@@ -1,0 +1,72 @@
+$nomention
+$c[
+-- comment --
+Create this variable before execute command,
+> authspo
+
+'value' just leave empty
+-- end comment --
+]
+$if[$isSlash]
+$onlyIf[$message[query]!=;Usage: `$commandTrigger <song_name>`]
+$var[qrs;$removeLinks[$message[user]]]
+$defer
+$else
+$onlyIf[$message[1]!=;Usage: `$commandTrigger <song_name>`]
+$var[qrs;$removeLinks[$message]]
+$botTyping
+$reply[$channelID;$messageID]
+$endif
+$if[$varExists[authspo]==false]
+$onlyIf[1!=1;Missing variables, `authspo`. Please create this first]
+$endif
+$try
+$jsonParse[$getVar[authspo]]
+$catch
+$jsonParse[{"check_time":0,"token":""}]
+$setVar[authspo;$jsonStringify]
+$endtry
+$if[$or[$json[check_time]==0;$checkCondition[$getTimestamp>$json[check_time]]==true]]
+$httpGet[https://open.spotify.com/embed/artist/0gxyHStUsqpMadRV0Di1Qt]
+$textSplit[$httpResult;"accessToken":"]
+$textSplit[$splitText[2];"]
+$var[authaccess;$splitText[1]]
+$jsonSet[token;$var[authaccess]]
+$jsonSet[check_time;$sum[$getTimestamp;60]]
+$setVar[authspo;$jsonStringify]
+$endif
+$httpAddHeader[Authorization;Bearer $json[token]]
+$httpGet[https://api.spotify.com/v1/search?q=$url[Encode;$var[qrs]]&type=track&offset=0&limit=1&market=US]
+$if[$and[$or[$httpStatus==400;$httpStatus==401]==true;$json[check_time]!=0;$checkCondition[$getTimestamp>$json[check_time]]==true]]
+$onlyIf[1!=1;Auth key expired. Try again <t:$json[check_time]:R>]
+$endif
+$try
+$jsonParse[$httpResult]
+$catch
+Possibly temporary IP blocked.
+Try again later.
+
+$error[message]
+$stop
+$endtry
+$color[$optOff[$random[0;16777215]];1]
+$author[Spotify;1]
+$authorIcon[https://open.spotifycdn.com/cdn/images/favicon.ad2294bb.png;1]
+$title[Tracks Info;1]
+$thumbnail[$json[tracks;items;0;album;images;0;url];1]
+$addField[Name | #$json[tracks;items;0;track_number];$json[tracks;items;0;name]
+-# $json[tracks;items;0;external_urls;spotify];false;1]
+$addField[Artist Name;$json[tracks;items;0;artists;0;name]
+-# $json[tracks;items;0;artists;0;external_urls;spotify];false;1]
+$var[calcduration;$calculate[$json[tracks;items;0;duration_ms] / 60000]]
+$addField[Duration;$if[$var[calcduration]!=0] ~$var[calcduration] Minutes $else $var[calcduration] Seconds $endif;true;1]
+$addField[Playable;`$if[$json[tracks;items;0;is_playable]]✅$else❌$endif`;true;1]
+$addField[Explicit;`$if[$json[tracks;items;0;explicit]]✅$else❌$endif`;true;1]
+$footer[$json[tracks;items;0;popularity] / 100 | Rating;1]
+$color[$optOff[$random[0;16777215]];2]
+$thumbnail[$json[tracks;items;0;album;images;0;url];2]
+$title[Album Info;2]
+$addField[Name;$json[tracks;items;0;album;name]
+-# $json[tracks;items;0;album;external_urls;spotify];false;2]
+$addField[Release Date;$json[tracks;items;0;album;release_date];true;2]
+$addField[Total Tracks;$json[tracks;items;0;album;total_tracks];true;2]
