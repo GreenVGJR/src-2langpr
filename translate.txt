@@ -51,7 +51,7 @@ $endif
 $var[qrs;$joinSplitText[ ]]
 $try
 $httpAddHeader[Origin;https://translate.googleapis.com]
-$httpGet[https://translate.googleapis.com/translate_a/single?client=gtx&sl=$var[from]&tl=$var[to]&dt=t&dt=bd&dj=1&q=$cropText[$url[Encode;$var[qrs]];230;]]
+$httpGet[https://translate.googleapis.com/translate_a/single?client=gtx&sl=$var[from]&tl=$var[to]&dt=t&dt=bd&dj=1&q=$url[Encode;$cropText[$var[qrs];230;]]]
 $catch
 Can't process this.
 Error: $error[message]
