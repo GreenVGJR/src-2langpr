@@ -38,6 +38,9 @@
 4. [Chat with Gemini AI](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/chatgemini.txt)
 5. [Fetch Roblox User](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchRobloxUser.txt)
 6. [Get TikTok Profile](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/get-tiktok_profile.txt)
+7. [Search Spotify Tracks](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchSoundcloudTracks.txt)
+8. [Search Soundcloud Tracks](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchSoundcloudTracks.txt)
+9. [Translate Text](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/translate.txt)
 
 ## [**ForgeScript**](https://github.com/tryForge/ForgeScript)
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js) (Deprecated)
