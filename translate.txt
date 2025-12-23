@@ -9,8 +9,16 @@ $jsonParse[{"m":["Abkhaz","Acehnese","Acholi","Afar","Afrikaans","Albanian","Alu
 $if[$isSlash]
 $onlyIf[$message[query]!=;Usage: `$commandTrigger (to) <query> (from)`]
 $var[qrs;$removeLinks[$message[query]]]
+$if[$message[from]!=]
 $var[fIndex-from;$jsonArrayIndex[c;$message[from]]]
+$else
+$var[fIndex-from;-1]
+$endif
+$if[$message[to]!=]
 $var[fIndex-to;$jsonArrayIndex[c;$message[to]]]
+$else
+$var[fIndex-to;-1]
+$endif
 $defer
 $else
 $trimContent
@@ -48,7 +56,9 @@ $endif
 $if[$var[nfk-2]==true]
 $removeSplitTextElement[$getTextSplitLength]
 $endif
+$if[$isSlash==false]
 $var[qrs;$joinSplitText[ ]]
+$endif
 $try
 $httpAddHeader[Origin;https://translate.googleapis.com]
 $httpGet[https://translate.googleapis.com/translate_a/single?client=gtx&sl=$var[from]&tl=$var[to]&dt=t&dt=bd&dj=1&q=$url[Encode;$cropText[$var[qrs];230;]]]
