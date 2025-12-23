@@ -1,0 +1,71 @@
+$nomention
+$c[-- comment --
+Maximum 230 chars input, beyond that might not correct for results.
+I'm already add limiter so you don't have to modify this codes unless for something
+-- end comment --
+]
+$c[Source: https://cloud.google.com/translate/docs/languages]
+$jsonParse[{"m":["Abkhaz","Acehnese","Acholi","Afar","Afrikaans","Albanian","Alur","Amharic","Arabic","Armenian","Assamese","Avar","Awadhi","Aymara","Azerbaijani","Balinese","Bambara","Bashkir","Basque","Batak Karo","Batak Simalungun","Batak Toba","Belarusian","Bengali","Bhojpuri","Bikol","Bosnian","Breton","Bulgarian","Buryat","Cantonese","Catalan","Cebuano","Chamorro","Chechen","Chichewa","Chinese (Simplified)","Chinese (Traditional)","Chuvash","Corsican","Crimean Tatar","Croatian","Czech","Danish","Dhivehi","Dininkka","Dogri","Dombe","Dutch","Dyula","Dzongkha","English","Esperanto","Estonian","Ewe","Faroese","Fijian","Filipino","Finnish","French","French (Canada)","Frisian","Friulian","Fulani","Ga","Galician","Georgian","German","Greek","Guarani","Gujarati","Haitian Creole","Hakha Chin","Hausa","Hawaiian","Hebrew","Hindi","Hmong","Hungarian","Hunsrik","Iban","Icelandic","Igbo","Ilocano","Indonesian","Irish","Italian","Japanese","Javanese","Jingpo","Kalaallisut","Kannada","Kanuri","Kapampangan","Kazakh","Khasi","Khmer","Kiga","Kikongo","Kinyarwanda","Kituba","Kokborok","Konkani","Korean","Krio","Kurdish (Kurmanji)","Kurdish (Sorani)","Kyrgyz","Lao","Latavian","Ligurian","Limburgish","Lingala","Lithuanian","Lombard","Luganda","Luo","Luxembourgish","Macedonian","Madurese","Magahi","Maithili","Makassar","Malagasy","Malay","Malayalam","Maltese","Mam","Manx","Maori","Marathi","Marshallese","Marwadi","Mauritian Creole","Meiteilon (Manipuri)","Minangkabau","Mizo","Mongolian","Myanmar (Burmese)","Nahuatl","Ndau","Ndebele (South)","Nepalbhasha (Newari)","Nepali","NKo","Norwegian","Nuer","Occitan","Odia (Oriya)","Oromo","Ossetian","Pangasinan","Papiamento","Pashto","Persian","Polish","Portuguese (Brazil)","Portuguese (Portugal)","Punjabi (Gurmukhi)","Punjabi (Shahmukhi)","Quechua","Qʼeqchiʼ","Romani","Romanian","Rundi","Russian","Samoan","Sango","Sanskrit","Santali","Scots Gaelic","Sepedi","Serbian","Sesotho","Seychellois Creole","Shan","Shona","Sicilian","Silesian","Sindhi","Sinhala","Slovak","Slovenian","Somali","Spanish","Sundanese","Susu","Swahili","Swati","Swedish","Tahitian","Tajik","Tamazight","Tamazight (Tifinagh)","Tamil","Tatar","Telugu","Tetum","Thai","Tibetan","Tigrinya","Tiv","Tok Pisin","Tongan","Tsonga","Tswana","Tulu","Tumbuka","Turkish","Turkmen","Tuvan","Twi","Udmurt","Ukrainian","Urdu","Uyghur","Uzbek","Venda","Venetian","Vietnamese","Waray","Welsh","Wolof","Xhosa","Yakut","Yiddish","Yoruba","Yucatec Maya","Zapotec","Zulu"\],"c":["ab","ace","ach","aa","af","sq","alz","am","ar","hy","as","av","awa","ay","az","ban","bm","ba","eu","btx","bts","bbc","be","bn","bho","bik","bs","br","bg","bua","yue","ca","ceb","ch","ce","ny","zh-CN","zh-TW","cv","co","crh","hr","cs","da","dv","din","doi","dom","nl","dyu","dz","en","eo","et","ee","fo","fj","fil","fi","fr","fr-CA","fy","fur","ff","gaa","gl","ka","de","el","gn","gu","ht","cnh","ha","haw","he","hi","hmn","hu","hrx","iba","is","ig","ilo","id","ga","it","ja","jv","kac","kl","kn","kr","pam","kk","kha","km","cgg","kg","rw","ktu","trp","gom","ko","kri","ku","ckb","ky","lo","lv","lij","li","ln","lt","lmo","lg","luo","lb","mk","mad","mag","mai","mak","mg","ms","ml","mt","mam","gv","mi","mr","mh","mwr","mfe","mni-Mtei","min","lus","mn","my","nah","ndc","nr","new","ne","nko","no","nus","oc","or","om","os","pag","pap","ps","fa","pl","pt-BR","pt-PT","pa","pa-Arab","qu","kek","rom","ro","rn","ru","sm","sg","sa","sat","gd","nso","sr","st","crs","shn","sn","scn","szl","sd","si","sk","sl","so","es","su","sus","sw","ss","sv","ty","tg","tzm","ber-Tfng","ta","tt","te","tet","th","bo","ti","tiv","tpi","to","ts","tn","tcy","tum","tr","tk","tyv","ak","udm","uk","ur","ug","uz","ve","vec","vi","war","cy","wo","xh","sah","yi","yo","yua","zap","zu"\]}]
+$if[$isSlash]
+$onlyIf[$message[query]!=;Usage: `$commandTrigger (to) <query> (from)`]
+$var[qrs;$removeLinks[$message[query]]]
+$var[fIndex-from;$jsonArrayIndex[c;$message[from]]]
+$var[fIndex-to;$jsonArrayIndex[c;$message[to]]]
+$defer
+$else
+$trimContent
+$onlyIf[$message[1]!=;Usage: `$commandTrigger <query> (from) (to)`]
+$var[qrs;$removeLinks[$message]]
+$textSplit[$toLowercase[$var[qrs]]; ]
+$if[$getTextSplitLength>=3]
+$var[fIndex-from;$jsonArrayIndex[c;$splitText[$sub[$getTextSplitLength;1]]]]
+$else
+$var[fIndex-from;-1]
+$endif
+$if[$getTextSplitLength>=2]
+$var[fIndex-to;$jsonArrayIndex[c;$splitText[$getTextSplitLength]]]
+$else
+$var[fIndex-to;-1]
+$endif
+$botTyping
+$reply[$channelID;$messageID]
+$endif
+$if[$var[fIndex-from]==-1]
+$var[from;auto]
+$else
+$var[nfk-1;true]
+$var[from;$json[c;$var[fIndex-from]]]
+$endif
+$if[$var[fIndex-to]==-1]
+$var[to;en]
+$else
+$var[nfk-2;true]
+$var[to;$json[c;$var[fIndex-to]]]
+$endif
+$if[$var[nfk-1]==true]
+$removeSplitTextElement[$sub[$getTextSplitLength;1]]
+$endif
+$if[$var[nfk-2]==true]
+$removeSplitTextElement[$getTextSplitLength]
+$endif
+$var[qrs;$joinSplitText[ ]]
+$try
+$httpAddHeader[Origin;https://translate.googleapis.com]
+$httpGet[https://translate.googleapis.com/translate_a/single?client=gtx&sl=$var[from]&tl=$var[to]&dt=t&dt=bd&dj=1&q=$cropText[$url[Encode;$var[qrs]];230;]]
+$catch
+Can't process this.
+Error: $error[message]
+$stop
+$endtry
+$author[Translate]
+$authorIcon[https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Google_Translate_logo.svg/2048px-Google_Translate_logo.svg.png]
+$addField[Detected Lang;$json[m;$jsonArrayIndex[c;$httpResult[src]]];true]
+$if[$var[from]==auto]
+$addField[From Lang;$json[m;$jsonArrayIndex[c;$httpResult[src]]];true]
+$else
+$addField[From Lang;$json[m;$jsonArrayIndex[c;$var[from]]];true]
+$endif
+$addField[To Lang;$json[m;$jsonArrayIndex[c;$var[to]]];true]
+$addField[Input;$var[qrs];false]
+$addField[Output;$httpResult[sentences;0;trans];false]
+$color[4285F4]
