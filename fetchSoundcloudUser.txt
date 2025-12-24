@@ -1,0 +1,86 @@
+$nomention
+$c[
+-- comment --
+Create this variable before execute command,
+> authsc
+
+'value' just leave empty
+-- end comment --
+]
+$if[$isSlash]
+$onlyIf[$message[query]!=;Usage: `$commandTrigger <username>`]
+$var[qrs;$removeLinks[$message[song_name]]]
+$defer
+$else
+$onlyIf[$message[1]!=;Usage: `$commandTrigger <username>`]
+$var[qrs;$removeLinks[$message]]
+$botTyping
+$reply[$channelID;$messageID]
+$endif
+$if[$varExists[authsc]==false]
+$onlyIf[1!=1;Missing variables, `authsc`. Please create this first]
+$endif
+$try
+$jsonParse[$getVar[authsc]]
+$catch
+$jsonParse[{"check_time":0,"token":""}]
+$setVar[authsc;$jsonStringify]
+$endtry
+$if[$or[$json[check_time]==0;$checkCondition[$getTimestamp>$json[check_time]]==true]]
+$httpGet[https://m.soundcloud.com]
+$textSplit[$httpResult;"clientId":"]
+$textSplit[$splitText[2];"]
+$var[authaccess;$splitText[1]]
+$jsonSet[token;$var[authaccess]]
+$jsonSet[check_time;$sum[$getTimestamp;86400]]
+$setVar[authsc;$jsonStringify]
+$endif
+$try
+$httpGet[https://api-v2.soundcloud.com/search/users?q=$url[Encode;$var[qrs]]&client_id=$json[token]&limit=1&offset=0&linked_partitioning=0]
+$if[$and[$or[$httpStatus==400;$httpStatus==401]==true;$json[check_time]!=0;$checkCondition[$getTimestamp>$json[check_time]]==true]]
+$setVar[authsc;]
+$onlyIf[1!=1;Auth key expired. Run this command again to re-generate.]
+$endif
+$jsonParse[$httpResult]
+$catch
+Can't process this.
+Error: $error[message]
+$stop
+$endtry
+$if[$json[collection;0]==]
+No user is found.
+$stop
+$endif
+$if[$or[$json[collection;0;avatar_url]==null;$json[collection;0;avatar_url]==]]
+$var[artworkurl;$userAvatar[$botID]?size=1024]
+$else
+$var[artworkurl;$json[collection;0;avatar_url]]
+$endif
+$color[FF5500]
+$author[Soundcloud User]
+$authorIcon[https://soundcloud.com/pwa-icon-512.png]
+$title[$json[collection;0;username]]
+$if[$json[collection;0;description]!=]
+$description[```js
+$json[collection;0;description]
+```]
+$endif
+$embeddedURL[$json[collection;0;permalink_url]]
+$thumbnail[$var[artworkurl]]
+$addField[Followers;$ceil[$json[collection;0;followers_count]];true]
+$addField[Following;$ceil[$json[collection;0;followings_count]];true]
+$addField[Song Likes;$ceil[$json[collection;0;likes_count]];true]
+$if[$json[collection;0;created_at]!=]
+$textSplit[$json[collection;0;created_at];T]
+$addField[Created Date;`$splitText[1]`;true]
+$endif
+$if[$and[$and[$json[collection;0;city]==;$json[collection;0;country_code]==]==false;$or[$json[collection;0;city]==;$json[collection;0;country_code]==]==true]]
+$var[geocodes;$json[collection;0;city]$json[collection;0;country_code]]
+$else
+$var[geocodes;$json[collection;0;city], $json[collection;0;country_code]]
+$endif
+$if[$var[geocodes]!=, ]
+$addField[Location;$var[geocodes];true]
+$endif
+$addField[Verified;`$if[$json[collection;0;verified]]✅$else❌$endif`;true]
+$footer[UserID: $ceil[$json[collection;0;id]]]
