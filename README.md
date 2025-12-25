@@ -41,6 +41,7 @@
 7. [Search Spotify Tracks](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchSpotifyTracks.txt)
 8. [Search Soundcloud Tracks](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchSoundcloudTracks.txt)
 9. [Translate Text](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/translate.txt)
+10. [Get Soundcloud User](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchSoundcloudUser.txt)
 
 ## [**ForgeScript**](https://github.com/tryForge/ForgeScript)
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js) (Deprecated)
