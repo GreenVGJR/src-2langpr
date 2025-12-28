@@ -1,0 +1,63 @@
+$c[Lyrics Source: Shazam (Apple Music)]
+$c[Note: This could take almost a minute due to bdfd throttling]
+
+$nomention
+$if[$isSlash]
+$onlyIf[$message[song_name]!=;Usage: `$commandTrigger <song_name>`]
+$var[qrs;$removeLinks[$message[song_name]]]
+$defer
+$else
+$onlyIf[$message[1]!=;Usage: `$commandTrigger <song_name>`]
+$var[qrs;$removeLinks[$message]]
+$botTyping
+$reply[$channelID;$messageID]
+$endif
+$try
+$httpAddHeader[Accept-Encoding;identify]
+$httpAddHeader[Range;bytes=0-]
+$httpGet[https://itunes.apple.com/search?media=music&entity=musicTrack&limit=1&country=US&lang=en-US&version=2&term=$url[Encode;$var[qrs]]]
+$if[$httpResult[results;0]==]
+No track is match with your request.
+$stop
+$endif
+$catch
+Can't continue this process.
+Error: $error[message]
+$stop
+$endtry
+$var[url;$httpResult[results;0;trackViewUrl]]
+$var[title;$httpResult[results;0;trackName]]
+$var[artists;$httpResult[results;0;artistName]]
+$var[thumbnail;$replaceText[$httpResult[results;0;artworkUrl100];100x100bb;1x1ss]]
+$textSplit[$var[url];/]
+$var[mid;$sendMessage[-# This may take longer due BDFD throttle requests. Please wait;true]]
+$var[shazamurl;https://www.shazam.com/song/$httpResult[results;0;trackId]/$splitText[$sub[$getTextSplitLength;1]]]
+$try
+$httpAddHeader[Accept-Encoding;identify]
+$httpAddHeader[Range;bytes=0-]
+$httpGet[$var[shazamurl]]
+$textSplit[$httpResult;script type="application/ld+json">]
+$textSplit[$splitText[2];</script>]
+$jsonParse[$splitText[1]]
+$if[$json[recordingOf;lyrics;text]==]
+$var[lyricstext;[ No lyrics were found \]]
+$else
+$var[lyricstext;$json[recordingOf;lyrics;text]]
+$endif
+$catch
+Can't continue this process.
+Error: $error[message]
+$stop
+$endtry
+$try
+$deleteMessage[$channelID;$var[mid]]
+$catch
+$endtry
+$author[$var[artists]]
+$title[$var[title]]
+$addField[Apple Music Track;[URL\]($var[url]);true]
+$addField[Shazam Track;[URL\]($var[shazamurl]);true]
+$description[$cropText[$var[lyricstext];3997;...]]
+$thumbnail[$var[thumbnail]]
+$color[2255FF]
+$footer[Source: Shazam]
