@@ -14,8 +14,8 @@
 
 ### Shortcut
 
-1. [bdscript \(bdfd\)](https://github.com/GreenVGJR/src-2langpr/tree/about#bdscript)
-2. [forgescript](https://github.com/GreenVGJR/src-2langpr/tree/about#forgescript)
+1. [BDScript \(BDFD\)](https://github.com/GreenVGJR/src-2langpr/tree/about#bdscript)
+2. [ForgeScript](https://github.com/GreenVGJR/src-2langpr/tree/about#forgescript)
 
 ## [**BDScript**](https://www.google.com/search?q=%22Bot+Designer+For+Discord%22+site:play.google.com+OR+site:apps.apple.com&num=5&udm=14)
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt) (Deprecated)
