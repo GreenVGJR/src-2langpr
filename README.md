@@ -14,22 +14,8 @@
 
 ### Shortcut
 
-1. [aoi.js](https://github.com/GreenVGJR/src-2langpr/tree/about#aoijs)
-2. [bdscript \(bdfd\)](https://github.com/GreenVGJR/src-2langpr/tree/about#bdscript)
-3. [forgescript](https://github.com/GreenVGJR/src-2langpr/tree/about#forgescript)
-
-## [**aoi.js**](https://github.com/aoijs/aoi.js)
-1. [Join-To-Create](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/join-to-create.js) (Deprecated)
-2. [Data-Reddit](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/datareddit.js) (Deprecated)
-3. [SoundCloud-Downloader](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/soundcloud-downloader.js) (Deprecated)
-4. [Data-Invite](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/datainvite.js) (Deprecated)
-5. [Create-QRCode](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/create-qrcode.js) (Deprecated)
-6. [STRF-Time](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/strftime.js) (Deprecated)
-7. [TypeOf](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/typeof.js) (Deprecated)
-8. [LogSpotify](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/logspotify.js) (Deprecated)
-9. [SlowMode](https://github.com/GreenVGJR/src-2langpr/blob/aoijs/slowmode.js) (Deprecated)
-10. [Advanced-Music](https://github.com/GreenVGJR/amc-aoijs) (Deprecated)
-11. [ModMail](https://github.com/GreenVGJR/modmail-aoijs) (Deprecated)
+1. [bdscript \(bdfd\)](https://github.com/GreenVGJR/src-2langpr/tree/about#bdscript)
+2. [forgescript](https://github.com/GreenVGJR/src-2langpr/tree/about#forgescript)
 
 ## [**BDScript**](https://www.google.com/search?q=%22Bot+Designer+For+Discord%22+site:play.google.com+OR+site:apps.apple.com&num=5&udm=14)
 1. [ClickGame](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/clickgame.txt) (Deprecated)
@@ -42,6 +28,7 @@
 8. [Search Soundcloud Tracks](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchSoundcloudTracks.txt)
 9. [Translate Text](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/translate.txt)
 10. [Get Soundcloud User](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/fetchSoundcloudUser.txt)
+11. [Get Lyrics Song](https://github.com/GreenVGJR/src-2langpr/blob/bdscript/bdfd/getLyrics-shazam.txt) (Unstable)
 
 ## [**ForgeScript**](https://github.com/tryForge/ForgeScript)
 1. [SoundCloud Finder](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/scfinder.js) (Deprecated)
@@ -60,3 +47,8 @@
 14. [$translateTextGoogle - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/translateTextGoogle_cf.js)
 15. [$chatMeta (ForgeDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta_cf.js)
 16. [$chatMeta (QuorielDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta-quorielDb_cf.js)
+
+<br>
+
+Looking for [aoi.js?](https://github.com/GreenVGJR/src-2langpr/tree/aoijs)<br>
+All of those are deprecated.
