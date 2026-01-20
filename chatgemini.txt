@@ -1,35 +1,44 @@
 $nomention
 $onlyIf[$message[1]!=;Usage: `$commandTrigger <prompt>`]
 $var[msg;$replaceText[$url[Encode;$replaceText[$message;";\\\\\\"]];%0A;\\\\n]]
-$var[mid;$sendMessage[-# Generating.;true]]
 $try
-$var[variables;[null,"[[\\"$var[msg]\\",0,null,null,null,null,0\],[\\"en-US\\"\],[\\"\\",\\"\\",\\"\\",null,null,null,null,null,null,\\"\\"\],null,\\"\\",null,[1\],1,null,null,1,0,null,null,null,null,null,[[1\]\],0,null,null,null,null,null,null,null,null,1,null,null,[0\],null,null,null,null,null,null,null,null,null,null,[2\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[\]\]"\]]
-$httpRemoveHeader[X-Amzn-Trace-Id]
-$httpRemoveHeader[Host]
+$var[variables;[null,"[[\\"$var[msg]\\",0,null,null,null,null,0\],[\\"en\\"\],[\\"\\",\\"\\",\\"\\",null,null,null,null,null,null,\\"\\"\],\\"\\",\\"\\",null,[1\],1,null,null,1,0,null,null,null,null,null,[[1\]\],0,null,null,null,null,null,null,null,null,1,null,null,[4\],null,null,null,null,null,null,null,null,null,null,[2\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,\\"\\",null,[\],null,null,null,null,null,null,2\]"\]&]
 $httpAddHeader[Content-Type;application/x-www-form-urlencoded]
+$httpAddHeader[Connection;keep-alive=30]
 $httpAddHeader[Accept;*/*]
-$httpAddHeader[Accept-Language;en-US]
+$httpAddHeader[Accept-Language;en]
 $httpAddHeader[Origin;https://gemini.google.com/]
 $httpAddHeader[Referer;https://gemini.google.com/]
-$httpAddHeader[X-Same-Domain;1]
-$httpAddHeader[Sec-Fetch-Dest;empty]
+$httpAddHeader[Range;bytes=0-]
+$httpAddHeader[Sec-Fetch-Dest;document]
 $httpAddHeader[Sec-Fetch-Mode;cors]
 $httpAddHeader[Sec-Fetch-Site;same-origin]
-$httpAddHeader[User-Agent;Mozilla/5.0 (Linux\; Android 10\; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.135 Mobile Safari/537.36 EdgA/134.0.3124.68]
-$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US&rt=c;f.req=$var[variables]]
+$httpAddHeader[X-Same-Domain;1]
+$httpAddHeader[x-goog-ext-525001261-jspb;[1,null,null,null,"fbb127bbb056c959",null,null,0,[4\],null,null,1\]]
+$var[mid;$sendMessage[-# Generating.;true]]
+$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en;f.req=$var[variables]]
 $catch
 Can't generate this content.
-Error: `$error[message]`
+Error: $error[message]
 $stop
 $endtry
 $try
 $textSplit[$httpResult;"wrb.fr"]
-$textSplit[$splitText[$getTextSplitLength];\]"\]\]]
-$var[pullres;$splitText[1]]
-$jsonParse[[["wrb.fr"$var[pullres]\]"\]\]]
-$jsonParse[$json[0;2]]
+$var[calcfr;$sub[$getTextSplitLength;2]]
+$textSplit[$httpResult;}']
+$jsonParse[$splitText[2]]
+$jsonParse[$json[$var[calcfr];2]]
 $var[result;$json[4;0;1;0]]
 $catch
+$if[$or[$checkContains[$error[message];after top-level value]==true;$checkContains[$error[message];expected valid value]==true]==true]
+$editMessage[$channelID;$var[mid];Error: Rate-limited. Try again later]
+$elseif[$checkContains[$error[message];timeout awaiting response]==true]
+$editMessage[$channelID;$var[mid];Error: Timeout]
+$else
+$editMessage[$channelID;$var[mid];Can't generate this content.
+$error[message]]
+$endif
+$stop
 $endtry
 $if[$charCount[$var[result]]==0]
 $var[result;null]
