@@ -35,7 +35,7 @@ $let[agent;Mozilla/5.0 (X11\\; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gec
 $let[showcontent;$if[$or[$env[info]==null;$env[info]==];false;$env[info]]]
 $let[getconvo;$if[$or[$env[conversation]==null;$env[conversation]==];null;$env[conversation]]]
 $let[msg;$env[prompt]]
-$jsonLoad[29ca8a2268;{"0":null,"1":null,"2":null,"3":null,"4":null}]
+$jsonLoad[29ca8a2268;{"0":null,"1":null,"2":null,"3":null,"4":null,"5":null}]
 $jsonLoad[5b306f5d5e;{}]
 $!jsonSet[5b306f5d5e;auth;\\[null\\]]
 $!jsonSet[5b306f5d5e;prompt;$env[prompt]]
@@ -53,11 +53,13 @@ $let[tempct-gr-aacid;$env[prts;1]]
 $let[tempct-gr-pid;$env[prts;2]]
 $let[tempct-gr-init;$env[prts;3]]
 $let[tempct-gr-timestamp;$env[prts;4]]
+$let[tempct-gr-sid;$env[prts;5]]
 $!jsonSet[29ca8a2268;0;$env[prts;0]]
-$!jsonSet[29ca8a2268;1;$env[prts;1]]
-$!jsonSet[29ca8a2268;2;$env[prts;2]]
-$!jsonSet[29ca8a2268;3;$env[prts;3]]
-$!jsonSet[29ca8a2268;4;$env[prts;4]]
+$!jsonSet[29ca8a2268;1;"$env[prts;1]"]
+$!jsonSet[29ca8a2268;2;"$env[prts;2]"]
+$!jsonSet[29ca8a2268;3;"$env[prts;3]"]
+$!jsonSet[29ca8a2268;4;"$env[prts;4]"]
+$!jsonSet[29ca8a2268;5;"$env[prts;5]"]
 ;
 $if[$and[$env[googlecookies]!=;$env[googlecookies]!=null];
 $let[grinitcookies;$env[googlecookies]]
@@ -113,6 +115,8 @@ $try[
 $httpRemoveHeader[Accept-Encoding]
 $httpAddHeader[Accept-Language;en]
 $httpAddHeader[Cookie;$get[grinitcookies]]
+$httpAddHeader[Sec-Fetch-Dest;document]
+$httpAddHeader[Sec-Fetch-Site;none]
 $httpAddHeader[User-Agent;$get[agent]]
 $httpSetContentType[Text]
 $let[httprotatetogr_1;$httpRequest[https://gemini.google.com/app;GET]]
@@ -120,12 +124,14 @@ $let[httprotatetogr_1;$httpRequest[https://gemini.google.com/app;GET]]
 $if[$or[$and[$advancedTextSplit[$httpResult;<html>;1;</html>;0]!=;$advancedTextSplit[$httpResult;form id="captcha-form";1]!=];$get[httprotatetogr_1]!=200];$return[$env[5ce6128f45]]]
 $let[2d460-resex;$checkContains[$httpGetHeader[Set-Cookie];SIDCC=]]
 $let[2d460-snlm0e;$advancedTextSplit[$httpResult;"SNlM0e":";1;";0]]
+$let[2d460-sid;$advancedTextSplit[$httpResult;"FdrFJe":";1;";0]]
 $let[2d460-aa2yr;$advancedTextSplit[$httpResult;/app?authuser=;1;pid=;1;\\\\;0]]
 $if[$and[$get[2d460-resex];$get[2d460-snlm0e]!=;$get[2d460-aa2yr]!=];
 $callLocalFunction[cookiessid;$httpGetHeader[Set-Cookie];false]
 $!jsonSet[29ca8a2268;0;$get[grinitcookies_replacement]]
 $!jsonSet[29ca8a2268;1;"$get[2d460-snlm0e]"]
 $!jsonSet[29ca8a2268;2;"$get[2d460-aa2yr]"]
+$!jsonSet[29ca8a2268;5;"$get[2d460-sid]"]
 $arrayPush[5ce6128f45;$get[2d460-snlm0e]]
 $arrayPush[5ce6128f45;$get[2d460-aa2yr]]
 ;
@@ -169,7 +175,7 @@ $let[httpgrrotate_2;$httpRequest[https://accounts.google.com/RotateCookies;POST;
 $if[$get[httpgrrotate_2]!=200;$return[0]]
 $callLocalFunction[cookiessid;$httpGetHeader[Set-Cookie];$checkContains[$httpGetHeader[Set-Cookie];__Secure-1PSIDTS;__Secure-3PSIDTS]]
 $!jsonSet[29ca8a2268;0;$get[grinitcookies_replacement]]
-$!jsonSet[29ca8a2268;4;$sum[$getTimestamp;600000]]
+$!jsonSet[29ca8a2268;4;"$sum[$getTimestamp;600000]"]
 $return[$get[httpgrrotate_2]]
 ;lr_pid]
 $if[$and[$default[$get[tempct-gr-timestamp];0]<=$getTimestamp;$has[tempct-gr-timestamp]==true];
@@ -232,7 +238,7 @@ $jsonLoad[httpheader_i6lQlIBEIVwCVXo0;{
 "x-goog-ext-525001261-jspb": "[1,null,null,null,\\\\"fbb127bbb056c959\\\\",null,null,0,[4\\],null,null,1\\]"
 }]
 $if[$and[$has[grinitcookies];$get[abb24-cs_g]!=true];
-$let[httpbody;f.req=%5Bnull%2C%22%5B%5B$get[filvr]%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en%5C%22%5D%2C%5B%5C%22$get[gr-cov_c]%5C%22%2C%5C%22$get[gr-cov_r]%5C%22%2C%5C%22$get[gr-cov_rc]%5C%22%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22$get[gr-cov_convoid]%5C%22%5D%2Cnull%2C%5C%22%5C%22%2Cnull%2C%5B1%5D%2C1%2Cnull%2Cnull%2C1%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B%5B0%5D%5D%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C1%2Cnull%2Cnull%2C%5B4%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B2%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C$if[$env[f_imgreq]==true;13;null]%2Cnull%2Cnull%2Cnull%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B%5D%5D%22%5D&at=$default[$get[tempct-gr-aacid];$get[2d460-snlm0e]]&]
+$let[httpbody;f.req=%5Bnull%2C%22%5B%5B$get[filvr]%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en%5C%22%5D%2C%5B%5C%22$get[gr-cov_c]%5C%22%2C%5C%22$get[gr-cov_r]%5C%22%2C%5C%22$get[gr-cov_rc]%5C%22%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22$get[gr-cov_convoid]%5C%22%5D%2C%5C%22%5C%22%2C%5C%22%5C%22%2Cnull%2C%5B1%5D%2C1%2Cnull%2Cnull%2C1%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B%5B0%5D%5D%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C1%2Cnull%2Cnull%2C%5B4%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B1%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C$if[$env[f_imgreq]==true;14;null]%2Cnull%2Cnull%2Cnull%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22%5C%22%2Cnull%2C%5B%5D%2Cnull%2Cnull%2Cnull%2Cnull%2C%5Bnull%2Cnull%5D%2Cnull%2C2%5D%22%5D&at=$default[$get[tempct-gr-aacid];$get[2d460-snlm0e]]&]
 $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;$default[$get[grinitcookies_replacement];$get[grinitcookies]]]
 $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;x-same-domain;1]
 ;
@@ -244,7 +250,7 @@ $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;NID=$get[gr-cov_cookies]]
 $!djsEval[
 const { request, Agent } = require("undici")\\;
 
-request("https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en", {
+request("https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en$if[$and[$default[$get[tempct-gr-sid];$get[2d460-sid]]!=;$has[grinitcookies]];&f.sid=$default[$get[tempct-gr-sid];$get[2d460-sid]]]", {
     dispatcher: new Agent({ 
         connect: { family: 4 },
         bodyTimeout: 60000,
@@ -296,11 +302,14 @@ $let[nidcookie;$deflate[$advancedTextSplit[$get[grinitcookies_replacement];NID=;
 $!jsonSet[29ca8a2268;0;$get[grinitcookies_replacement]]
 $!jsonSet[5b306f5d5e;auth;\\["$deflate[$encrypt[$env[29ca8a2268];$clientToken];base64]"\\]]
 ;
+$if[$and[$advancedTextSplit[$get[httpcookie];NID=;0;\\;;0]!=;$has[gr-cov_cookies]==false];
+$let[plc-gr-s-blocked;true]
+;
 $if[$advancedTextSplit[$get[httpcookie];NID=;1;\\;;0]!=;
 $let[nidcookie;$deflate[$advancedTextSplit[$get[httpcookie];NID=;1;\\;;0];base64url]]
 ;
 $let[nidcookie;$deflate[$get[gr-cov_cookies];base64url]]
-]]
+]]]
 $jsonLoad[tns;$advancedTextSplit[$get[httpresult];}'
 
 ;1]]
@@ -335,7 +344,7 @@ $!jsonSet[5b306f5d5e;response;estimate_tokens;[{}\\]]
 $!jsonSet[5b306f5d5e;response;estimate_tokens;0;"$round[$divide[$charCount[$env[prompt]];4]]"]
 $!jsonSet[5b306f5d5e;response;estimate_tokens;1;"$round[$divide[$charCount[$default[$env[tr;4;0;1;0];$env[tr;26;0;0;0;1;2]]];4]]"]
 $!jsonSet[5b306f5d5e;response;chat;{}]
-$!jsonSet[5b306f5d5e;response;chat;status;$if[$or[$env[tr;4;0;0]!=null;$env[tr;4;0;0]!=];$if[$has[convoid];$if[$and[$env[tr;1;0]==$default[$get[gr-cov_c];$env[tr;1;0]]];OK;BAD_COOKIES_OR_EXPIRED];$if[$has[grinitcookies];OK;SIGN_IN_REQUIRED]];BAD_RESPONSE]]
+$!jsonSet[5b306f5d5e;response;chat;status;$if[$or[$env[tr;4;0;0]!=null;$env[tr;4;0;0]!=];$if[$has[convoid];$if[$and[$env[tr;1;0]==$default[$get[gr-cov_c];$env[tr;1;0]]];$if[$get[plc-gr-s-blocked]==true;SIGN_IN_REQUIRED;OK];BAD_COOKIES_OR_EXPIRED];$if[$has[grinitcookies];OK;SIGN_IN_REQUIRED]];BAD_RESPONSE]]
 $!jsonSet[5b306f5d5e;response;chat;c;$env[tr;1;0]]
 $!jsonSet[5b306f5d5e;response;chat;r;$env[tr;1;1]]
 $!jsonSet[5b306f5d5e;response;chat;rc;$env[tr;4;0;0]]
