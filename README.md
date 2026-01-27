@@ -1,17 +1,3 @@
-<details close>
-
-<summary>
-
-### FAQ
-
-</summary>
-
-|"Everything but aoi.js"|Do i need to credits you?|**Why would you even do this for free?**|
-|:-:|:-:|:-:|
-|I'm no longer using that|Optional|Either i wanted it, or someone asked me to make it|
-
-</details>
-
 ### Shortcut
 
 1. [BDScript \(BDFD\)](https://github.com/GreenVGJR/src-2langpr/tree/about#bdscript)
@@ -54,3 +40,17 @@
 
 Looking for [aoi.js?](https://github.com/GreenVGJR/src-2langpr/tree/aoijs)<br>
 All of those are deprecated.
+
+<details close>
+
+<summary>
+
+### FAQ
+
+</summary>
+
+|"Everything but aoi.js"|Do i need to credits you?|**Why would you even do this for free?**|
+|:-:|:-:|:-:|
+|I'm no longer using that|Optional|Either i wanted it, or someone asked me to make it|
+
+</details>
