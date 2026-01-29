@@ -33,9 +33,7 @@
 14. [$translateTextGoogle - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/translateTextGoogle_cf.js)
 15. [$chatMeta (ForgeDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta_cf.js)
 16. [$chatMeta (QuorielEdge) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta-quorielDb_cf.js)
-17. [Tenor - Custom Functions](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/tenor_cf.js)
-18. [Giphy - Custom Functions](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/giphy_cf.js)
-19. [Klipy - Custom Functions](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/klipy_cf.js) (Testing)
+17. [Tenor, Giphy, Klipy - Custom Functions](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/gifs_cf.js)
 <br>
 
 Looking for [aoi.js?](https://github.com/GreenVGJR/src-2langpr/tree/aoijs)<br>
