@@ -205,7 +205,7 @@ $let[gr-cov_cookies;$inflate[$env[clks;cookies];base64url]]
 $let[retry;0]
 $let[conthttperr;]
 $localFunction[fetchgemini;
-$if[$get[retry]>=1;
+$if[$get[retry]>=3;
 $!jsonSet[5b306f5d5e;response;text;null]
 $!jsonSet[5b306f5d5e;response;chat;{}]
 $!jsonSet[5b306f5d5e;response;chat;status;BAD_RESPONSE]
@@ -235,14 +235,15 @@ $jsonLoad[httpheader_i6lQlIBEIVwCVXo0;{
 "Sec-Fetch-Dest": "document",
 "Sec-Fetch-Mode": "cors",
 "Sec-Fetch-Site": "same-origin",
-"x-goog-ext-525001261-jspb": "[1,null,null,null,\\\\"fbb127bbb056c959\\\\",null,null,0,[4\\],null,null,1\\]"
+"x-goog-ext-73010989-jspb": "[0\\]",
+"x-goog-ext-525001261-jspb": "[1,null,null,null,\\\\"fbb127bbb056c959\\\\",null,null,0,[4\\],null,null,1\\]",
+"x-same-domain": "1"
 }]
 $if[$and[$has[grinitcookies];$get[abb24-cs_g]!=true];
 $let[httpbody;f.req=%5Bnull%2C%22%5B%5B$get[filvr]%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en%5C%22%5D%2C%5B%5C%22$get[gr-cov_c]%5C%22%2C%5C%22$get[gr-cov_r]%5C%22%2C%5C%22$get[gr-cov_rc]%5C%22%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22$get[gr-cov_convoid]%5C%22%5D%2C%5C%22%5C%22%2C%5C%22%5C%22%2Cnull%2C%5B1%5D%2C1%2Cnull%2Cnull%2C1%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B%5B0%5D%5D%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C1%2Cnull%2Cnull%2C%5B4%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B1%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C$if[$env[f_imgreq]==true;14;null]%2Cnull%2Cnull%2Cnull%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22%5C%22%2Cnull%2C%5B%5D%2Cnull%2Cnull%2Cnull%2Cnull%2C%5Bnull%2Cnull%5D%2Cnull%2C2%5D%22%5D&at=$default[$get[tempct-gr-aacid];$get[2d460-snlm0e]]&]
 $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;$default[$get[grinitcookies_replacement];$get[grinitcookies]]]
-$!jsonSet[httpheader_i6lQlIBEIVwCVXo0;x-same-domain;1]
 ;
-$let[httpbody;f.req=%5Bnull%2C%22%5B%5B$get[filvr]%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en-US%5C%22%5D%2C%5B%5C%22$get[gr-cov_c]%5C%22%2C%5C%22$get[gr-cov_r]%5C%22%2C%5C%22$get[gr-cov_rc]%5C%22%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22$get[gr-cov_convoid]%5C%22%5D%2C%5C%22%5C%22%2C%5C%22%5C%22%2Cnull%2C%5B1%5D%2C1%2Cnull%2Cnull%2C1%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B%5B1%5D%5D%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C1%2Cnull%2Cnull%2C%5B4%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B2%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22%5C%22%2Cnull%2C%5B%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C2%5D%22%5D&]
+$let[httpbody;f.req=%5Bnull%2C%22%5B%5B$get[filvr]%2C0%2Cnull%2Cnull%2Cnull%2Cnull%2C0%5D%2C%5B%5C%22en-US%5C%22%5D%2C%5B%5C%22$get[gr-cov_c]%5C%22%2C%5C%22$get[gr-cov_r]%5C%22%2C%5C%22$get[gr-cov_rc]%5C%22%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5C%22$get[gr-cov_convoid]%5C%22%5D%2C%5C%22%5C%22%2C%5C%22%5C%22%5D%22%5D&]
 $if[$has[gr-cov_cookies];
 $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;NID=$get[gr-cov_cookies]]
 ]
@@ -250,11 +251,14 @@ $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;NID=$get[gr-cov_cookies]]
 $!djsEval[
 const { request, Agent } = require("undici")\\;
 
-request("https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en$if[$and[$default[$get[tempct-gr-sid];$get[2d460-sid]]!=;$has[grinitcookies]];&f.sid=$default[$get[tempct-gr-sid];$get[2d460-sid]]]", {
+request("https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en$if[$and[$default[$get[tempct-gr-sid];$get[2d460-sid]]!=;$has[grinitcookies]];&f.sid=$default[$get[tempct-gr-sid];$get[2d460-sid]]]&rt=c", {
     dispatcher: new Agent({ 
-        connect: { family: 4 },
+        connect: { 
+            family: 4
+        },
         bodyTimeout: 60000,
-        headersTimeout: 60000
+        headersTimeout: 60000,
+        keepAliveTimeout: 30000
     }),
     body: ctx.getKeyword("httpbody"),
     method: "POST",
@@ -310,16 +314,20 @@ $let[nidcookie;$deflate[$advancedTextSplit[$get[httpcookie];NID=;1;\\;;0];base64
 ;
 $let[nidcookie;$deflate[$get[gr-cov_cookies];base64url]]
 ]]]
-$jsonLoad[tns;$advancedTextSplit[$get[httpresult];}'
-
-;1]]
+$arrayLoad[tns;
+;$get[httpresult]]
+$arrayMap[tns;l;
+$if[$typeof[$env[l]]==object;
+$try[$jsonLoad[msn;$env[l]]]
+$return[$jsonStringify[msn]]
+];tns]
 $let[convoid;]
 $let[found1;false]
 $let[found2;false]
 $arrayReverse[tns;tns]
 $arrayForEach[tns;s;
-$if[$and[$env[s;0]==wrb.fr;$env[s;2]!=;$get[found1]==false];
-$try[$jsonLoad[tr;$env[s;2]]]
+$if[$and[$env[s;0;0]==wrb.fr;$env[s;0;2]!=;$get[found1]==false];
+$try[$jsonLoad[tr;$env[s;0;2]]]
 $if[$env[tr;25]!=null;
 $let[found1;true]
 $let[convoid;$env[tr;25]]
@@ -328,8 +336,8 @@ $if[$get[convoid]==;
 $delete[convoid]
 ]
 $arrayForEach[tns;s;
-$if[$and[$env[s;0]==wrb.fr;$env[s;2]!=;$get[found2]==false];
-$try[$jsonLoad[tr;$env[s;2]]]
+$if[$and[$env[s;0;0]==wrb.fr;$env[s;0;2]!=;$get[found2]==false];
+$try[$jsonLoad[tr;$env[s;0;2]]]
 $if[$env[tr;4;0;8;0]==2;
 $let[found2;true]
 $if[$and[$env[tr;26;0;0;0;9;0;0;0;3;3]!=;$env[tr;26;0;0;0;9;0;0;0;3;3]!=null];
