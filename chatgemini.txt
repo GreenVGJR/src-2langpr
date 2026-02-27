@@ -33,7 +33,11 @@ $var[reqid;$optOff[$random[1031319;7864320]]]
 
 $try
 $c[-- Input Content --]
+$if[$isSlash]
+$var[msg;$message[prompt]]
+$else
 $var[msg;$message]
+$endif
 
 $jsonParse[[[null,0,null,null,null,null,0\],["en-US"\],["","","",null,null,null,null,null,null,""\],"1."\]]
 $jsonSetString[0;0;$var[msg]]
