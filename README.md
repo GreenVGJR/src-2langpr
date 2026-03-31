@@ -25,14 +25,14 @@
 6. [Advanced Blackbox.AI Chat](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat.js) (Deprecated)
 7. [Advanced Blackbox.AI Chat - Slash Version](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/blackbox_chat_slash.js) (Deprecated)
 8. [$getLyricsTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/getLyricsTrack_cf.js)
-9. [Youtube Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/yt-downloader.js)
+9. [Youtube Downloader](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/yt-downloader.js) (Unstable)
 10. [Music Bot](https://github.com/GreenVGJR/amc-discord-bot/)
 11. [Steal Emoji / Sticker](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/stealemojiorsticker.js)
 12. [$fastSuggestTrack - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/fastSuggestTrack_cf.js)
 13. [$chatGemini - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatGemini_cf.js)
 14. [$translateTextGoogle - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/translateTextGoogle_cf.js)
-15. [$chatMeta (ForgeDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta_cf.js) (Unstable)
-16. [$chatMeta (QuorielEdge) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta-quorielDb_cf.js) (Unstable)
+15. [$chatMeta (ForgeDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta_cf.js) (Deprecated)
+16. [$chatMeta (QuorielEdge) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta-quorielDb_cf.js) (Deprecated)
 17. [Tenor, Giphy, Klipy - Custom Functions](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/gifs_cf.js)
 <br>
 
