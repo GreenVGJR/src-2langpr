@@ -11,7 +11,7 @@ module.exports = [{
     }, {
         name: "f_imgreq", description: "Force Generate Image (Default: false)", type: "Boolean", required: false
     }, {
-        name: "models", description: "Choose Gemini Model (Default: 3)", type: "String", required: false
+        name: "models", description: "Choose Gemini Model (Default: 3.5)", type: "String", required: false
     }, {
         name: "htUserAgent", description: "Spoof User Agent", type: "String", required: false
         // try use this same as browser header where you get cookies if it fails to generate
