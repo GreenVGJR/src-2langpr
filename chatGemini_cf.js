@@ -21,12 +21,18 @@ $let[defaultUserAgent;Mozilla/5.0 (X11\\; Linux x86_64) AppleWebKit/537.36 (KHTM
 $let[agent;$if[$or[$env[htUserAgent]==null;$env[htUserAgent]==];$get[defaultUserAgent];$env[htUserAgent]]]
 $let[showcontent;$if[$or[$env[info]==null;$env[info]==];false;$env[info]]]
 $let[getconvo;$if[$or[$env[conversation]==null;$env[conversation]==];null;$env[conversation]]]
-$let[targetModel;$if[$env[f_imgreq]==true;nano;$if[$or[$env[models]==null;$env[models]==];3;$toLowercase[$env[models]]]]]
+$let[targetModel;$if[$env[f_imgreq]==true;nano;$if[$or[$env[models]==null;$env[models]==];3.5;$toLowercase[$env[models]]]]]
 $c[List Models]
+$if[$or[$env[googlecookies]==null;$env[googlecookies]==];
+$let[defaultModel;fbb127bbb056c959]
+$let[customYYGeminiLogin;0]
+;
 $let[defaultModel;56fdd199312815e2]
+$let[customYYGeminiLogin;1]
+]
 $ifx[
-    $if[$get[targetModel]==3-thinking;
-    $let[convertModel;e051ce1aa80aa576]
+    $if[$get[targetModel]==3-lite;
+    $let[convertModel;8c46e95b1a07cecc]
     ]
     $elseIf[$get[targetModel]==3-pro;
     $let[convertModel;e6fa609c3fa255c0]
@@ -47,7 +53,7 @@ $!jsonSet[5b306f5d5e;models;\\[\\]]
 $!jsonSet[5b306f5d5e;models;0;$get[targetModel]]
 $!jsonSet[5b306f5d5e;models;1;$get[convertModel]]
 $!jsonSet[5b306f5d5e;models;2;{}]]
-$!jsonSet[5b306f5d5e;models;2;isUsingModel;$if[$get[targetModel]==3;true;$checkCondition[$or[$env[googlecookies]==null;$env[googlecookies]==]==false]]]
+$!jsonSet[5b306f5d5e;models;2;isUsingModel;$if[$get[targetModel]==3.5;true;$checkCondition[$or[$env[googlecookies]==null;$env[googlecookies]==]==false]]]
 $!jsonSet[5b306f5d5e;response;{}]
 $!jsonSet[5b306f5d5e;response;text;null]
 $!jsonSet[5b306f5d5e;response;image;null]
@@ -273,7 +279,7 @@ $if[$env[refresh]==true;$letSum[retry;1]]
 $try[
 $jsonLoad[httpheader_i6lQlIBEIVwCVXo0;{
 "Accept": "*/*",
-"Accept-Encoding": "gzip",
+"Accept-Encoding": "identity",
 "Accept-Language": "en",
 "Content-Type": "application/x-www-form-urlencoded\\;charset=utf-8",
 "Origin": "https://gemini.google.com",
@@ -282,10 +288,10 @@ $jsonLoad[httpheader_i6lQlIBEIVwCVXo0;{
 "Sec-Fetch-Dest": "empty",
 "Sec-Fetch-Mode": "cors",
 "Sec-Fetch-Site": "same-origin",
-"x-goog-ext-525001261-jspb": "[1,null,null,null,\\\\"$get[convertModel]\\\\",null,null,1,[4\\],null,null,4,null,null,1,null,\\\\"$toUpperCase[$randomUUID]\\\\"\\]",
+"x-goog-ext-525001261-jspb": "[1,null,null,null,\\\\"$get[convertModel]\\\\",null,null,$get[customYYGeminiLogin],[\\],null,null,4,null,null,1,null,\\\\"$toUpperCase[$randomUUID]\\\\"\\]",
 "x-goog-ext-525005358-jspb": "[\\\\"$toUpperCase[$randomUUID]\\\\", 1\\]",
 "x-goog-ext-73010989-jspb": "[0\\]",
-"x-goog-ext-73010990-jspb": "[0\\]",
+"x-goog-ext-73010990-jspb": "[0,0,0\\]",
 "x-same-domain": "1"
 }]
 $if[$and[$has[grinitcookies];$get[abb24-cs_g]!=true];
@@ -313,26 +319,32 @@ $let[httpbody;f.req=$encodeURIComponent[$jsonStringify[buildgquery]]&]
 $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;$default[$get[grinitcookiesfirst];$get[gr-cov_cookies]]]
 ]
 $!djsEval[
-const { Agent } = require("undici")\\;
+const { Agent, request, createRedirectInterceptor } = require("undici")\\;
 
-fetch("https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en$if[$and[$default[$get[tempct-gr-sid];$get[2d460-sid]]!=;$has[grinitcookies]];&f.sid=$default[$get[tempct-gr-sid];$get[2d460-sid]]]&rt=c&_reqid=$randomNumber[1031319;7864320]", {
-    dispatcher: new Agent({ 
-        connect: { 
+const streamUrl = "https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en$if[$and[$default[$get[tempct-gr-sid];$get[2d460-sid]]!=;$has[grinitcookies]];&f.sid=$default[$get[tempct-gr-sid];$get[2d460-sid]]]&rt=c&_reqid=$randomNumber[1031319;7864320]"\\;
+
+request(streamUrl, {
+    dispatcher: new Agent({
+        connect: {
             family: 4
         },
         bodyTimeout: 60000,
         headersTimeout: 60000,
-        keepAliveTimeout: 30000
+        keepAliveTimeout: 30000,
+        interceptors: { Agent: [createRedirectInterceptor({ maxRedirections: 15 })\\] }
     }),
     body: ctx.getKeyword("httpbody"),
     method: "POST",
     headers: ctx.getEnvironmentKey("httpheader_i6lQlIBEIVwCVXo0")
 })
-.then(f => {
-    ctx.setKeyword("httpstatus", f.status)\\;
-    ctx.setKeyword("httpcookie", f.headers.get("set-cookie") || "")\\;
-    ctx.setKeyword("isAskingCaptcha", f.url.includes('google.com/sorry'))\\;
-    return f.text()\\;
+.then(a => {
+    const history = a.context?.history || [\\]\\;
+    const finalUrl = (history.length > 0 ? history[history.length - 1\\].href : streamUrl)\\;
+    const setCookie = a.headers?.["set-cookie"\\]\\;
+    ctx.setKeyword("httpstatus", a.statusCode)\\;
+    ctx.setKeyword("httpcookie", Array.isArray(setCookie) ? setCookie.join('\\; ') : (setCookie || ""))\\;
+    ctx.setKeyword("isAskingCaptcha", finalUrl.includes('google.com/sorry'))\\;
+    return a.body.text()\\;
 })
 .then(a => ctx.setKeyword("httpresult", a))
 .catch()
