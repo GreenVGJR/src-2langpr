@@ -7,7 +7,6 @@ $c[
 ]
 
 $c[-- Custom Error Message --]
-$var[c1;To avoid timeout issues, you can't send over 1k characters.]
 $var[c2;-# Generating...]
 
 $var[lmn1;Error: Rate-limited. Try again later]
@@ -24,13 +23,13 @@ $var[generatechatid;$optOff[$randomText[a;b;c;d;e;f;0;1;2;3;4;5;6;7;8;9]]$optOff
 $nomention
 $trimContent
 
+$varExistError[gemkis;Missing `gemkis` variables. Create this first with empty value.]
+
 $if[$isSlash]
 $onlyIf[$message[prompt]!=;Usage: `$commandTrigger <prompt>`]
-$onlyIf[$charCount[$message[prompt]]<=1000;$var[c1]]
 $defer
 $else
 $onlyIf[$message[1]!=;Usage: `$commandTrigger <prompt>`]
-$onlyIf[$charCount[$message]<=1000;$var[c1]]
 $var[mid;$sendMessage[$var[c2];true]]
 $endif
 
@@ -46,10 +45,38 @@ $jsonSetString[1;$var[mk]]
 
 $var[variables;$jsonStringify&]
 
-$httpAddHeader[Accept;*/*]
-$httpAddHeader[Accept-Encoding;identify]
+$c[-- Get "Secure-ENID" cookie --]
+$var[templateJson;{"cg":"","mt":"0"}]
+
+$try
+$jsonParse[$getVar[gemkis;$botID]]
+$catch
+$jsonParse[$var[templateJson]]
+$endtry
+$if[$or[$json[mt]==0;$getTimestamp>=$json[mt]]==true]
+$try
 $httpAddHeader[Accept-Language;en-US]
-$httpAddHeader[Connection;keep-alive=30]
+$httpAddHeader[Sec-Fetch-Dest;document]
+$httpAddHeader[Sec-Fetch-Mode;navigate]
+$httpAddHeader[Sec-Fetch-Site;none]
+$httpRemoveHeader[Content-Type]
+$httpGet[https://gemini.google.com/_/bscframe]
+$textSplit[$httpGetHeader[Set-Cookie];\;]
+
+$if[$splitText[1]!=]
+$jsonSetString[cg;$splitText[1]]
+$jsonSetString[mt;$sum[$getTimestamp;300]]
+$endif
+$setVar[gemkis;$jsonStringify;$botID]
+$catch
+$endtry
+$endif
+
+$httpAddHeader[Accept;*/*]
+$httpAddHeader[Accept-Encoding;identity]
+$httpAddHeader[Accept-Language;en-US]
+$if[$json[cg]!=] $httpAddHeader[Cookie;$json[cg]] $endif
+$httpAddHeader[Connection;keep-alive]
 $httpAddHeader[Content-Type;application/x-www-form-urlencoded\; charset=utf-8]
 $httpAddHeader[Origin;https://gemini.google.com]
 $httpAddHeader[Range;bytes=0-]
@@ -57,14 +84,14 @@ $httpAddHeader[Referer;https://gemini.google.com/]
 $httpAddHeader[Sec-Fetch-Dest;empty]
 $httpAddHeader[Sec-Fetch-Mode;cors]
 $httpAddHeader[Sec-Fetch-Site;same-origin]
-$httpAddHeader[x-same-domain;1]
-$httpAddHeader[x-goog-ext-525001261-jspb;[1,null,null,null,"fbb127bbb056c959",null,null,0,[4\],null,null,1\]] $c[Gemini 3 Flash]
-$httpAddHeader[x-goog-ext-525005358-jspb;["$toUppercase[$var[generateuuid]]", 1\]] $c[Alt Conversation ID]
+$httpAddHeader[x-goog-ext-525001261-jspb;[1,null,null,null,"fbb127bbb056c959",null,null,0,[\],null,null,1,null,""\]]
+$httpAddHeader[x-goog-ext-525005358-jspb;["$toUppercase[$var[generateuuid]]", 1\]]
 $httpAddHeader[x-goog-ext-73010989-jspb;[0\]]
-$httpAddHeader[x-goog-ext-73010990-jspb;[0\]]
+$httpAddHeader[x-goog-ext-73010990-jspb;[0,0,0\]]
+$httpAddHeader[x-same-domain;1]
 $c[ BDFD restricted for User-Agent :/ ]
 
-$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US&_reqid=$var[reqid]&f.sid=-1;f.req=$var[variables]]
+$httpPost[https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US&_reqid=$var[reqid];f.req=$var[variables]]
 
 $c[ 403 :: Google Error Page ]
 $c[ 429 :: Gemini Error ]
@@ -94,9 +121,11 @@ $textSplit[$httpResult;}']
 $jsonParse[$splitText[2]]
 $jsonParse[$json[$var[calcfr];2]]
 
-$c[-- Check Multiple Response --]
-$if[$json[4;0;1;0;0]!=]
-$var[result;$json[4;0;1;0;0]]
+$if[$json[4;0]==]
+$var[result;$var[lmn1]]
+$elseif[$json[4;0;12;1]!=]
+$var[result;$json[4;0;12;1;0;12;0;0]
+-# [Original Link\](<$json[4;0;12;1;0;0;0;0]>)]
 $else
 $var[result;$json[4;0;1;0]]
 $endif
