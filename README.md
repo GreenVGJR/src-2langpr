@@ -34,6 +34,7 @@
 15. [$chatMeta (ForgeDB) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta_cf.js) (Deprecated)
 16. [$chatMeta (QuorielEdge) - Custom Function](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/chatMeta-quorielDb_cf.js) (Deprecated)
 17. [Tenor, Giphy, Klipy - Custom Functions](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/gifs_cf.js)
+18. [Search Youtube - Custom Functions](https://github.com/GreenVGJR/src-2langpr/blob/fsjs/searchYoutube_cf.js)
 <br>
 
 Looking for [aoi.js?](https://github.com/GreenVGJR/src-2langpr/tree/aoijs)<br>
