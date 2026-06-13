@@ -17,7 +17,7 @@ module.exports = [{
         // try use this same as browser header where you get cookies if it fails to generate
     }],
     code: `
-$let[defaultUserAgent;Mozilla/5.0 (X11\\; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36]
+$let[defaultUserAgent;Mozilla/5.0 (X11\\; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36]
 $let[agent;$if[$or[$env[htUserAgent]==null;$env[htUserAgent]==];$get[defaultUserAgent];$env[htUserAgent]]]
 $let[showcontent;$if[$or[$env[info]==null;$env[info]==];false;$env[info]]]
 $let[getconvo;$if[$or[$env[conversation]==null;$env[conversation]==];null;$env[conversation]]]
@@ -100,7 +100,7 @@ $if[$has[grinitcookies];
 $localFunction[62afa6e8f7;
 $arrayLoad[5ce6128f45]
 $try[
-$httpRemoveHeader[Accept-Encoding]
+$httpAddHeader[Accept-Encoding;gzip, br]
 $httpAddHeader[Accept-Language;en]
 $httpAddHeader[Cookie;$get[grinitcookies]]
 $httpAddHeader[Sec-Fetch-Dest;document]
@@ -142,7 +142,7 @@ $localFunction[4fd59fb44e;
 $try[
 $httpSetContentType[Text]
 $httpAddHeader[Accept;*/*]
-$httpRemoveHeader[Accept-Encoding]
+$httpAddHeader[Accept-Encoding;gzip, br]
 $httpAddHeader[Referer;https://gemini.google.com]
 $httpAddHeader[Cookie;$default[$get[grinitcookies_replacement];$get[grinitcookies]]]
 $httpAddHeader[User-Agent;$get[agent]]
@@ -161,7 +161,7 @@ $localFunction[396ce1eb75;
 $try[
 $httpSetContentType[Text]
 $httpAddHeader[Accept;*/*]
-$httpRemoveHeader[Accept-Encoding]
+$httpAddHeader[Accept-Encoding;gzip, br]
 $httpAddHeader[Content-Type;application/json]
 $httpAddHeader[Origin;https://accounts.google.com]
 $httpAddHeader[Referer;https://accounts.google.com/RotateCookiesPage?og_pid=$env[lr_pid]&rot=3&origin=https://gemini.google.com&exp_id=0]
@@ -218,7 +218,7 @@ request("https://gemini.google.com/app", { dispatcher: new Agent({ connect: { fa
     ctx.setKeyword("isAskingConsent", isConsentRequire)\\;
     ctx.setKeyword("isAskingCaptcha", finalUrl.includes('google.com/sorry'))\\;
     ctx.setKeyword("temppullcookie", a.headers?.["set-cookie"\\]?.join('\\; '))\\;
-    return isConsentRequire ? a.body.text() : null\\;
+    return a.body.text()\\;
 })
 .catch()
 ]]
@@ -243,10 +243,38 @@ $return[$get[ret]]
 
 $c[Check if asking consent, then auto accept if any]
 $if[$get[isAskingConsent];
+$c[Redirection page version, refresh after]
 $let[temppullcookiesec;$callFunction[filterHttpCookies;1;$get[temppullcookie]]]
 $!jsonSet[httpheader_XQdBDcoTqYeNxbNn;cookie;$get[temppullcookiesec]]
 $callLocalFunction[fetchwebgeminiforcookie;$callFunction[filterHttpCookies;2;$callFunction[filterHttpCookies;1;$callFunction[solveConsentGemini;$get[temppullbodyhttp];$env[httpheader_XQdBDcoTqYeNxbNn]]];$get[temppullcookiesec]]]
-]
+;
+$c[Pop-up version]
+$let[bardInitialData;$advancedTextSplit[$get[temppullbodyhttp];script id="bard-initial-data";1;data-payload=";1;";0]]
+$if[$checkContains[$get[bardInitialData];consent.google.com];
+
+$jsonLoad[rhnoi;$replace[$get[bardInitialData];&quot\\;;"]]
+$jsonLoad[rhnoi;$jsonEntries[rhnoi]]
+$let[looktrueoptconsent;$arrayFindIndex[rhnoi;r;$checkContains[$env[r;1];set_sc=true]]]
+
+$if[$get[looktrueoptconsent]!=-1;
+$try[
+$let[temppullcookiesec;$callFunction[filterHttpCookies;1;$get[temppullcookie]]]
+$httpAddHeader[Accept-Encoding;gzip, br]
+$httpAddHeader[Accept-Language;en]
+$httpAddHeader[Cookie;$get[temppullcookiesec]]
+$httpAddHeader[Origin;https://gemini.google.com]
+$httpAddHeader[Referer;https://gemini.google.com/app]
+$httpAddHeader[Sec-Fetch-Dest;empty]
+$httpAddHeader[Sec-Fetch-Site;same-site]
+$httpAddHeader[User-Agent;$get[agent]]
+$httpSetContentType[Text]
+$let[pullupconsentgem;$httpRequest[$env[rhnoi;$get[looktrueoptconsent];1];POST]]
+$if[$get[pullupconsentgem]==200;
+$c[Overwrite previous anon cookies]
+$let[temppullcookie;$httpGetHeader[Set-Cookie]]
+$let[isAskingConsent;true]
+]]
+]]]
 $let[grinitcookiesfirst;$callFunction[filterHttpCookies;1;$get[temppullcookie]]]
 ]]
 $if[$and[$get[getconvo]!=null;$typeof[$get[getconvo]]==object];
@@ -261,7 +289,7 @@ $let[gr-cov_cookies;$if[$env[clks;cookies]!=;$inflate[$env[clks;cookies];base64u
 $let[retry;0]
 $let[conthttperr;]
 $localFunction[fetchgemini;
-$if[$get[retry]>=3;
+$if[$get[retry]>=5;
 $!jsonSet[5b306f5d5e;response;text;null]
 $!jsonSet[5b306f5d5e;response;chat;{}]
 $!jsonSet[5b306f5d5e;response;chat;status;BAD_RESPONSE]
@@ -275,7 +303,10 @@ $let[ret;null]
 ]
 $return
 ]
-$if[$env[refresh]==true;$letSum[retry;1]]
+$if[$env[refresh]==true;
+$letSum[retry;1]
+$wait[1s]
+]
 $try[
 $jsonLoad[httpheader_i6lQlIBEIVwCVXo0;{
 "Accept": "*/*",
