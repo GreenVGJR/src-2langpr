@@ -168,6 +168,7 @@ module.exports = [{
     $arrayForEach[dofetch;getfetch;
     $if[$env[getfetch;lockupViewModel;contentId]!=;
     $if[$or[$env[getfetch;lockupViewModel;contentType]==LOCKUP_CONTENT_TYPE_MUSIC;$env[getfetch;lockupViewModel;contentType]==LOCKUP_CONTENT_TYPE_VIDEO];
+    $letSum[trackresult;1]
     $jsonLoad[tempres;{}]
     $!jsonSet[tempres;title;$env[getfetch;lockupViewModel;metadata;lockupMetadataViewModel;title;content]]
     $!jsonSet[tempres;duration;"$if[$env[getfetch;lockupViewModel;contentImage;thumbnailViewModel;overlays]==;-1;$round[$divide[$unparseDigital[$env[getfetch;lockupViewModel;contentImage;thumbnailViewModel;overlays;0;thumbnailBottomOverlayViewModel;badges;0;thumbnailBadgeViewModel;text]];1000];0]]"]
@@ -177,6 +178,7 @@ module.exports = [{
     ]
     ;
     $if[$and[$env[getfetch;tileRenderer;contentType]==TILE_CONTENT_TYPE_VIDEO;$env[getfetch;tileRenderer;onLongPressCommand;showMenuCommand;contentId]!=];
+    $letSum[trackresult;1]
     $jsonLoad[tempres;{}]
     $!jsonSet[tempres;title;$env[getfetch;tileRenderer;onLongPressCommand;showMenuCommand;subtitle;simpleText] - $env[getfetch;tileRenderer;onLongPressCommand;showMenuCommand;title;simpleText]]
     $!jsonSet[tempres;duration;"$if[$and[$env[getfetch;tileRenderer;header;tileHeaderRenderer;thumbnailOverlays;0;thumbnailOverlayTimeStatusRenderer;text;simpleText]==;$env[getfetch;tileRenderer;header;tileHeaderRenderer;thumbnailOverlays;1;thumbnailOverlayTimeStatusRenderer;style]!=LIVE];-1;$round[$divide[$unparseDigital[$env[getfetch;tileRenderer;header;tileHeaderRenderer;thumbnailOverlays;0;thumbnailOverlayTimeStatusRenderer;text;simpleText]];1000];0]]"]
