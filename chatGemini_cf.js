@@ -11,17 +11,17 @@ module.exports = [{
     }, {
         name: "f_imgreq", description: "Force Generate Image (Default: false)", type: "Boolean", required: false
     }, {
-        name: "models", description: "Choose Gemini Model (Default: 3.5)", type: "String", required: false
+        name: "models", description: "Choose Gemini Model (Default: 3.6)", type: "String", required: false
     }, {
         name: "htUserAgent", description: "Spoof User Agent", type: "String", required: false
         // try use this same as browser header where you get cookies if it fails to generate
     }],
     code: `
-$let[defaultUserAgent;Mozilla/5.0 (X11\\; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36]
+$let[defaultUserAgent;Mozilla/5.0 (Windows NT 10.0\\; Win64\\; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36]
 $let[agent;$if[$or[$env[htUserAgent]==null;$env[htUserAgent]==];$get[defaultUserAgent];$env[htUserAgent]]]
 $let[showcontent;$if[$or[$env[info]==null;$env[info]==];false;$env[info]]]
 $let[getconvo;$if[$or[$env[conversation]==null;$env[conversation]==];null;$env[conversation]]]
-$let[targetModel;$if[$env[f_imgreq]==true;nano;$if[$or[$env[models]==null;$env[models]==];3.5;$toLowercase[$env[models]]]]]
+$let[targetModel;$if[$env[f_imgreq]==true;nano;$if[$or[$env[models]==null;$env[models]==];3.6;$toLowercase[$env[models]]]]]
 $c[List Models]
 $if[$or[$env[googlecookies]==null;$env[googlecookies]==];
 $let[defaultModel;fbb127bbb056c959]
@@ -53,7 +53,7 @@ $!jsonSet[5b306f5d5e;models;\\[\\]]
 $!jsonSet[5b306f5d5e;models;0;$get[targetModel]]
 $!jsonSet[5b306f5d5e;models;1;$get[convertModel]]
 $!jsonSet[5b306f5d5e;models;2;{}]]
-$!jsonSet[5b306f5d5e;models;2;isUsingModel;$if[$get[targetModel]==3.5;true;$checkCondition[$or[$env[googlecookies]==null;$env[googlecookies]==]==false]]]
+$!jsonSet[5b306f5d5e;models;2;isUsingModel;$if[$get[targetModel]==3.6;true;$checkCondition[$or[$env[googlecookies]==null;$env[googlecookies]==]==false]]]
 $!jsonSet[5b306f5d5e;response;{}]
 $!jsonSet[5b306f5d5e;response;text;null]
 $!jsonSet[5b306f5d5e;response;image;null]
@@ -71,12 +71,14 @@ $let[tempct-gr-pid;$env[prts;2]]
 $let[tempct-gr-init;$env[prts;3]]
 $let[tempct-gr-timestamp;$env[prts;4]]
 $let[tempct-gr-sid;$env[prts;5]]
+$let[tempct-gr-btgver;$env[prts;6]]
 $!jsonSet[29ca8a2268;0;$env[prts;0]]
 $!jsonSet[29ca8a2268;1;"$env[prts;1]"]
 $!jsonSet[29ca8a2268;2;"$env[prts;2]"]
 $!jsonSet[29ca8a2268;3;"$env[prts;3]"]
 $!jsonSet[29ca8a2268;4;"$env[prts;4]"]
 $!jsonSet[29ca8a2268;5;"$env[prts;5]"]
+$!jsonSet[29ca8a2268;5;"$env[prts;6]"]
 $let[tempct-gr-userid;$env[lrts;userid]]
 $let[tempct-gr-name;$env[lrts;name]]
 $let[tempct-gr-email;$env[lrts;email]]
@@ -101,7 +103,7 @@ $localFunction[62afa6e8f7;
 $arrayLoad[5ce6128f45]
 $try[
 $httpAddHeader[Accept-Encoding;gzip, br]
-$httpAddHeader[Accept-Language;en]
+$httpAddHeader[Accept-Language;en-US]
 $httpAddHeader[Cookie;$get[grinitcookies]]
 $httpAddHeader[Sec-Fetch-Dest;document]
 $httpAddHeader[Sec-Fetch-Site;none]
@@ -112,12 +114,13 @@ $let[httprotatetogr_1;$httpRequest[https://gemini.google.com/app;GET]]
 $if[$or[$and[$advancedTextSplit[$httpResult;<html>;1;</html>;0]!=;$advancedTextSplit[$httpResult;form id="captcha-form";1]!=];$get[httprotatetogr_1]!=200];$return[$env[5ce6128f45]]]
 $let[2d460-resex;$checkContains[$httpGetHeader[Set-Cookie];SIDCC=]]
 $let[2d460-snlm0e;$advancedTextSplit[$httpResult;"SNlM0e":";1;";0]]
-$let[2d460-sid;$advancedTextSplit[$httpResult;"FdrFJe":";1;";0]]
 $let[2d460-aa2yr;$advancedTextSplit[$httpResult;/app?authuser=;1;pid=;1;\\\\;0]]
 $let[2d460-userid;$advancedTextSplit[$httpResult;"qDCSke":";1;";0]]
 $let[2d460-name;$trim[$advancedTextSplit[$httpResult;aria-label="Google Account:;1;&#10\\;;0]]]
 $let[2d460-email;$advancedTextSplit[$httpResult;aria-label="Google Account:;1;&#10\\;;1;(;1;);0]]
 $let[2d460-avatar;$advancedTextSplit[$httpResult;aria-label="Google Account:;1;src=";1;";0]]
+$let[2d460-sid;$advancedTextSplit[$httpResult;"FdrFJe":";1;";0]]
+$let[2d460-btgver;$advancedTextSplit[$httpResult;"cfb2h":";1;";0]]
 $if[$get[2d460-avatar]!=;
 $let[2d460-avatar;$advancedTextSplit[$get[2d460-avatar];=;0]=s0]
 ]
@@ -127,6 +130,7 @@ $!jsonSet[29ca8a2268;0;$get[grinitcookies_replacement]]
 $!jsonSet[29ca8a2268;1;"$get[2d460-snlm0e]"]
 $!jsonSet[29ca8a2268;2;"$get[2d460-aa2yr]"]
 $!jsonSet[29ca8a2268;5;"$get[2d460-sid]"]
+$!jsonSet[29ca8a2268;6;"$get[2d460-btgver]"]
 $arrayPush[5ce6128f45;$get[2d460-snlm0e]]
 $arrayPush[5ce6128f45;$get[2d460-aa2yr]]
 $!jsonSet[75bcc39312;userid;$get[2d460-userid]]
@@ -145,6 +149,8 @@ $httpAddHeader[Accept;*/*]
 $httpAddHeader[Accept-Encoding;gzip, br]
 $httpAddHeader[Referer;https://gemini.google.com]
 $httpAddHeader[Cookie;$default[$get[grinitcookies_replacement];$get[grinitcookies]]]
+$httpAddHeader[Sec-Fetch-Dest;iframe]
+$httpAddHeader[Sec-Fetch-Site;same-site]
 $httpAddHeader[User-Agent;$get[agent]]
 $let[httprotatetogr_2;$httpRequest[https://accounts.google.com/RotateCookiesPage?og_pid=$env[lr_pid]&rot=3&origin=https://gemini.google.com&exp_id=0;GET]]
 ]
@@ -183,10 +189,8 @@ $if[$callLocalFunction[396ce1eb75;$get[tempct-gr-pid]]==200;;$let[abb24-cs_g;tru
 $if[$has[tempct-gr-timestamp]==false;
 $jsonLoad[rro_gr;$callLocalFunction[62afa6e8f7]]
 $if[$get[abb24-cs_g]!=true;
-$wait[1s]
 $if[$callLocalFunction[4fd59fb44e;$env[rro_gr;1]]==200;;$let[abb24-cs_g;true]]
 $if[$get[abb24-cs_g]!=true;
-$wait[1s]
 $if[$callLocalFunction[396ce1eb75;$env[rro_gr;1]]==200;;$let[abb24-cs_g;true]]
 ]]
 ]
@@ -196,8 +200,8 @@ $!jsonSet[5b306f5d5e;auth;1;$env[75bcc39312]]
 $if[$and[$get[getconvo]!=null;$typeof[$get[getconvo]]==object]==false;
 $jsonLoad[httpheader_XQdBDcoTqYeNxbNn;{
 "Accept": "*/*",
-"Accept-Encoding": "identity",
-"Accept-Language": "en",
+"Accept-Encoding": "gzip, br",
+"Accept-Language": "en-US",
 "User-Agent": "$get[agent]",
 "Sec-Fetch-Dest": "document",
 "Sec-Fetch-Mode": "navigate",
@@ -207,20 +211,17 @@ $localFunction[fetchwebgeminiforcookie;
 $if[$or[$env[inputwebcookies]==;$env[inputwebcookies]==null]==false;
 $!jsonSet[httpheader_XQdBDcoTqYeNxbNn;cookie;$env[inputwebcookies]]
 ]
+$c[Pull all possible session require]
 $let[temppullbodyhttp;$djsEval[
-const { Agent, request, createRedirectInterceptor } = require("undici")\\;
-
-request("https://gemini.google.com/app", { dispatcher: new Agent({ connect: { family: 4 }, interceptors: { Agent: [createRedirectInterceptor({ maxRedirections: 15 })\\] } }), headers: ctx.getEnvironmentKey("httpheader_XQdBDcoTqYeNxbNn") })
+fetch("https://gemini.google.com/app", { headers: ctx.getEnvironmentKey("httpheader_XQdBDcoTqYeNxbNn") })
 .then(a => {
-    const history = a.context?.history || [\\]\\;
-    const finalUrl = (history.length > 0 ? history[history.length - 1\\].href : "https://gemini.google.com/app")\\;
-    const isConsentRequire = finalUrl.includes('consent.google.com')\\;
+    const isConsentRequire = a.url.includes('consent.google.com')\\;
     ctx.setKeyword("isAskingConsent", isConsentRequire)\\;
-    ctx.setKeyword("isAskingCaptcha", finalUrl.includes('google.com/sorry'))\\;
-    ctx.setKeyword("temppullcookie", a.headers?.["set-cookie"\\]?.join('\\; '))\\;
-    return a.body.text()\\;
+    ctx.setKeyword("isAskingCaptcha", a.url.includes('google.com/sorry'))\\;
+    ctx.setKeyword("temppullcookie", a.headers?.get("set-cookie"))\\;
+    return a.text()\\;
 })
-.catch()
+.catch(e => console.error("(chatGemini) Failed to fetch web: " + e.message))
 ]]
 ;inputwebcookies]
 $callLocalFunction[fetchwebgeminiforcookie;]
@@ -260,7 +261,7 @@ $if[$get[looktrueoptconsent]!=-1;
 $try[
 $let[temppullcookiesec;$callFunction[filterHttpCookies;1;$get[temppullcookie]]]
 $httpAddHeader[Accept-Encoding;gzip, br]
-$httpAddHeader[Accept-Language;en]
+$httpAddHeader[Accept-Language;en-US]
 $httpAddHeader[Cookie;$get[temppullcookiesec]]
 $httpAddHeader[Origin;https://gemini.google.com]
 $httpAddHeader[Referer;https://gemini.google.com/app]
@@ -268,7 +269,7 @@ $httpAddHeader[Sec-Fetch-Dest;empty]
 $httpAddHeader[Sec-Fetch-Site;same-site]
 $httpAddHeader[User-Agent;$get[agent]]
 $httpSetContentType[Text]
-$let[pullupconsentgem;$httpRequest[$env[rhnoi;$get[looktrueoptconsent];1];POST]]
+$let[pullupconsentgem;$httpRequest[$env[rhnoi;$get[looktrueoptconsent];1];POST;nkjkjnsjd]]
 $if[$get[pullupconsentgem]==200;
 $c[Overwrite previous anon cookies]
 $let[temppullcookie;$httpGetHeader[Set-Cookie]]
@@ -276,16 +277,41 @@ $let[isAskingConsent;true]
 ]]
 ]]]
 $let[grinitcookiesfirst;$callFunction[filterHttpCookies;1;$get[temppullcookie]]]
+$let[2d460-sid;$advancedTextSplit[$get[temppullbodyhttp];"FdrFJe":";1;";0]]
+$let[2d460-btgver;$advancedTextSplit[$get[temppullbodyhttp];"cfb2h":";1;";0]]
 ]]
 $if[$and[$get[getconvo]!=null;$typeof[$get[getconvo]]==object];
 $try[
 $jsonLoad[clks;$get[getconvo]]
+$let[sr-cov_expiretime;$env[clks;session;expire]]
+$if[$checkCondition[$default[$get[sr-cov_expiretime];0]<=$getTimestamp]==false;
 $let[gr-cov_c;$env[clks;c]]
 $let[gr-cov_r;$env[clks;r]]
 $let[gr-cov_rc;$env[clks;rc]]
-$let[gr-cov_convoid;$env[clks;convoid]]
 $let[gr-cov_cookies;$if[$env[clks;cookies]!=;$inflate[$env[clks;cookies];base64url]]]
+$let[sr-cov_uuid1;$env[clks;session;targets;0]]
+$let[sr-cov_uuid2;$env[clks;session;targets;1]]
+$let[2d460-sid;$env[clks;session;id]]
+$let[2d460-btgver;$env[clks;session;batch]]
+;
+$!jsonSet[5b306f5d5e;response;text;null]
+$!jsonSet[5b306f5d5e;response;chat;{}]
+$!jsonSet[5b306f5d5e;response;chat;status;EXPIRED]
+$!jsonSet[5b306f5d5e;response;image;null]
+$!jsonSet[5b306f5d5e;response;gallery;null]
+$!jsonSet[5b306f5d5e;response;other;Sessions expired. Execute again without conversation input for re-generate session]
+$if[$env[info]==true;
+$let[ret;$env[5b306f5d5e]]
+;
+$let[ret;Error: Sessions expired. Execute again without conversation input for re-generate session.]
+]
+$return[$get[ret]]
 ]]
+;
+$let[sr-cov_uuid1;$toUpperCase[$randomUUID]]
+$let[sr-cov_uuid2;$toUpperCase[$randomUUID]]
+$let[sr-cov_expiretime;$sum[$getTimestamp;10800000]]
+]
 $let[retry;0]
 $let[conthttperr;]
 $localFunction[fetchgemini;
@@ -310,8 +336,8 @@ $wait[1s]
 $try[
 $jsonLoad[httpheader_i6lQlIBEIVwCVXo0;{
 "Accept": "*/*",
-"Accept-Encoding": "identity",
-"Accept-Language": "en",
+"Accept-Encoding": "gzip, br",
+"Accept-Language": "en-US",
 "Content-Type": "application/x-www-form-urlencoded\\;charset=utf-8",
 "Origin": "https://gemini.google.com",
 "Referer": "https://gemini.google.com",
@@ -319,63 +345,47 @@ $jsonLoad[httpheader_i6lQlIBEIVwCVXo0;{
 "Sec-Fetch-Dest": "empty",
 "Sec-Fetch-Mode": "cors",
 "Sec-Fetch-Site": "same-origin",
-"x-goog-ext-525001261-jspb": "[1,null,null,null,\\\\"$get[convertModel]\\\\",null,null,$get[customYYGeminiLogin],[\\],null,null,4,null,null,1,null,\\\\"$toUpperCase[$randomUUID]\\\\"\\]",
-"x-goog-ext-525005358-jspb": "[\\\\"$toUpperCase[$randomUUID]\\\\", 1\\]",
+"x-goog-ext-525001261-jspb": "[1,null,null,null,\\\\"$get[convertModel]\\\\",null,null,$get[customYYGeminiLogin],[\\],null,null,4,null,null,1,null,\\\\"$get[sr-cov_uuid1]\\\\"\\]",
+"x-goog-ext-525005358-jspb": "[\\\\"$get[sr-cov_uuid2]\\\\", 1\\]",
 "x-goog-ext-73010989-jspb": "[0\\]",
 "x-goog-ext-73010990-jspb": "[0,0,0\\]",
 "x-same-domain": "1"
 }]
 $if[$and[$has[grinitcookies];$get[abb24-cs_g]!=true];
 $jsonLoad[buildgquery;[null\\]]
-$jsonLoad[buildgquerysec;[["",0,null,null,null,null,0\\],["en"\\],["","","",null,null,null,null,null,null,""\\],"1.","",null,[1\\],1,null,null,1,0,null,null,null,null,null,[[1\\]\\],0,null,null,null,null,null,null,null,null,1,null,null,[4\\],null,null,null,null,null,null,null,null,null,null,[2\\],null,null,null,1,null,null,null,null,null,null,null,0,null,null,null,null,null,"",null,[\\],null,null,null,null,null,0,2,null,null,null,null,null,null,null,null,null,null,1\\]]
+$jsonLoad[buildgquerysec;[["",0,null,null,null,null,0\\],["en-US"\\],["","","",null,null,null,null,null,null,""\\],"1.","",null,[1\\],1,null,null,1,0,null,null,null,null,null,[[1\\]\\],0,null,null,null,null,null,null,null,null,1,null,null,[4\\],null,null,null,null,null,null,null,null,null,null,[2\\],null,null,null,1,null,null,null,null,null,null,null,0,null,null,null,null,null,"",null,[\\],null,null,null,null,null,0,2,null,null,null,null,null,null,null,null,null,null,1\\]]
 $!jsonSet[buildgquerysec;0;0;"$get[msg]"]
 $!jsonSet[buildgquerysec;2;0;"$get[gr-cov_c]"]
 $!jsonSet[buildgquerysec;2;1;"$get[gr-cov_r]"]
 $!jsonSet[buildgquerysec;2;2;"$get[gr-cov_rc]"]
-$!jsonSet[buildgquerysec;2;9;"$get[gr-cov_convoid]"]
 $!jsonSet[buildgquerysec;49;$if[$env[f_imgreq]==true;14;null]]
 $arrayPush[buildgquery;$jsonStringify[buildgquerysec]]
 $let[httpbody;f.req=$encodeURIComponent[$jsonStringify[buildgquery]]&at=$default[$get[tempct-gr-aacid];$get[2d460-snlm0e]]&]
 $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;$default[$get[grinitcookies_replacement];$get[grinitcookies]]]
 ;
 $jsonLoad[buildgquery;[null\\]]
-$jsonLoad[buildgquerysec;[["",0,null,null,null,null,0\\],["en"\\],["","","",null,null,null,null,null,null,""\\],"1.","",null,[1\\],1,null,null,1,0,null,null,null,null,null,[[1\\]\\],0,null,null,null,null,null,null,null,null,1,null,null,[4\\],null,null,null,null,null,null,null,null,null,null,[2\\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,"",null,[\\],null,null,null,null,null,null,2,null,null,null,null,null,null,null,null,null,null,1\\]]
+$jsonLoad[buildgquerysec;[["",0,null,null,null,null,0\\],["en-US"\\],["","","",null,null,null,null,null,null,""\\],"1.","",null,[1\\],1,null,null,1,0,null,null,null,null,null,[[1\\]\\],0,null,null,null,null,null,null,null,null,1,null,null,[4\\],null,null,null,null,null,null,null,null,null,null,[2\\],null,null,null,null,null,null,null,null,null,null,null,0,null,null,null,null,null,"",null,[\\],null,null,null,null,null,null,2,null,null,null,null,null,null,null,null,null,null,1\\]]
 $!jsonSet[buildgquerysec;0;0;"$get[msg]"]
 $!jsonSet[buildgquerysec;2;0;"$get[gr-cov_c]"]
 $!jsonSet[buildgquerysec;2;1;"$get[gr-cov_r]"]
 $!jsonSet[buildgquerysec;2;2;"$get[gr-cov_rc]"]
-$!jsonSet[buildgquerysec;2;9;"$get[gr-cov_convoid]"]
 $arrayPush[buildgquery;$jsonStringify[buildgquerysec]]
 $let[httpbody;f.req=$encodeURIComponent[$jsonStringify[buildgquery]]&]
 $!jsonSet[httpheader_i6lQlIBEIVwCVXo0;cookie;$default[$get[grinitcookiesfirst];$get[gr-cov_cookies]]]
 ]
 $!djsEval[
-const { Agent, request, createRedirectInterceptor } = require("undici")\\;
+const streamUrl = "https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en-US$if[$default[$get[tempct-gr-btgver];$get[2d460-btgver]]!=;&bl=$default[$get[tempct-gr-btgver];$get[2d460-btgver]]]$if[$default[$get[tempct-gr-sid];$get[2d460-sid]]!=;&f.sid=$default[$get[tempct-gr-sid];$get[2d460-sid]]]&rt=c&_reqid=$randomNumber[1031319;7864320]"\\;
 
-const streamUrl = "https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate?hl=en$if[$and[$default[$get[tempct-gr-sid];$get[2d460-sid]]!=;$has[grinitcookies]];&f.sid=$default[$get[tempct-gr-sid];$get[2d460-sid]]]&rt=c&_reqid=$randomNumber[1031319;7864320]"\\;
-
-request(streamUrl, {
-    dispatcher: new Agent({
-        connect: {
-            family: 4
-        },
-        bodyTimeout: 60000,
-        headersTimeout: 60000,
-        keepAliveTimeout: 30000,
-        interceptors: { Agent: [createRedirectInterceptor({ maxRedirections: 15 })\\] }
-    }),
+fetch(streamUrl, {
     body: ctx.getKeyword("httpbody"),
     method: "POST",
     headers: ctx.getEnvironmentKey("httpheader_i6lQlIBEIVwCVXo0")
 })
 .then(a => {
-    const history = a.context?.history || [\\]\\;
-    const finalUrl = (history.length > 0 ? history[history.length - 1\\].href : streamUrl)\\;
-    const setCookie = a.headers?.["set-cookie"\\]\\;
-    ctx.setKeyword("httpstatus", a.statusCode)\\;
-    ctx.setKeyword("httpcookie", Array.isArray(setCookie) ? setCookie.join('\\; ') : (setCookie || ""))\\;
-    ctx.setKeyword("isAskingCaptcha", finalUrl.includes('google.com/sorry'))\\;
-    return a.body.text()\\;
+    ctx.setKeyword("httpstatus", a.status)\\;
+    ctx.setKeyword("httpcookie", a.headers?.get("set-cookie"))\\;
+    ctx.setKeyword("isAskingCaptcha", a.url.includes('google.com/sorry'))\\;
+    return a.text()\\;
 })
 .then(a => ctx.setKeyword("httpresult", a))
 .catch()
@@ -427,6 +437,7 @@ $let[nidcookie;$deflate[$callFunction[filterHttpCookies;1;$get[httpcookie]];base
 ;
 $let[nidcookie;$deflate[$get[gr-cov_cookies];base64url]]
 ]]]
+$let[found1;false]
 $arrayLoad[tns;
 ;$get[httpresult]]
 $arrayMap[tns;l;
@@ -434,31 +445,12 @@ $if[$typeof[$env[l]]==object;
 $try[$jsonLoad[msn;$env[l]]]
 $return[$jsonStringify[msn]]
 ];tns]
-$let[convoid;]
-$let[found1;false]
-$let[found2;false]
 $arrayReverse[tns;tns]
 $arrayForEach[tns;s;
 $if[$and[$env[s;0;0]==wrb.fr;$env[s;0;2]!=;$get[found1]==false];
 $try[$jsonLoad[tr;$env[s;0;2]]]
-$if[$and[$or[$env[tr;2]==;$env[tr;2]==null]==false;$isJSON[$env[tr;2]]];
-$try[$jsonLoad[trlc;$env[tr;2]]]
-$jsonLoad[trlc;$jsonEntries[trlc]]
-$let[found1;true]
-$let[convoid;$env[trlc;0;1]]
-;
-$if[$env[tr;25]!=null;
-$let[found1;true]
-$let[convoid;$env[tr;25]]
-]]]]
-$if[$get[convoid]==;
-$delete[convoid]
-]
-$arrayForEach[tns;s;
-$if[$and[$env[s;0;0]==wrb.fr;$env[s;0;2]!=;$get[found2]==false];
-$try[$jsonLoad[tr;$env[s;0;2]]]
 $if[$env[tr;4;0;8;0]==2;
-$let[found2;true]
+$let[found1;true]
 $if[$and[$env[tr;26;0;0;0;9;0;0;0;3;3]!=;$env[tr;26;0;0;0;9;0;0;0;3;3]!=null];
 $let[plc-gr-r_render-wm;$djsEval[require("undici").request("$env[tr;26;0;0;0;9;0;0;0;3;3]").then(lr => fetch(lr.headers?.location,{headers:{"Accept":"*/*","Cookie":ctx.getKeyword("grinitcookies_replacement")}}).then(a => a.url).catch()).catch()]]
 ]
@@ -492,12 +484,17 @@ $!jsonSet[5b306f5d5e;response;estimate_tokens;[\\]]
 $!jsonSet[5b306f5d5e;response;estimate_tokens;0;"$round[$divide[$charCount[$env[prompt]];4]]"]
 $!jsonSet[5b306f5d5e;response;estimate_tokens;1;"$round[$divide[$sum[$charCount[$get[rccl]];$charCount[$get[rcce]]];4]]"]
 $!jsonSet[5b306f5d5e;response;chat;{}]
-$!jsonSet[5b306f5d5e;response;chat;status;$if[$or[$env[tr;4;0;0]!=null;$env[tr;4;0;0]!=];$if[$has[convoid];$if[$and[$env[tr;1;0]==$default[$get[gr-cov_c];$env[tr;1;0]]];$if[$get[plc-gr-s-blocked]==true;SIGN_IN_REQUIRED;OK];BAD_COOKIES_OR_EXPIRED];$if[$has[grinitcookies];OK;SIGN_IN_REQUIRED]];BAD_RESPONSE]]
-$!jsonSet[5b306f5d5e;response;chat;c;$env[tr;1;0]]
-$!jsonSet[5b306f5d5e;response;chat;r;$env[tr;1;1]]
-$!jsonSet[5b306f5d5e;response;chat;rc;$env[tr;4;0;0]]
-$!jsonSet[5b306f5d5e;response;chat;convoid;$get[convoid]]
+$!jsonSet[5b306f5d5e;response;chat;status;$if[$or[$env[tr;4;0;0]!=null;$env[tr;4;0;0]!=];$if[$env[tr;1;1]!=;$if[$env[tr;1;0]==$default[$get[gr-cov_c];$env[tr;1;0]];$if[$get[plc-gr-s-blocked]==true;SIGN_IN_REQUIRED;OK];BAD_COOKIES_OR_EXPIRED];$if[$has[grinitcookies];OK;SIGN_IN_REQUIRED]];BAD_RESPONSE]]
+$!jsonSet[5b306f5d5e;response;chat;c;"$env[tr;1;0]"]
+$!jsonSet[5b306f5d5e;response;chat;r;"$env[tr;1;1]"]
+$!jsonSet[5b306f5d5e;response;chat;rc;"$env[tr;4;0;0]"]
+$!jsonSet[5b306f5d5e;response;chat;convoid;null]
 $!jsonSet[5b306f5d5e;response;chat;cookies;$if[$and[$env[googlecookies]!=;$env[googlecookies]!=null];;$get[nidcookie]]]
+$!jsonSet[5b306f5d5e;response;chat;session;{}]
+$!jsonSet[5b306f5d5e;response;chat;session;id;"$default[$get[tempct-gr-sid];$get[2d460-sid]]"]
+$!jsonSet[5b306f5d5e;response;chat;session;batch;"$default[$get[tempct-gr-btgver];$get[2d460-btgver]]"]
+$!jsonSet[5b306f5d5e;response;chat;session;targets;["$get[sr-cov_uuid1]","$get[sr-cov_uuid2]"\\]]
+$!jsonSet[5b306f5d5e;response;chat;session;expire;"$get[sr-cov_expiretime]"]
 $if[$and[$and[$env[tr;26;0;0;0;9;0;0;0;3;3]!=;$env[tr;26;0;0;0;9;0;0;0;3;3]!=null];$and[$env[tr;26;0;0;0;9;0;0;0;6;3]!=;$env[tr;26;0;0;0;9;0;0;0;6;3]!=null]];
 $!jsonSet[5b306f5d5e;response;image;{}]
 $!jsonSet[5b306f5d5e;response;image;no_auth;{}]
@@ -548,12 +545,18 @@ $return[$get[ret]]
     code: `
     $if[$env[mode]==0;
     $arrayLoad[kilcookies; ;$env[po]]
-    $arrayMap[kilcookies;b;$return[$advancedTextSplit[$trim[$env[b]];\\;;0]];kilcookies]
+    $arrayMap[kilcookies;b;
+        $let[ffhjkvcookie;$advancedTextSplit[$trim[$env[b]];\\;;0]]
+        $if[$get[ffhjkvcookie]!=;$return[$get[ffhjkvcookie]]]
+    ;kilcookies]
     $arrayMap[kilcookies;b;$if[$charCount[$env[b];=]>=1;$return[$trim[$env[b]]]];kilcookies]]
     ]
     $if[$env[mode]==1;
     $arrayLoad[kilcookies; ;$env[po]]
-    $arrayMap[kilcookies;b;$return[$advancedTextSplit[$trim[$env[b]];\\;;0]];kilcookies]
+    $arrayMap[kilcookies;b;
+        $let[ffhjkvcookie;$advancedTextSplit[$trim[$env[b]];\\;;0]]
+        $if[$get[ffhjkvcookie]!=;$return[$get[ffhjkvcookie]]]
+    ;kilcookies]
     $arrayMap[kilcookies;b;$return[$default[$advancedTextSplit[$env[b];, ;1];$advancedTextSplit[$env[b]; ;0]]];kilcookies]
     $arrayMap[kilcookies;b;$if[$and[$charCount[$env[b]; ]==0;$charCount[$env[b]]!=0];$return[$env[b]]];kilcookies]
     $arrayMap[kilcookies;b;
@@ -561,11 +564,18 @@ $return[$get[ret]]
         $if[$and[$get[checkValidCookies]==false;$charCount[$env[b];=]>=1];$return[$trim[$env[b]]]]
     ;kilcookies]]
     ]
+    $c[Both cookies must be filtered]
     $if[$env[mode]==2;
     $arrayLoad[kilcookies; ;$env[po]]
-    $arrayMap[kilcookies;b;$return[$advancedTextSplit[$trim[$env[b]];\\;;0]];kilcookies]
+    $arrayMap[kilcookies;b;
+        $let[ffhjkvcookie;$advancedTextSplit[$trim[$env[b]];\\;;0]]
+        $if[$get[ffhjkvcookie]!=;$return[$get[ffhjkvcookie]]]
+    ;kilcookies]
     $arrayLoad[kilcookies2; ;$env[po2]]
-    $arrayMap[kilcookies2;b;$return[$advancedTextSplit[$trim[$env[b]];\\;;0]];kilcookies2]
+    $arrayMap[kilcookies2;b;
+        $let[ffhjkvcookie;$advancedTextSplit[$trim[$env[b]];\\;;0]]
+        $if[$get[ffhjkvcookie]!=;$return[$get[ffhjkvcookie]]]
+    ;kilcookies2]
     $arrayForEach[kilcookies2;llc;
         $let[tempcckvrlv;$advancedTextSplit[$trim[$env[llc]];=;0]]
         $let[tempcckvrll;$advancedTextSplit[$trim[$env[llc]];=;1;\\;;0]]
@@ -605,10 +615,8 @@ $return[$get[ret]]
         $return[$advancedTextSplit[$env[f0v9;$arrayFindIndex[f0v9;f0p9;$startsWith[$env[f0p9];name="]]];name=";1;";0]=$advancedTextSplit[$env[f0v9;$arrayFindIndex[f0v9;f0p9;$startsWith[$env[f0p9];value="]]];value=";1;";0]]
     ;snhk]
     $return[$try[$djsEval[
-    const { Agent, request } = require("undici")\\;
-
-    request("https://consent.google.com/save", { method: "POST", body: ctx.getEnvironmentKey("snhk").join("&"), dispatcher: new Agent({ connect: { family: 4 } }), headers: ctx.getEnvironmentKey("htky") })
-    .then(a => a.headers?.["set-cookie"\\]?.join('\\; ') || null)
+    fetch("https://consent.google.com/save", { method: "POST", body: ctx.getEnvironmentKey("snhk").join("&"), headers: ctx.getEnvironmentKey("htky") })
+    .then(a => a.headers?.get("set-cookie") || null)
     .catch(() => null)
     ];null]]
     `
